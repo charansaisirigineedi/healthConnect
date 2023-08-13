@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload PDF</title>
+</head>
+<body>
+    <h1>Upload PDF</h1>
+    <form action="/sign" method="POST" enctype="multipart/form-data">
+        <label for="pdf">Select PDF:</label>
+        <input type="file" name="pdf" id="pdf" accept=".pdf">
+        
+        <label for="reportType">Select Report Type:</label>
+        <select name="reportType" id="reportType">
+            <option value="X-ray">X-ray Report</option>
+            <option value="MRI">MRI Report</option>
+            <option value="CT Scan">CT Scan Report</option>
+            <option value="Blood Test">Blood Test Report</option>
+            <option value="Ultrasound">Ultrasound Report</option>
+            <option value="ECG">ECG Report</option>
+            <option value="Endoscopy">Endoscopy Report</option>
+            <option value="Colonoscopy">Colonoscopy Report</option>
+            <option value="Biopsy">Biopsy Report</option>
+            <option value="Pathology">Pathology Report</option>
+            <option value="Allergy Test">Allergy Test Report</option>
+            <option value="Genetic Test">Genetic Test Report</option>
+            <option value="Dental X-ray">Dental X-ray Report</option>
+            <option value="Eye Exam">Eye Exam Report</option>
+            <option value="Echocardiogram">Echocardiogram Report</option>
+            <option value="Pulmonary Function Test">Pulmonary Function Test Report</option>
+            <option value="Skin Biopsy">Skin Biopsy Report</option>
+            <option value="Urinalysis">Urinalysis Report</option>
+            <option value="Colonoscopy">Colonoscopy Report</option>
+            <option value="Mammogram">Mammogram Report</option>
+        </select>
+        
+        <br><br>
+        <input type="submit" value="Sign and Upload">
+    </form>
+</body>
+</html>
