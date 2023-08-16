@@ -58,29 +58,6 @@ def book_appointment(doctor_id):
             return "Doctor not found"
     else:
         return redirect(url_for('login'))
-    
-# @app.route('/confirm_booking/<string:doctor_id>', methods=['POST'])
-# def confirm_booking(doctor_id):
-#     if 'ID' in session:
-#         doctor_id = ObjectId(doctor_id)
-#         user_id = ObjectId(session['ID'])
-#         selected_date = request.form['appointment_date']
-#         selected_time_slot = request.form['time_slot']
-        
-#         booking_data = {
-#             'user_id': user_id,
-#             'doctor_id': doctor_id,
-#             'appointment_date': selected_date,
-#             'appointment_time': selected_time_slot,
-#             'timestamp': datetime.now()
-#         }
-        
-#         # Insert the booking data into the database
-#         appoint.insert_one(booking_data)
-        
-#         return "Appointment confirmed successfully!"
-#     else:
-#         return redirect(url_for('login'))
 
 @app.route('/confirm_booking/<string:doctor_id>', methods=['POST'])
 def confirm_booking(doctor_id):
