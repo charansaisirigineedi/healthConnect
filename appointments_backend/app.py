@@ -86,6 +86,7 @@ def confirm_booking(doctor_id):
                         'appointment_date': selected_date,
                         'appointment_time': selected_time_slot,
                         'accessToken': accessToken,
+                        'accessed':'1',
                         'timestamp': datetime.now()
                     }
             
