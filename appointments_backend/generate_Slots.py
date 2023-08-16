@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-def generate_slots(schedule):
+def generate_slots(schedule, selected_date):
     
     # Extract morning and evening session timings if they exist
     morning_start = schedule.get('morning')
@@ -25,7 +25,6 @@ def generate_slots(schedule):
 
     # Get the limit
     limit = int(schedule['limit'])
-    print(type(limit), type(morning_ratio), type(evening_ratio))
     # Calculate the number of slots for morning and evening based on ratio
     morning_slots = round(limit * morning_ratio)
     evening_slots = round(limit * evening_ratio)
@@ -58,5 +57,20 @@ def generate_slots(schedule):
 
     # Combine morning and evening time slots
     time_slots = morning_time_slots + evening_time_slots
+
+    # Convert the selected date string to a datetime.date object
+    selected_date = datetime.strptime(selected_date, '%Y-%m-%d').date()
+
+    # Get the current date and time
+    current_datetime = datetime.now().date()
+
+    # Check if the selected date is today's date
+    if selected_date == current_datetime:
+        current_time = datetime.now().time()
+
+        # Filter time slots that are in the future
+        time_slots = [slot for slot in time_slots if datetime.strptime(slot, '%I:%M %p').time() > current_time]
+    else:
+        time_slots = time_slots
 
     return time_slots

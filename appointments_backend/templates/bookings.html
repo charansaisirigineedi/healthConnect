@@ -62,18 +62,40 @@
             </select><br>
             <button type="submit">Confirm Appointment</button>
         </div>
+        <div id="message_for_you" style="display: none; color: red; margin-top: 10px;">
+            <p>You already booked for today</p>
+        </div>
     </form>
 
     <script>
         const dateInput = document.getElementById('appointment_date');
         const timeSlotContainer = document.getElementById('time_slot_container');
         const timeSlotSelect = document.getElementById('time_slot');
+        const messageContainer = document.getElementById('message_for_you');
     
         dateInput.addEventListener('change', () => {
             const selectedDate = dateInput.value;
-            fetchTimeSlots(selectedDate);
-            timeSlotContainer.style.display = 'block';
+            const doctorId = "{{ doctor['_id'] }}";
+            
+            checkWithHistory(selectedDate)            
         });
+
+        function checkWithHistory(selectedDate){
+            const doctorId = "{{ doctor['_id'] }}";
+            fetch('/already_in_appointment/'+doctorId+'/'+selectedDate)
+            .then(response => response.json())
+            .then(data => {
+                const value = data.message;
+                if (value == "False") {
+                    fetchTimeSlots(selectedDate);
+                    timeSlotContainer.style.display = 'block';
+                    messageContainer.style.display = 'none';
+                } else {
+                    timeSlotContainer.style.display = 'none';
+                    messageContainer.style.display = 'block';
+                }
+            })
+        }
     
         function fetchTimeSlots(selectedDate) {
             const doctorId = "{{ doctor['_id'] }}";
