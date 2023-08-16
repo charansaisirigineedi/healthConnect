@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+    <h2>Appointments for {{ tdate }}</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Serial Number</th>
+                <th>User ID</th>
+                <th>Slot</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ loop.index }}</td>  <!-- Serial Number -->
+                    <td>{{ appointment['user_id'] }}</td>  <!-- User ID -->
+                    <td>{{ appointment['appointment_time'] }}</td>  <!-- Slot -->
+                    <td>
+                        <a href="{{ url_for('view_details', appointment_id=appointment['_id'],user_id=appointment['user_id'], access_token=appointment['accessToken']) }}">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+   
+</html>
