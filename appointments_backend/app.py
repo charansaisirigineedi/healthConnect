@@ -127,7 +127,6 @@ def already_in_appointment(doctor_id, selected_date):
     else:
         return redirect(url_for('login'))
     get_appointment = list(appoint.find({"user_id":user_id,"doctor_id":doctor_id,"appointment_date":selected_date},{}))
-    print(len(get_appointment))
     if len(get_appointment) >= 1:
         return jsonify({"message": "True"})
     return jsonify({"message":"False"})
