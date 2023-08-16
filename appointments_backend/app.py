@@ -62,6 +62,7 @@ def book_appointment(doctor_id):
 @app.route('/confirm_booking/<string:doctor_id>', methods=['POST'])
 def confirm_booking(doctor_id):
     if 'ID' in session:
+        accessToken = doctor_id + session['ID']
         doctor_id = ObjectId(doctor_id)
         user_id = ObjectId(session['ID'])
         selected_date = request.form['appointment_date']
@@ -84,6 +85,7 @@ def confirm_booking(doctor_id):
                         'doctor_id': doctor_id,
                         'appointment_date': selected_date,
                         'appointment_time': selected_time_slot,
+                        'accessToken': accessToken,
                         'timestamp': datetime.now()
                     }
             
