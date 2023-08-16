@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Appointment</h1>
+    <form method="post" action="{{ url_for('confirm_booking', doctor_id=doctor['_id']) }}">
+        <label for="appointment_date">Select Date:</label>
+        <input type="date" id="appointment_date" name="appointment_date" required><br>
+        <div id="time_slot_container" style="display: none;">
+            <label for="time_slot">Select Time Slot:</label>
+            <select id="time_slot" name="time_slot" required>
+                <!-- Populate time slot options dynamically based on doctor's availability -->
+                <!-- For example, <option value="9:00 AM">9:00 AM</option> -->
+            </select><br>
+            <button type="submit">Confirm Appointment</button>
+        </div>
+    </form>
+
+    <script>
+        const dateInput = document.getElementById('appointment_date');
+        const timeSlotContainer = document.getElementById('time_slot_container');
+        const timeSlotSelect = document.getElementById('time_slot');
+    
+        dateInput.addEventListener('change', () => {
+            const selectedDate = dateInput.value;
+            fetchTimeSlots(selectedDate);
+            timeSlotContainer.style.display = 'block';
+        });
+    
+        function fetchTimeSlots(selectedDate) {
+            const doctorId = "{{ doctor['_id'] }}";
+            const dayOfWeek = new Date(selectedDate).getDay();
+            fetch('/check_appointments/'+doctorId+'/'+selectedDate+'/'+dayOfWeek)
+            .then(response => response.json())
+            .then( data => {
+
+                timeSlotSelect.innerHTML = '';
+
+                const availableSlots = data.available_slots
+                const bookedSlots = data.booked_slots
+
+                const availableSlotsArray = Object.values(availableSlots)
+                const bookedSlotsArray = Object.values(bookedSlots)
+                
+                availableSlotsArray.forEach( slot => {
+
+                    const option = document.createElement('option');
+                    option.value = slot;
+                    if (bookedSlotsArray.includes(slot)) {
+                        option.disabled = true;
+                        option.textContent = `${slot} (Booked)`;
+                    } else {
+                        option.textContent = slot;
+                    }
+                    timeSlotSelect.appendChild(option);
+                    
+                })
+            }) 
+        }
+    </script>
+</body>
+</html>
