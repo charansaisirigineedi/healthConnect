@@ -360,8 +360,8 @@ def confirm_booking(doctor_id):
                         "reminders": {
                             "useDefault": False,
                             "overrides": [
-                            {"method": "email", "minutes":5},
-                            {"method": "popup", "minutes": 10}
+                            {"method": "email", "minutes":180},
+                            {"method": "popup", "minutes": 30}
                         ]
                         },
                         "visibility":"public",
