@@ -1,1 +1,0 @@
-uri = "mongodb+srv://charanmcr:Charansai20020902@healthconnect.bfcrznb.mongodb.net/?retryWrites=true&w=majority"
