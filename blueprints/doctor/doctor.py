@@ -1,5 +1,4 @@
 import datetime
-from aiohttp import request
 from bson import ObjectId
 from flask import Blueprint, jsonify, redirect, render_template, session, url_for, request
 from blueprints.database_connection import doctors, appointments, users, medicines
