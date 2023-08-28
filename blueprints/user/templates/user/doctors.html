@@ -1,0 +1,908 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'user/header.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/libs/prismjs/themes/prism-okaidia.min.css')}}">
+
+    <!-- --------------------------------------------------- -->
+    <!-- Select2 -->
+    <!-- --------------------------------------------------- -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/libs/select2/dist/css/select2.min.css')}}">
+  <body>
+    <!-- Preloader -->
+    
+    <!-- --------------------------------------------------- -->
+    <!-- Body Wrapper -->
+    <!-- --------------------------------------------------- -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+      <!-- --------------------------------------------------- -->
+      <!-- Sidebar -->
+      <!-- --------------------------------------------------- -->
+      {% include 'user/sidebar-user.html' %}
+      <!-- --------------------------------------------------- -->
+      <!-- Main Wrapper -->
+      <!-- --------------------------------------------------- -->
+      <div class="body-wrapper">
+        <!-- --------------------------------------------------- -->
+        <!-- Header Start -->
+        <!-- --------------------------------------------------- -->
+        {% include 'user/header-user.html' %}
+        <!-- --------------------------------------------------- -->
+        <!-- Header End -->
+        <!-- --------------------------------------------------- -->
+        <div class="container-fluid">
+            <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+              <div class="card-body px-4 py-3">
+                <div class="row align-items-center">
+                  <div class="col-9">
+                    <h4 class="fw-semibold mb-8">Doctors</h4>
+                    <nav aria-label="breadcrumb">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-muted " href="{{ url_for('user.user_dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Doctors Near You </li>
+                      </ol>
+                    </nav>
+                  </div>
+                  <div class="col-3">
+                    <div class="text-center mb-n5">  
+                      <img src="{{ url_for('static', filename='dist/images/breadcrumb/ChatBc.png')}}" alt="" class="img-fluid mb-n4">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="widget-content searchable-container list">
+              <!-- --------------------- start Contact ---------------- -->
+              <div class="card card-body">
+                <div class="row">
+                  <div class="col-md-3 col-xl-3">
+                    <form  action="/recommendMydoctor" method="POST" class="position-relative">
+                      <label>Search Hosiptal</label>
+                      <select
+                      class="select2 form-control block"
+                      style="width: 100%; height: 36px"
+                      name="hospital"
+                    >
+                    <option selected>📍Select Hospital</option>
+                    {% for l in hospitals_names %}
+                    <option value="{{l}}">{{l}}</option>
+                    {% endfor %}
+                    </select> 
+                      <!-- <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i> -->
+                  
+                  </div>
+                  <div class="col-md-3 col-xl-3">
+                    
+                    <label>Select Location</label>
+                      <select
+                      class="select2 form-control block"
+                      style="width: 100%; height: 36px"
+                      name="location"
+                    >
+                    <option selected>📍Select Location</option>
+                    {% for l in locations%}
+                    <option value="{{l}}">{{l}}</option>
+                    {% endfor %}
+                    </select> 
+                       <!-- <i class="ti ti-location position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i> -->
+                    
+                  </div>
+                  <div class="col-md-3 col-xl-3">
+                    <label>Select Symptomps</label>
+                    <select
+                      class="select2 form-control block"
+                      multiple="multiple"
+                      style="width: 100%; height: 36px"
+                      aria-placeholder="Select Symptomps"
+                      placeholder="Select Symptomps"
+                      name="symptoms[]"
+                    >
+                   
+                      <optgroup label="Respiratory Diseases">
+                        <option value="asthma">Asthma</option>
+                        <option value="bronchitis">Bronchitis</option>
+                        <option value="pneumonia">Pneumonia</option>
+                        <option value="copd">COPD</option>
+                        <option value="emphysema">Emphysema</option>
+                      </optgroup>
+                      <optgroup label="Cardiovascular Diseases">
+                        <option value="hypertension">Hypertension</option>
+                        <option value="heart-disease">Heart Disease</option>
+                        <option value="stroke">Stroke</option>
+                        <option value="atherosclerosis">Atherosclerosis</option>
+                        <option value="arrhythmia">Arrhythmia</option>
+                      </optgroup>
+                      <optgroup label="Gastrointestinal Diseases">
+                        <option value="ulcer">Ulcer</option>
+                        <option value="colitis">Colitis</option>
+                        <option value="gastritis">Gastritis</option>
+                        <option value="crohns-disease">Crohn's Disease</option>
+                        <option value="ibs">Irritable Bowel Syndrome (IBS)</option>
+                      </optgroup>
+                      <optgroup label="Neurological Diseases">
+                        <option value="alzheimers">Alzheimer's Disease</option>
+                        <option value="parkinsons">Parkinson's Disease</option>
+                        <option value="migraine">Migraine</option>
+                        <option value="epilepsy">Epilepsy</option>
+                        <option value="ms">Multiple Sclerosis (MS)</option>
+                      </optgroup>
+                      <optgroup label="Musculoskeletal Diseases">
+                        <option value="arthritis">Arthritis</option>
+                        <option value="osteoporosis">Osteoporosis</option>
+                        <option value="fibromyalgia">Fibromyalgia</option>
+                      </optgroup>
+                      <optgroup label="Endocrine Diseases">
+                        <option value="diabetes">Diabetes</option>
+                        <option value="thyroid">Thyroid Disorders</option>
+                        <option value="cushing-syndrome">Cushing's Syndrome</option>
+                      </optgroup>
+                      <optgroup label="Skin Diseases">
+                        <option value="psoriasis">Psoriasis</option>
+                        <option value="eczema">Eczema</option>
+                        <option value="acne">Acne</option>
+                                </optgroup>
+
+            <optgroup label="Respiratory Diseases">
+            <option value="asthma">Asthma</option>
+            <option value="bronchitis">Bronchitis</option> 
+            <option value="pneumonia">Pneumonia</option>
+            <option value="copd">COPD</option>
+            <option value="emphysema">Emphysema</option>
+            </optgroup>
+
+            <optgroup label="Cardiovascular Diseases">  
+            <option value="hypertension">Hypertension</option>
+            <option value="heart-disease">Heart Disease</option>
+            <option value="stroke">Stroke</option>
+            <option value="atherosclerosis">Atherosclerosis</option>
+            <option value="arrhythmia">Arrhythmia</option>
+            </optgroup>
+
+            <optgroup label="Gastrointestinal Diseases">
+            <option value="ulcer">Ulcer</option>
+            <option value="colitis">Colitis</option>
+            <option value="gastritis">Gastritis</option>
+            <option value="crohns-disease">Crohn's Disease</option>
+            <option value="ibs">Irritable Bowel Syndrome (IBS)</option>
+            </optgroup>
+
+            <optgroup label="Neurological Diseases">
+            <option value="alzheimers">Alzheimer's Disease</option>
+            <option value="parkinsons">Parkinson's Disease</option>
+            <option value="migraine">Migraine</option>
+            <option value="epilepsy">Epilepsy</option>
+            <option value="ms">Multiple Sclerosis (MS)</option>
+            </optgroup>
+
+            <optgroup label="Musculoskeletal Diseases">
+            <option value="arthritis">Arthritis</option>
+            <option value="osteoporosis">Osteoporosis</option>
+            <option value="fibromyalgia">Fibromyalgia</option>
+            </optgroup>
+
+            <optgroup label="Endocrine Diseases">
+            <option value="diabetes">Diabetes</option>
+            <option value="thyroid">Thyroid Disorders</option>
+            <option value="cushing-syndrome">Cushing's Syndrome</option>  
+            </optgroup>
+
+            <optgroup label="Skin Diseases">
+            <option value="psoriasis">Psoriasis</option>
+            <option value="eczema">Eczema</option>
+            <option value="acne">Acne</option>
+            </optgroup>
+
+            <optgroup label="Infectious Diseases">
+            <option value="covid">COVID-19</option>
+            <option value="influenza">Influenza</option>
+            <option value="hiv">HIV/AIDS</option>
+            <option value="hepatitis">Hepatitis</option>
+            <option value="lyme-disease">Lyme Disease</option>
+            </optgroup>
+
+            <optgroup label="Cancer">
+            <option value="breast-cancer">Breast Cancer</option>
+            <option value="lung-cancer">Lung Cancer</option>
+            <option value="prostate-cancer">Prostate Cancer</option>
+            <option value="colon-cancer">Colon Cancer</option>
+            <option value="leukemia">Leukemia</option>
+            </optgroup>
+
+            <optgroup label="Kidney Diseases">
+            <option value="kidney-stones">Kidney Stones</option>
+            <option value="kidney-failure">Kidney Failure</option>
+            <option value="polycystic-kidney">Polycystic Kidney Disease</option>
+            </optgroup>
+
+            <optgroup label="Eye Diseases">
+            <option value="glaucoma">Glaucoma</option>
+            <option value="cataracts">Cataracts</option>
+            <option value="macular-degeneration">Macular Degeneration</option>
+            </optgroup>
+
+            <optgroup label="Mental Health">
+            <option value="depression">Depression</option>
+            <option value="anxiety">Anxiety</option>
+            <option value="addiction">Addiction</option>
+            <option value="ptsd">PTSD</option>  
+            </optgroup>
+            
+                      <!-- Add more disease groups and options here -->
+                    </select>
+                  
+                  </div>
+                  <div class="col-md-3 col-xl-3 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+                    <div class="action-btn show-btn" style="display: none">
+                      <a href="javascript:void(0)" class="delete-multiple btn-light-danger btn me-2 text-danger d-flex align-items-center font-medium">
+                        <i class="ti ti-trash text-danger me-1 fs-5"></i> Delete All Row 
+                      </a>
+                    </div>
+                    <button type="submit" name="searchdoc" class="btn btn-info d-flex align-items-center">
+                      <i class="ti ti-users text-white me-1 fs-5"></i> Search Doctors 
+                    </button>
+                  </form>
+                  </div>
+                </div>
+              </div>
+              <!-- ---------------------
+                              end Contact
+                          ---------------- -->
+              <!-- Modal -->
+              <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                      <h5 class="modal-title">Contact</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="add-contact-box">
+                        <div class="add-contact-content">
+                          <form id="addContactModalTitle">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="mb-3 contact-name">
+                                  <input type="text" id="c-name" class="form-control" placeholder="Name" />
+                                  <span class="validation-text text-danger"></span>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="mb-3 contact-email">
+                                  <input type="text" id="c-email" class="form-control" placeholder="Email" />
+                                  <span class="validation-text text-danger"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="mb-3 contact-occupation">
+                                  <input type="text" id="c-occupation" class="form-control" placeholder="Occupation" />
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="mb-3 contact-phone">
+                                  <input type="text" id="c-phone" class="form-control" placeholder="Phone" />
+                                  <span class="validation-text text-danger"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="mb-3 contact-location">
+                                  <input type="text" id="c-location" class="form-control" placeholder="Location" />
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button id="btn-add" class="btn btn-success rounded-pill px-4">Add</button>
+                      <button id="btn-edit" class="btn btn-success rounded-pill px-4">Save</button>
+                      <button class="btn btn-danger rounded-pill px-4" data-bs-dismiss="modal"> Discard </button>
+                    </div>
+                  </div>
+                </div>
+              </div>  
+              <div class="row">
+              <div class="col-md-4 col-lg-2">
+                <div class="card text-center alert-dismissible fade show alert p-0 card-hover bg-white"
+                  role="alert">
+                  <div class="p-2 d-block mt-3">
+                    <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg')}}" width="75" class="rounded-circle img-fluid" />
+                    <h5 class="card-title mt-3"></h5>
+                    <span class="badge bg-light-success text-success rounded-pill mb-3">AI RECOMMENDED</span>
+                      
+                    <a href="#"><button type="button" 
+                        class="justify-content-center w-100 btn mb-1 btn-rounded btn-primary d-flex align-items-center">
+                        <i class="ti ti-send fs-4 me-2"></i>
+                        Book Now
+                      </button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              {% for d in doctors_data %}
+              <div class="col-lg-4 col-md-6">
+                <div class="card text-center">
+                  <div class="card-body">
+                    <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg')}}" class="rounded-1 img-fluid" width="90" />
+                    <div class="mt-n2">
+                      <!-- <span class="badge bg-primary">✅Approved</span> -->
+                      <h3 class="card-title mt-3">{{d['name']}}</h3>
+                      <h6 class="card-subtitle">{{d['speciality']}}</h6>
+                    </div>
+                    <br>
+                    <h5>Consultation Fee : Rs {{ d['fees'] }}</h5>
+
+                    <div class="row mt-3 justify-content-center">
+                      <div class="col-6">
+                        <div class="py-2 px-3 bg-light rounded-pill d-flex align-items-center">
+                          <span class="text-warning"><i class="ti ti-star-filled fs-8"></i></span>
+                          <div class="ms-2 text-start">
+                            <h6 class="fw-normal text-muted mb-0">Rating</h6>
+                            <h4 class="mb-0 fs-5">4.5</h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="py-2 px-3 bg-light rounded-pill d-flex align-items-center">
+                          <span class="text-primary"><i class="ti ti-report-medical fs-8"></i></span>
+                          <div class="ms-2 text-start">
+                            <h6 class="fw-normal text-muted mb-0">Treated</h6>
+                            <h4 class="mb-0 fs-5">1200</h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-6">
+                        <a href="/book_appointment/{{d['_id']}}/{{session['aadharnumber']}}"><button type="button" 
+                      class="justify-content-center w-100 btn mb-1 btn-rounded btn-primary d-flex align-items-center">
+                      <i class="ti ti-send fs-4 me-2"></i>
+                      Book Now
+                    </button></a>
+                      </div>
+                      <div class="col-6">
+                        <a href="/doctor-profile/{{d['_id']}}"><button type="button"
+                      class="justify-content-center w-100 btn mb-1 btn-rounded btn-light d-flex align-items-center">
+                      <i class="ti ti-send fs-4 me-2"></i>
+                      View Profile
+                    </button></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+{% endfor %}
+            </div>
+
+
+              <!-- <div class="card card-body">
+                <div class="table-responsive">
+                  <table class="table search-table align-middle text-nowrap">
+                    <thead class="header-item">
+                      <th>
+                        <div class="n-chk align-self-center text-center">
+                        </div>
+                      </th>
+                      <th>Name</th>
+                      <th>speciality</th>
+                      <th>Hospital</th>
+                      <th>Rating</th>
+                      <th>View</th>
+                    </thead>
+                    <tbody>
+                 
+                      {% for d in doctors_data %}
+                      <tr class="search-items">
+                        <td>
+                          <div class="n-chk align-self-center text-center">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <img src="dist/images/profile/user-1.jpg" alt="avatar" class="rounded-circle" width="35" />
+                            <div class="ms-3">
+                              <div class="user-meta-info">
+                                <h6 class="user-name mb-0" data-name="Emma Adams">{{d['name']}}</h6>
+                                <span class="user-work fs-3" data-occupation="Web Developer">{{ d['speciality']}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="usr-email-addr" data-email="adams@mail.com">{{ d['hospital'] }}</span>
+                        </td>
+                        <td>
+                          <span class="usr-location" data-location="Boston, USA">{{ d['hospital_address']+','+d['location']}}</span>
+                        </td>
+                        <td>
+                          <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ d['rating']}}</span>
+                        </td>
+                        <td>
+                          <div class="action-btn">
+                            <a href="javascript:void(0)" class="text-info edit">
+                              <i class="ti ti-eye fs-5"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="text-dark delete ms-2">
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                      
+                     
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div> -->
+    <!--  Shopping Cart -->
+    <div class="offcanvas offcanvas-end shopping-cart" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header py-4">
+        <h5 class="offcanvas-title fs-5 fw-semibold" id="offcanvasRightLabel">Shopping Cart</h5>
+        <span class="badge bg-primary rounded-4 px-3 py-1 lh-sm">5 new</span>
+      </div>
+      <div class="offcanvas-body h-100 px-4 pt-0" data-simplebar="">
+        <ul class="mb-0">
+          <li class="pb-7">
+            <div class="d-flex align-items-center">
+              <img src="../../dist/images/products/product-1.jpg" width="95" height="75" class="rounded-1 me-9 flex-shrink-0" alt="">
+              <div>
+                <h6 class="mb-1">Supreme toys cooker</h6>
+                <p class="mb-0 text-muted fs-2">Kitchenware Item</p>
+                <div class="d-flex align-items-center justify-content-between mt-2">
+                  <h6 class="fs-2 fw-semibold mb-0 text-muted">$250</h6>
+                  <div class="input-group input-group-sm w-50">
+                    <button class="btn border-0 round-20 minus p-0 bg-light-success text-success " type="button" id="add1"> - </button>
+                    <input type="text" class="form-control round-20 bg-transparent text-muted fs-2 border-0  text-center qty" placeholder="" aria-label="Example text with button addon" aria-describedby="add1" value="1">
+                    <button class="btn text-success bg-light-success  p-0 round-20 border-0 add" type="button" id="addo2"> + </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="pb-7">
+            <div class="d-flex align-items-center">
+              <img src="../../dist/images/products/product-2.jpg" width="95" height="75" class="rounded-1 me-9 flex-shrink-0" alt="">
+              <div>
+                <h6 class="mb-1">Supreme toys cooker</h6>
+                <p class="mb-0 text-muted fs-2">Kitchenware Item</p>
+                <div class="d-flex align-items-center justify-content-between mt-2">
+                  <h6 class="fs-2 fw-semibold mb-0 text-muted">$250</h6>
+                  <div class="input-group input-group-sm w-50">
+                    <button class="btn border-0 round-20 minus p-0 bg-light-success text-success " type="button" id="add2"> - </button>
+                    <input type="text" class="form-control round-20 bg-transparent text-muted fs-2 border-0  text-center qty" placeholder="" aria-label="Example text with button addon" aria-describedby="add2" value="1">
+                    <button class="btn text-success bg-light-success  p-0 round-20 border-0 add" type="button" id="addon34"> + </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="pb-7">
+            <div class="d-flex align-items-center">
+              <img src="../../dist/images/products/product-3.jpg" width="95" height="75" class="rounded-1 me-9 flex-shrink-0" alt="">
+              <div>
+                <h6 class="mb-1">Supreme toys cooker</h6>
+                <p class="mb-0 text-muted fs-2">Kitchenware Item</p>
+                <div class="d-flex align-items-center justify-content-between mt-2">
+                  <h6 class="fs-2 fw-semibold mb-0 text-muted">$250</h6>
+                  <div class="input-group input-group-sm w-50">
+                    <button class="btn border-0 round-20 minus p-0 bg-light-success text-success " type="button" id="add3"> - </button>
+                    <input type="text" class="form-control round-20 bg-transparent text-muted fs-2 border-0  text-center qty" placeholder="" aria-label="Example text with button addon" aria-describedby="add3" value="1">
+                    <button class="btn text-success bg-light-success  p-0 round-20 border-0 add" type="button" id="addon3"> + </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="align-bottom">
+          <div class="d-flex align-items-center pb-7">
+            <span class="text-dark fs-3">Sub Total</span>
+            <div class="ms-auto">
+              <span class="text-dark fw-semibold fs-3">$2530</span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center pb-7">
+            <span class="text-dark fs-3">Total</span>
+            <div class="ms-auto">
+              <span class="text-dark fw-semibold fs-3">$6830</span>
+            </div>
+          </div>
+          <a href="eco-checkout.html" class="btn btn-outline-primary w-100">Go to shopping cart</a>
+        </div>
+      </div>
+    </div>
+    <!--  Mobilenavbar -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="mobilenavbar" aria-labelledby="offcanvasWithBothOptionsLabel">
+      <nav class="sidebar-nav scroll-sidebar">
+        <div class="offcanvas-header justify-content-between">
+          <img src="../../dist/images/logos/favicon.ico" alt="" class="img-fluid">
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar="" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="sidebar-item">
+              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                <span>
+                  <i class="ti ti-apps"></i>
+                </span>
+                <span class="hide-menu">Apps</span>
+              </a>
+              <ul aria-expanded="false" class="collapse first-level my-3">
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-chat.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Chat Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">New messages arrived</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-invoice.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Invoice App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get latest invoice</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-mobile.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Contact Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">2 Unsaved Contacts</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-message-box.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Email App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get new emails</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-cart.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">User Profile</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">learn more information</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-date.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Calendar App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get dates</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-lifebuoy.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Contact List Table</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Add new contact</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-application.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Notes Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">To-do and Daily tasks</span>
+                    </div>
+                  </a>
+                </li>
+                <ul class="px-8 mt-7 mb-4">
+                  <li class="sidebar-item mb-3">
+                    <h5 class="fs-5 fw-semibold">Quick Links</h5>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Pricing Page</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Authentication Design</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Register Now</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">404 Error Page</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Notes App</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">User Application</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Account Settings</a>
+                  </li>
+                </ul>
+              </ul>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-chat.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-message-dots"></i>
+                </span>
+                <span class="hide-menu">Chat</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-calendar.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-calendar"></i>
+                </span>
+                <span class="hide-menu">Calendar</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-email.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-mail"></i>
+                </span>
+                <span class="hide-menu">Email</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <!--  Search Bar -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content rounded-1">
+          <div class="modal-header border-bottom">
+            <input type="search" class="form-control fs-3" placeholder="Search here" id="search">
+            <span data-bs-dismiss="modal" class="lh-1 cursor-pointer">
+              <i class="ti ti-x fs-5 ms-3"></i>
+            </span>
+          </div>
+          <div class="modal-body message-body" data-simplebar="">
+            <h5 class="mb-0 fs-5 p-1">Quick Page Links</h5>
+            <ul class="list mb-0 py-2">
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Modern</span>
+                  <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
+                  <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Contacts</span>
+                  <span class="fs-3 text-muted d-block">/apps/contacts</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Posts</span>
+                  <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Detail</span>
+                  <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Shop</span>
+                  <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Modern</span>
+                  <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
+                  <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Contacts</span>
+                  <span class="fs-3 text-muted d-block">/apps/contacts</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Posts</span>
+                  <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Detail</span>
+                  <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
+                </a>
+              </li>
+              <li class="p-1 mb-1 bg-hover-light-black">
+                <a href="#">
+                  <span class="fs-3 text-black fw-normal d-block">Shop</span>
+                  <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- --------------------------------------------------- -->
+    <!-- Customizer -->
+    <!-- --------------------------------------------------- -->
+   <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+    <i class="ti ti-settings fs-7" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Settings"></i>
+  </button>
+  <div class="offcanvas offcanvas-end customizer" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-simplebar="">
+    <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+      <h4 class="offcanvas-title fw-semibold" id="offcanvasExampleLabel">Settings</h4>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+      <div class="theme-option pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Theme Option</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <a href="javascript:void(0)" onclick="toggleTheme('../../dist/css/style.min.css')" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 light-theme text-dark">
+            <i class="ti ti-brightness-up fs-7 text-primary"></i>
+            <span class="text-dark">Light</span>
+          </a>
+          <a href="javascript:void(0)" onclick="toggleTheme('../../dist/css/style-dark.min.css')" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 dark-theme text-dark">
+            <i class="ti ti-moon fs-7 "></i>
+            <span class="text-dark">Dark</span>
+          </a>
+        </div>
+      </div>
+      <div class="theme-direction pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Theme Direction</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <a href="index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+            <i class="ti ti-text-direction-ltr fs-6 text-primary"></i>
+            <span class="text-dark">LTR</span>
+          </a>
+          <a href="../rtl/index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+            <i class="ti ti-text-direction-rtl fs-6 text-dark"></i>
+            <span class="text-dark">RTL</span>
+          </a>
+        </div>
+      </div>
+      <div class="theme-colors pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Theme Colors</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <ul class="list-unstyled mb-0 d-flex gap-3 flex-wrap change-colors">
+            <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+              <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin1-bluetheme-primary active-theme " onclick="toggleTheme('../../dist/css/style.min.css')" data-color="blue_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="BLUE_THEME"><i class="ti ti-check text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+            </li>
+            <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+              <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin2-aquatheme-primary " onclick="toggleTheme('../../dist/css/style-aqua.min.css')" data-color="aqua_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="AQUA_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+            </li>
+            <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+              <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin3-purpletheme-primary" onclick="toggleTheme('../../dist/css/style-purple.min.css')" data-color="purple_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="PURPLE_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+            </li>
+            <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+              <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin4-greentheme-primary" onclick="toggleTheme('../../dist/css/style-green.min.css')" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="GREEN_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+            </li>
+            <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+              <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin5-cyantheme-primary" onclick="toggleTheme('../../dist/css/style-cyan.min.css')" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="CYAN_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+            </li>
+            <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+              <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin6-orangetheme-primary" onclick="toggleTheme('../../dist/css/style-orange.min.css')" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="ORANGE_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="layout-type pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Layout Type</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <a href="index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">              
+            <i class="ti ti-layout-sidebar fs-6 text-primary"></i>
+            <span class="text-dark">Vertical</span>
+          </a>
+          <a href="../horizontal/index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+            <i class="ti ti-layout-navbar fs-6 text-dark"></i>
+            <span class="text-dark">Horizontal</span>
+          </a>
+        </div>
+      </div>
+      <div class="container-option pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Container Option</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 boxed-width text-dark">              
+            <i class="ti ti-layout-distribute-vertical fs-7 text-primary"></i>
+            <span class="text-dark">Boxed</span>
+          </a>
+          <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 full-width text-dark">
+            <i class="ti ti-layout-distribute-horizontal fs-7"></i>
+            <span class="text-dark">Full</span>
+          </a>
+        </div>
+      </div>
+      <div class="sidebar-type pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Sidebar Type</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 fullsidebar">              
+            <i class="ti ti-layout-sidebar-right fs-7"></i>
+            <span class="text-dark">Full</span>
+          </a>
+          <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center text-dark sidebartoggler gap-2">
+            <i class="ti ti-layout-sidebar fs-7"></i>
+            <span class="text-dark">Collapse</span>
+          </a>
+        </div>
+      </div>
+      <div class="card-with pb-4">
+        <h6 class="fw-semibold fs-4 mb-1">Card With</h6>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 text-dark cardborder">              
+            <i class="ti ti-border-outer fs-7"></i>
+            <span class="text-dark">Border</span>
+          </a>
+          <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 cardshadow">
+            <i class="ti ti-border-none fs-7"></i>
+            <span class="text-dark">Shadow</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+        <!-- ---------------------------------------------- -->
+    <!-- Customizer -->
+    <!-- ---------------------------------------------- -->
+    <!-- ---------------------------------------------- -->
+    <!-- Import Js Files -->
+    <!-- ---------------------------------------------- -->
+    {% include 'user/footer.html' %}
+    <!-- ---------------------------------------------- -->
+    <script src="{{ url_for('static', filename='dist/js/apps/chat.js')}}"></script>
+    <script src="{{ url_for('static', filename='dist/libs/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='dist/libs/select2/dist/js/select2.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='dist/js/forms/select2.init.js')}}"></script>
+    <script src="{{ url_for('static', filename='dist/js/apps/contact.js')}}"></script>
+  </body>
+</html>

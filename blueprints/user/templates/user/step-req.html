@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'user/header.html' %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/codemirror.min.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/theme/blackboard.min.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/theme/monokai.min.css')}}" />
+     <link rel="stylesheet" href="{{ url_for('static', filename='dist/libs/summernote/dist/summernote-lite.min.css')}}">
+<!-- Include SweetAlert CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.css">
+
+<!-- Include SweetAlert JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.all.min.js"></script>
+
+     <body>
+    <style>
+
+        </style>
+ <div class="container-fluid">
+    
+<div class="card bg-light-info shadow-none position-relative overflow-hidden">
+            <div class="card-body px-4 py-3">
+              <div class="row align-items-center">
+                <div class="col-9">
+                  <h4 class="fw-semibold mb-8">Let us Know More about you 😊</h4>
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <!-- <li class="breadcrumb-item">
+                        <a class="text-muted text-decoration-none" href="index.html">Dashboard</a>
+                      </li>
+                      <li class="breadcrumb-item" aria-current="page">Form Wizard</li> -->
+                    </ol>
+                  </nav>
+                </div>
+                <div class="col-3">
+                  <div class="text-center mb-n5">
+                    <img src="{{ url_for('static', filename='dist/images/breadcrumb/ChatBc.png')}}" alt="" class="img-fluid mb-n4">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <section>
+            <div class="domo-contect position-relative">
+    <div class="card">
+        <div class="card-body wizard-content">
+          <h4 class="card-title">Please Tell about you more !</h4>
+          <p class="card-subtitle mb-3"> You can us the validation like what we did </p>
+          <form method="POST" action="/user.stepsform" class="validation-wizard wizard-circle mt-5" enctype="multipart/form-data">
+            <!-- Step 1 -->
+            <h6>Step 1</h6>
+            <section>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wfirstName2"> First Name : <span class="danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="wfirstName2" name="firstName">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wlastName2"> Last Name : <span class="danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" id="wlastName2" name="lastName">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wemailAddress2"> Email Address : <span class="danger">*</span>
+                    </label>
+                    <input type="email" class="form-control" id="wemailAddress2" name="emailAddress">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wphoneNumber2">Phone Number : <span class="danger">*</span></label>
+                    <input type="tel" class="form-control" id="wphoneNumber2">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wlocation2"> Enter City : <span class="danger">*</span>
+                    </label>
+                    <input type="location" class="form-control" id="location">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wdate2"> Date of Birth : <span class="danger">*</span></label>
+                    <input type="date" class="form-control" id="wdate2">
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Step 2 -->
+            <h6>Step 2</h6>
+            <section>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="wfirstName2"> Gender : <span class="danger">*</span></label>
+                        <select class="form-select " id="wlocation2" name="gender">
+                            <option value="">Select option</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="wlastName2"> No. of children(if applicable) : <span class="danger">*</span>
+                      </label>
+                      <input type="text" class="form-control " id="wlastName2" name="children">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="wemailAddress2"> Marital Status <span class="danger">*</span>
+                        </label>
+                        <select class="form-select " id="wlocation2" name="gender">
+                            <option value="">Select option</option>
+                            <option value="Married">Married</option>
+                            <option value="Unmarried">Unmarried</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="wphoneNumber2"> Are you handicapped : <span class="danger">*</span></label>
+                      <select class="form-select" id="wlocation2" name="location">
+                        <option value="">Select Option</option>
+                        <option value="Male">Yes</option>
+                        <option value="Female">No</option>
+                      </select>
+                    </div>
+                  </div>    
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="wlocation2"> Aadhar No. : <span class="danger">*</span></label>
+                      <input type="text" class="form-control " name="aadhar">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="wdate2">Occupation : <span class="danger">*</span></label>
+                      <input type="text" class="form-control " name="occupation">
+                    </div>
+                  </div>
+                </div>
+            </section>
+            <!-- Step 3 -->
+            <h6>Step 3</h6>
+            <section>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="bloodgroup"> Blood Group : <span class="danger">*</span></label>
+                    <input type="text" class="form-control " id="bloodgroup" name="bloodgroup">  
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="medhist"> Medical History (Previous illnesses, Allergies, surgeries)<span class="danger">*</span>
+                    </label>
+                    <div class="email-repeater mb-3">
+                      <div data-repeater-list="repeater-group">
+                        <div data-repeater-item class="row mb-3">
+                          <div class="col-md-10">
+                            <div class="fileInput">
+                              <input type="file" class="form-control" id="fileInput" name="fileInput" />
+                            </div> 
+                            <div class="mb-3">
+                              <select class="form-select " id="fileType" name="fileType">
+                                <option value="">Select type</option>
+                                <option value="Married">Married</option>
+                                <option value="Unmarried">Unmarried</option>
+                            </select>
+                            <button type="">Upload </button>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <button data-repeater-delete="" class="btn btn-danger waves-effect waves-light"
+                              type="button">
+                              <i class="ti ti-circle-x fs-5"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" data-repeater-create="" class="btn btn-info waves-effect waves-light">
+                        <div class="d-flex align-items-center">
+                          Add More File
+                          <i class="ti ti-circle-plus ms-1 fs-5"></i>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="wemailAddress2"> Do you Smoke or consume Alcohol <span class="danger">*</span>
+                    </label>
+                    <select class="form-select" id="alcohol" name="alcohol">
+                      <option value="">Select Option</option>
+                      <option value="alcohol">Consume Alcohol</option>
+                      <option value="smoke">Smoke</option>
+                      <option value="both">Both</option>
+                    </select>                  
+                </div>
+              </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="currmed"> Current medications : <span class="danger">*</span></label>
+                    <textarea name="currmed" id="currmed" rows="4" class="form-control"></textarea>
+                  </div>
+                </div>    
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="emercon"> Emergency Contact : <span class="danger">*</span></label>
+                    <input type="tel" class="form-control" id="emercon">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="chcom"> Cheif Complaint(Reason for Visit) : <span class="danger">*</span></label>
+                    <textarea name="chcom" id="chcom" rows="2" class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+          </section>
+          </form>
+              <!-- Step 4 -->
+              <!-- <h6>Step 4</h6>
+              <section>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="medhist"> Symptoms (description, duration, severity)<span class="danger">*</span>
+                      </label>
+                      <textarea name="medhist" id="medhist" rows="4" class="form-control"></textarea>  
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="medhist"> Medical History (Previous illnesses, Allergies, surgeries)<span class="danger">*</span>
+                      </label>
+                      <textarea name="medhist" id="medhist" rows="4" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="wemailAddress2">  <span class="danger">*</span>
+                      </label>
+                      <select class="form-select" id="alcohol" name="alcohol">
+                        <option value="">Select Option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>                  
+                  </div>
+                </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="currmed"> Current medications : <span class="danger">*</span></label>
+                      <textarea name="currmed" id="currmed" rows="4" class="form-control"></textarea>
+                    </div>
+                  </div>    
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="smoke"> Do you Smoke <span class="danger">*</span>
+                      </label>
+                      <select class="form-select" id="smoke" name="smoke">
+                        <option value="">Select Option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="chcom"> Cheif Complaint(Reason for Visit) : <span class="danger">*</span></label>
+                      <textarea name="chcom" id="chcom" rows="2" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
+            </section> -->
+      </div>
+</body>
+{% include 'user/footer.html' %}
+<script>
+  // Define the function to be called
+  function afterSubmitClick() {
+    // Your code here
+    alert("Function called after 'Submit' link is clicked!");
+  }
+
+  // Get all anchor tags with the specified role attribute
+  var finishLinks = document.querySelectorAll('a[role="menuitem"]');
+
+  // Add a click event listener to each anchor tag with the role attribute
+  finishLinks.forEach(function(link) {
+    link.addEventListener("click", function(event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      if (link.innerHTML.trim() === "Submit") {
+        afterSubmitClick(); // Call the defined function
+      }
+    });
+  });
+</script>
+<script src="{{ url_for('static', filename='dist/libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
+<script src="{{ url_for('static', filename='dist/libs/jquery-validation/dist/jquery.validate.min.js')}}"></script>
+<script src="{{ url_for('static', filename='dist/js/forms/form-wizard.js')}}"></script>
+<script src="{{ url_for('static', filename='dist/libs/jquery.repeater/jquery.repeater.min.js')}}"></script>
+<script src="{{ url_for('static', filename='dist/js/plugins/repeater-init.js')}}"></script>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'doctor/header.html' %}
+  <body>
+    <!-- Preloader -->
+    <!-- --------------------------------------------------- -->
+    <!-- Body Wrapper -->
+    <!-- --------------------------------------------------- -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+      <!-- --------------------------------------------------- -->
+      <!-- Sidebar -->
+      <!-- --------------------------------------------------- -->
+      {% include 'doctor/sidebar-doctor.html' %}
+      <!-- --------------------------------------------------- -->
+      <!-- Main Wrapper -->
+      <!-- --------------------------------------------------- -->
+      <div class="body-wrapper">
+        <!-- --------------------------------------------------- -->
+        <!-- Header Start -->
+        <!-- --------------------------------------------------- -->
+        {% include 'doctor/header-doctor.html' %}
+        <!-- --------------------------------------------------- -->
+        <!-- Header End -->
+        <!-- --------------------------------------------------- -->
+      
+        <div class="container-fluid">
+          <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+            <div class="card-body px-4 py-3">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h4 class="fw-semibold mb-8">Prescriptions List</h4>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a class="text-muted " href="javascript:void(0)">Current</a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    Prescription
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-center mb-n5">
+                            <img src="../../dist/images/breadcrumb/ChatBc.png" alt="" class="img-fluid mb-n4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="border-bottom title-part-padding">
+              <h4 class="card-title mb-0">Prescriptions List</h4>
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="card invoices-add-card">
+                        <div class="card-body">
+                            <form class="invoices-form"  id="submit">
+                                <div class="invoice-add-table">
+                                    <div class="table-responsive">
+                                        <table class="table table-center add-table-items">
+                                            <thead>
+                                                <tr>
+                                                    <th>Medicine Name</th>
+                                                    <th>Course Days</th>
+                                                    <th>Morning</th>
+                                                    <th>Afternoon</th>
+                                                    <th>Evening</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="add-row">
+                                                    <td>
+                                                    <!-- <label for="browser">Choose your browser from the list:</label> -->
+                                                    <input list="charges" name="charge" id="charge" class="form-control">
+
+                                                        <datalist id="charges">
+                                                            {% for medicine in medicines %}
+                                                            <option id="{{medicine['_id']}}" value="{{medicine['name']+', '+medicine['manufacturer_name']}}">
+                                                            {% endfor %}
+                                                        </datalist>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number"  min="1" name="days" id="days"  class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="mor" id="mor">
+                                                          </div>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox"  name="aft" id="aft">
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="evn" id="evn">
+                                                    </td>
+                                                    <td>
+                                                    <button type="submit"  class="btn btn-primary">Add</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end">
+                <a href="{{ url_for('doctor.prescription_submitted') }}">
+                    <button type="submit"  class="btn btn-primary">Finish</button>		
+                </a>								
+            </div>
+            </div>
+           
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+          <script src="/static/assets/extra-libs/jsgrid/db.js"></script>
+          <script src="/static/assets/extra-libs/jsgrid/render.js"></script>
+         
+          <div class="selected-medicines">
+            <div class="border-bottom title-part-padding">
+            <h4>Selected Medicines</h4>
+            <div class="card">
+            <div class="invoice-add-table">
+                <div class="table-responsive">
+                    <table class="table table-center add-table-items" id="medicationTableBody">
+                        <thead>
+                            <tr>
+                                <th>Medicine Name</th>
+                                <th>Manufacture Name</th>
+                                <th>Course Days</th>
+                                <th>Morning</th>
+                                <th>Afternoon</th>
+                                <th>Evening</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {%  for prescription_list in prescriptions_list%}
+                          {%  for medicine in prescription_list['prescription']  %}
+                          <tr> 
+                            <td> {{medicine['medicine_name']}}</td> 
+                            <td> {{ medicine['medicine_mname']}}</td> 
+                            <td> {{ medicine['course_days']}}</td> 
+                            <td> {{medicine['morning']}} </td> 
+                            <td> {{medicine['afternoon']}} </td> 
+                            <td> {{medicine['evening']}}</td> 
+                            <td><a href= "{{ url_for('doctor.delete_medication',medicine_names= medicine['medicine_name'])}}"><button class="btn btn-primary">Delete</button></a></td> 
+                            </tr>
+                          {% endfor %}
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  Shopping Cart -->
+    <!--  Mobilenavbar -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="mobilenavbar" aria-labelledby="offcanvasWithBothOptionsLabel">
+      <nav class="sidebar-nav scroll-sidebar">
+        <div class="offcanvas-header justify-content-between">
+          <img src="../../dist/images/logos/favicon.ico" alt="" class="img-fluid">
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar="" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="sidebar-item">
+              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                <span>
+                  <i class="ti ti-apps"></i>
+                </span>
+                <span class="hide-menu">Apps</span>
+              </a>
+              <ul aria-expanded="false" class="collapse first-level my-3">
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-chat.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Chat Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">New messages arrived</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-invoice.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Invoice App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get latest invoice</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-mobile.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Contact Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">2 Unsaved Contacts</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-message-box.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Email App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get new emails</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-cart.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">User Profile</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">learn more information</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-date.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Calendar App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get dates</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-lifebuoy.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Contact List Table</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Add new contact</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-application.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Notes Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">To-do and Daily tasks</span>
+                    </div>
+                  </a>
+                </li>
+                <ul class="px-8 mt-7 mb-4">
+                  <li class="sidebar-item mb-3">
+                    <h5 class="fs-5 fw-semibold">Quick Links</h5>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Pricing Page</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Authentication Design</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Register Now</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">404 Error Page</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Notes App</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">User Application</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Account Settings</a>
+                  </li>
+                </ul>
+              </ul>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-chat.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-message-dots"></i>
+                </span>
+                <span class="hide-menu">Chat</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-calendar.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-calendar"></i>
+                </span>
+                <span class="hide-menu">Calendar</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-email.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-mail"></i>
+                </span>
+                <span class="hide-menu">Email</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+    <script type="text/javascript">
+                $(document).ready(function() {
+                $('#submit').on('submit', function(e) {
+                e.preventDefault();
+                // Get form data
+                var formData = {
+                    charge: $('#charge').val(),
+                    days: $('#days').val(), 
+                    mor: $('#mor').is(':checked') ? 1 : 0,
+                    aft: $('#aft').is(':checked') ? 1 : 0,
+                    evn: $('#evn').is(':checked') ? 1 : 0
+                };
+                // Stringify the data to JSON
+                var jsonData = JSON.stringify(formData);
+                $.ajax({
+                    url: '/prescriptions_pdf',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: jsonData 
+                })
+
+                .done(function(data) {
+                    var newRow = '<tr>' +
+                        '<td>' + data.medicine_name + '</td>' +
+                        '<td>' + data.medicine_mname + '</td>' +
+                        '<td>' + data.course_days + '</td>' +
+                        '<td>' + (data.morning) + '</td>' +
+                        '<td>' + (data.afternoon) + '</td>' +
+                        '<td>' + (data.evening) + '</td>' +
+                        '<td><a href="/delete_medication/'+data.medicine_name +'"><button type="button" class="btn btn-primary">Delete</button></a></td>'+
+                        '</tr>';
+                    
+
+                // Append to table  
+                $('#medicationTableBody').append(newRow);
+                    // Optionally, you can clear the form fields here
+                    $('#charge').val('');
+                    $('#days').val('');
+                    $('#mor').prop('checked', false);
+                    $('#aft').prop('checked', false);
+                    $('#evn').prop('checked', false);
+                });
+                
+
+            }); 
+        });
+
+    </script>
+  
+    <!-- --------------------------------------------------- -->
+    <!-- Customizer -->
+    <!-- --------------------------------------------------- -->
+    {% include 'doctor/footer.html' %}
+  </body>
+</html>
