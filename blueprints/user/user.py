@@ -178,7 +178,6 @@ def my_appointements():
             }
             
             res.append(combined_data)
-        print(res)
         return render_template('user/my-appointments.html',appointments_data=res)
     
 @user.route('/get_doc_details',methods=['GET'])
@@ -245,7 +244,6 @@ def prescriptions_list():
         evn = request.form.get("evn") != None
         aft = request.form.get("aft") != None
         mor = request.form.get("mor") != None
-        print(medicine_id,days,mor,aft,evn)
 
 @user.route('/recommendMydoctor',methods=['GET','POST'])
 def recommendMydoctor():
@@ -257,7 +255,6 @@ def recommendMydoctor():
         doctors_data = doctors.find().limit(100)
         doctors_data= list(doctors_data)
         symptoms = request.form.getlist('symptoms[]')
-        print(location)
         if symptoms!=[]  and hospital_name != 'Select Hospital' and location!='Select Location':
             specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
             sorted_doctors= doctors.find({'hospital':hospital_name,'speciality': specialist,'location': location}).sort('recommendation_score',-1)
@@ -290,7 +287,6 @@ def recommendMydoctor():
         elif location!='Selected Location':
             sorted_doctors=  doctors.find({'location': location}).sort('recommendation_score',-1)
             sorted_doctors=list(sorted_doctors)
-            print(sorted_doctors)
             return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
         else:
             return render_template('user/doctors.html',doctors_data=doctors_data,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
@@ -336,7 +332,6 @@ def get_hospitals_locations():
         return redirect(url_for('login'))
     else:
         hospitals_data = hospitals.distinct('location')
-        # print(hospitals_data)
         hospitals_loc_data= hospitals_data
         return hospitals_loc_data
 
@@ -400,7 +395,6 @@ def confirm_booking(doctor_id):
                     }
 
                     event_id  = addEvent(session['_id'],1,event=event)
-                    print("EVENT ID", event_id)
                     booking_data = {
                         'user_id': user_id,
                         'doctor_id': doctor_id,
