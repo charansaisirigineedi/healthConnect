@@ -43,7 +43,7 @@ def register():
         existing_user = users.find_one({'aadharnumber': aadharnumber})
 
         if existing_user:
-            return render_template('login.html', message='User Already exists')
+            return render_template('user/login.html', message='User Already exists')
     
         # Hash password 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
@@ -62,16 +62,16 @@ def register():
             result = users.insert_one(user)
         
             if result.inserted_id:
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('user.user-dashboard'))
             else:
-                return render_template('login.html', message='User not created')
+                return render_template('user/login.html', message='User not created')
 
         except Exception as e:
             print(e)
             return jsonify({'message': 'Unknown error'}), 500
     else:
         # GET request - show signup form
-        return render_template('register.html')
+        return render_template('user/register.html')
 
 
 @user.route('/login', methods=['GET', 'POST'])
@@ -250,24 +250,47 @@ def prescriptions_list():
 
 @user.route('/recommendMydoctor',methods=['GET','POST'])
 def recommendMydoctor():
-    print('I AM HEREEEEEEEEEEEEEEEEEEEEEEE')
     if request.method=='POST':
-        doctors_data = doctors.find().limit(100)
-        doctors_data= list(doctors_data)
         hospitals_loc_data = doctors.distinct('location')
         hospitals_names = hospitals.distinct('hospital_name')
         hospital_name = request.form['hospital']
         location = request.form['location']
-        symptoms = request.form.getlist('symptoms[]') 
-        if symptoms!=[] :
+        symptoms = request.form.getlist('symptoms[]')
+        if symptoms!=[]  and hospital_name != 'Select Hospital' and location!='Select Location':
+            specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
+            sorted_doctors= doctors.find({'hospital':hospital_name,'speciality': specialist,'location': location}).sort('recommendation_score',-1)
+            sorted_doctors=list(sorted_doctors)
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+        elif symptoms!=[]  and location!='Select Location':
             specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
             sorted_doctors= doctors.find({'speciality': specialist,'location': location}).sort('recommendation_score',-1)
-        elif hospital_name == 'Select Hospital':
-            sorted_doctors= doctors.find({'hospital':hospital_name,'location': location}).sort('recommendation_score',-1)
+            sorted_doctors=list(sorted_doctors)
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+        elif  hospital_name !='Select Hospital' and location!='Select Location':
+             sorted_doctors= doctors.find({'hospital':hospital_name,'location': location}).sort('recommendation_score',-1)
+             sorted_doctors=list(sorted_doctors)
+             return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+        elif hospital_name != 'Select Hospital' and symptoms!=[]:
+            specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
+            sorted_doctors= doctors.find({'hospital':hospital_name,'speciality': specialist}).sort('recommendation_score',-1)
+            sorted_doctors=list(sorted_doctors)
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+        
+        elif symptoms!=[]:
+            specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
+            sorted_doctors= doctors.find({'speciality': specialist}).sort('recommendation_score',-1)
+            sorted_doctors=list(sorted_doctors)
+            return render_template('user/doctors.html',ai_doctors=sorted_doctors,doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+        elif hospital_name != 'Select Hospital':
+            sorted_doctors= doctors.find({'hospital':hospital_name}).sort('recommendation_score',-1)
+            sorted_doctors=list(sorted_doctors)
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
         else:
             sorted_doctors=  doctors.find({'location': location}).sort('recommendation_score',-1)
-        sorted_doctors=list(sorted_doctors)
-        return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+            sorted_doctors=list(sorted_doctors)
+            print(sorted_doctors)
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+
         
 
 def get_specialist(symptoms, age, gender):
