@@ -3,13 +3,14 @@ import bcrypt
 import pymongo
 import os
 import openai
+from blueprints.getTokens import addEvent
 from blueprints.ibm_connection import cos, cosReader
 from blueprints.user.generate_slots import generate_slots
 from bson import ObjectId
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 from blueprints.database_connection import users, hospitals, appointments, doctors
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
@@ -186,7 +187,6 @@ def get_doc_details(doctor_id):
         return redirect(url_for('login'))
     else:
         doctor_details = doctors.find_one({'_id':doctor_id})
-        print(doctor_details)
         return  doctor_details
 @user.route('/my-reports',methods=['GET'])
 def my_reports():
@@ -222,7 +222,6 @@ def search_docotors():
         # Find doctors matching the query and retrieve their IDs
         doctors_cursor = doctors.find(query)
         doctors_cursor = list(doctors_cursor)
-        print(doctors_cursor)
         hospitals_loc_data = get_hospitals_locations()
         hospitals_names = hospitals.distinct('hospital_name')
         # Extract doctor IDs from the cursor
@@ -315,9 +314,7 @@ def book_appointment(doctor_id, user_id):
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))
     else:
-        
         doctor_data = get_doc_details(ObjectId(doctor_id))
-        print(doctor_data)
         return render_template('user/book-appointment.html',doctor_data=doctor_data)
 
 
@@ -343,23 +340,61 @@ def confirm_booking(doctor_id):
     if 'aadharnumber' in session:
         accessToken = doctor_id + session['_id']
         doctor_id = ObjectId(doctor_id)
+        doctor_data = get_doc_details(ObjectId(doctor_id))
         user_id = ObjectId(session['_id'])
         selected_date = request.form['appointment_date']
         selected_time_slot = request.form['time_slot']  
         reason = request.form['reason']
-        
         # Convert selected date and time to datetime objects
         selected_datetime = datetime.datetime.strptime(selected_date + ' ' + selected_time_slot, '%Y-%m-%d %I:%M %p')
         current_datetime = datetime.datetime.now()
 
         # Calculate the difference in days between selected date and current date
         days_difference = (selected_datetime.date() - current_datetime.date()).days
-
         # Check booking conditions
         if days_difference <= 15:
             if days_difference >= 0:
                 # Booking is within 15 days, proceed with time check
                 if selected_datetime > current_datetime + datetime.timedelta(minutes=10):
+                    start_time = datetime.datetime.strptime(selected_time_slot, "%I:%M %p")
+                    end_time = start_time + datetime.timedelta(minutes=30)
+                    _ ,start_time = str(start_time).split()
+                    _ ,end_time = str(end_time).split()
+                    start_time = start_time[:-3]
+                    end_time = end_time[:-3]
+                    start_datetime = datetime.datetime.strptime(selected_date + " " + str(start_time), "%Y-%m-%d %H:%M").isoformat() + "+05:30"
+                    end_datetime = datetime.datetime.strptime(selected_date + " " + str(end_time), "%Y-%m-%d %H:%M").isoformat() + "+05:30"
+                    location = doctor_data['hospital_address'] + " " + doctor_data['location']
+                    description = "Appointment with doctor "+ doctor_data['name'] + " (" + doctor_data['speciality'] +") @ " + str(selected_time_slot)
+                    event = {
+                        "summary": "Doctor Appointment",
+                        "location": location,
+                        "description": description,
+                        
+                        "start": {
+                            "dateTime": start_datetime, 
+                            "timeZone": "Asia/Kolkata"
+                        },
+                        
+                        "end": {
+                            "dateTime": end_datetime,
+                            "timeZone": "Asia/Kolkata"
+                        },
+
+                        "reminders": {
+                            "useDefault": False,
+                            "overrides": [
+                            {"method": "email", "minutes":180},
+                            {"method": "popup", "minutes": 30}
+                        ]
+                        },
+                        "visibility":"public",
+                        "sendNotifications": True,
+                        "sendUpdates": "all"
+                    }
+
+                    event_id  = addEvent(session['_id'],1,event=event)
+                    print("EVENT ID", event_id)
                     booking_data = {
                         'user_id': user_id,
                         'doctor_id': doctor_id,
@@ -374,19 +409,20 @@ def confirm_booking(doctor_id):
                         'status': 'booked',
                         'lab_tests': [],
                         'lab_report': [],
-                        'calendar_event_id':''  
+                        'calendar_event_id':str(event_id)
                     }
             
                     # Insert the booking data into the database
                     appointments.insert_one(booking_data)
+
             
-                    return render_template('user/book-appointment.html',message ="Appointment confirmed successfully!",type="success", doctor_data = get_doc_details(ObjectId(doctor_id)))
+                    return render_template('user/book-appointment.html',message ="Appointment confirmed successfully!",type="success", doctor_data = doctor_data)
                 else:
-                    return render_template('user/book-appointment.html',message ="You can only book appointments that are more than 10 minutes away from the current time.", type="error" ,doctor_data = get_doc_details(ObjectId(doctor_id)))
+                    return render_template('user/book-appointment.html',message ="You can only book appointments that are more than 10 minutes away from the current time.", type="error" ,doctor_data = doctor_data)
             else:
-                return render_template('user/book-appointment.html',message ="You cannot book appointments for a past date.", type="error" ,doctor_data = get_doc_details(ObjectId(doctor_id)))
+                return render_template('user/book-appointment.html',message ="You cannot book appointments for a past date.", type="error" ,doctor_data = doctor_data)
         else:
-            return render_template('user/book-appointment.html',message ="You can only book appointments up to 15 days from the current date", type="error" ,doctor_data = get_doc_details(ObjectId(doctor_id)))
+            return render_template('user/book-appointment.html',message ="You can only book appointments up to 15 days from the current date", type="error" ,doctor_data = doctor_data)
     else:
         return redirect(url_for('login'))
 
@@ -478,3 +514,9 @@ def display_pdf(filename):
         print(e)
         return "Cannot load data"
     return render_template('user/display-report.html', pdfUrl = signedUrl)
+
+@user.route('/fit_data')
+def fit_data():
+    today = datetime.datetime.now()
+    value = addEvent(session['_id'],2,date=today)
+    return value
