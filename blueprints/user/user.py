@@ -84,10 +84,7 @@ def login():
         user = users.find_one({'aadharnumber': aadharnumber})
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['aadharnumber'] = aadharnumber
-            session['username']=user['name']
             session['_id'] = str(user['_id'])
-            session['age']=user['age']
-            session['gender'] = user['gender']
             return redirect(url_for('user.user_dashboard'))
         else:
             return render_template('user/login.html', message='Incorrect aadharnumber/password combination')

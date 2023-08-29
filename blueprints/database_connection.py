@@ -15,6 +15,7 @@ try:
     doctors = db['doctor']
     tokens = db['googleTokens']
     hospitals= db['hospitals']
+    labs = db['labs']
     medicines = db['medicines']
     users = db['users']
 

@@ -199,7 +199,7 @@ def lab_tests_required():
         if updated:
             return redirect(url_for('doctor.doctordashboard'))
 
-@doctor.route('/doctor_reviews/<filename>',methods=['GET'])
+@doctor.route('/doctor_display_pdf/<filename>',methods=['GET'])
 def doctor_display_pdf(filename):
     doctor_id = session.get('doctor_id')
     if doctor_id:
@@ -209,7 +209,7 @@ def doctor_display_pdf(filename):
         access_token = appointment.get("accessToken")
         getstatus = appointment.get("status")
         if not r.get(appointment_id) and getstatus == "pending":
-            r.set(appointment_id, access_token, ex=30)
+            r.set(appointment_id, access_token, ex=600)
         else:
             return "Access Denied"
         
