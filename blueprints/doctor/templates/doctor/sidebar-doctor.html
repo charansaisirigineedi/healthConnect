@@ -24,7 +24,7 @@
           <!-- Dashboard -->
           <!-- =================== -->
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{url_for('doctor.doctordashboard',doctor_id=doctor_data['_id'])}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{url_for('doctor.doctordashboard')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-dashboard"></i>
               </span>
@@ -32,7 +32,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{url_for('doctor.doctor_appointments',doctor_id=doctor_data['_id'])}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{url_for('doctor.doctor_appointments')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-calendar"></i>
               </span>
@@ -40,7 +40,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{url_for('doctor.doctorpatients',doctor_id=doctor_data['_id'])}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{url_for('doctor.doctorpatients')}}" aria-expanded="false">
               <span>
               <i class="ti ti-user"></i>
               </span>

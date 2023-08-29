@@ -11,7 +11,7 @@
         <!-- --------------------------------------------------- -->
         <!-- Header Start -->
         <!-- --------------------------------------------------- -->
-        {% include 'doctor/header-doctor.html' %}
+ 
         <!-- --------------------------------------------------- -->
         <!-- Header End -->
         <!-- --------------------------------------------------- -->
@@ -121,9 +121,10 @@
                           </button>
 
                     </form>
-                    <button type="submit" class="btn btn-primary" id="send-button">
-                      <i class="fas fa-arrow-right fs-4 text-white me-2"></i> Send
-                  </button>
+                    <a href="{{ url_for('tabletsprescription')}}">
+                      <button type="submit" class="btn btn-primary" id="send-button">
+                        <i class="fas fa-arrow-right fs-4 text-white me-2"></i> Send
+                    </button></a>
                   </div>
                  
                   <script>

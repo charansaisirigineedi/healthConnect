@@ -18,7 +18,7 @@
         <!-- --------------------------------------------------- -->
         <!-- Header Start -->
         <!-- --------------------------------------------------- -->
-        {% include 'doctor/header-doctor.html' %}
+
         <!-- --------------------------------------------------- -->
         <!-- Header End -->
         <!-- --------------------------------------------------- -->
@@ -59,6 +59,20 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{{url_for('doctor.lab_doctor_appointments')}}" class="
+                      nav-link
+                      note-link
+                      d-flex
+                      align-items-center
+                      justify-content-center
+                      px-3 px-md-3
+                      me-0 me-md-2 text-body-color
+                    " id="all-category">
+                <i class="ti ti-list fill-white me-0 me-md-1"></i>
+                <span class="d-none d-md-block font-weight-medium">Patients At Lab</span>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{url_for('doctor.completed_doctor_appointments')}}" class="
                       nav-link
                       note-link
@@ -73,6 +87,7 @@
                 <span class="d-none d-md-block font-weight-medium">Finished Appointments</span>
               </a>
             </li>
+
           </ul>
          
           <div class="card card-body">
@@ -89,7 +104,6 @@
                   <!-- start row -->
                   <tr class="search-items">
                       {% for appointment_with_user in appointments_with_users | sort(attribute='appointment.appointment_time') %}
-                      {% if appointment_with_user['appointment']['status'] == 'booked' %}
                     <td>
                       <div class="d-flex align-items-center">
                         <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg')}}" alt="avatar" class="rounded-circle" width="35">
@@ -122,7 +136,6 @@
                       </a>
                     </td>
                   </tr>
-                  {% endif %}
                   {% endfor %}
                   <!-- end row -->
                 </tbody>
@@ -134,13 +147,13 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content border-0">
                 <div class="modal-header bg-primary">
-                  <h6 class="modal-title text-white">Add Notes</h6>
+                  <h6 class="modal-title text-white">Patient Tests</h6>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   <div class="notes-box">
                     <div class="notes-content">
-                      <form action="javascript:void(0);" id="addnotesmodalTitle">
+                      <form action="doctor_lab_updates" method="POST">
                         <div class="row">
                           <div class="col-md-12 mb-3">
                             <div class="note-title">
@@ -497,6 +510,7 @@
         </div>
       </div>
     </div>
+    
     {% include 'doctor/footer.html' %}
   </body>
 </html>

@@ -110,10 +110,9 @@ def update_doctor_availability():
 def doctor_appointments():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
         current_date= datetime.datetime.now().date()
         date1 = str(current_date.strftime('%Y-%m-%d'))
-        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1})
+        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1,"status":'booked'})
         appointments_with_users = []
         for appointment in doctor_appointments:
             user_id = appointment.get("user_id")
@@ -125,20 +124,18 @@ def doctor_appointments():
                 "user": user_data
             }
             appointments_with_users.append(appointment_with_user)
-        
         # appointment_ids = [str(appointment_with_user['appointment']['_id']) for appointment_with_user in appointments_with_users]
         # session['appointment_ids'] = appointment_ids
-        return render_template('doctor/doctor-appointments.html', doctor_data=doctor_data, appointments_with_users=appointments_with_users)
+        return render_template('doctor/doctor-appointments.html', appointments_with_users=appointments_with_users)
     else:
         return 'Unauthorized'   
 @doctor.route('/completed_doctor_appointments')
 def completed_doctor_appointments():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
-        current_date=datetime.now().date()
+        current_date=datetime.datetime.now().date()
         date1 = str(current_date.strftime('%Y-%m-%d'))
-        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1})
+        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1,"status":'completed'})
         appointments_with_users = []
         for appointment in doctor_appointments:
             user_id = appointment.get("user_id")
@@ -151,26 +148,56 @@ def completed_doctor_appointments():
             }
             appointments_with_users.append(appointment_with_user)
         
-        # appointment_ids = [str(appointment_with_user['appointment']['_id']) for appointment_with_user in appointments_with_users]
-        # session['appointment_ids'] = appointment_ids
-        return render_template('doctor/completed_doctor-appointments.html', doctor_data=doctor_data, appointments_with_users=appointments_with_users)
+        return render_template('doctor/completed_doctor-appointments.html', appointments_with_users=appointments_with_users)
     else:
         return 'Unauthorized'  
+@doctor.route('/lab_doctor_appointments')
+def lab_doctor_appointments():
+    doctor_id = session.get('doctor_id')
+    if doctor_id:
+        current_date=datetime.datetime.now().date()
+        date1 = str(current_date.strftime('%Y-%m-%d'))
+        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1,"status":'tests_required'})
+        appointments_with_users = []
+        for appointment in doctor_appointments:
+            user_id = appointment.get("user_id")
+            user_data = users.find_one({"_id": ObjectId(user_id)})
+
+            # Include the user data along with appointment data
+            appointment_with_user = {
+                "appointment": appointment,
+                "user": user_data
+            }
+            appointments_with_users.append(appointment_with_user)
+        
+        return render_template('doctor/lab_doctor-appointments.html', appointments_with_users=appointments_with_users)
+    else:
+        return 'Unauthorized' 
     
 @doctor.route('/patientreports/<user_id>/<appointment_id>')
 def patientreports(user_id,appointment_id):
     user_data = users.find_one({"_id": ObjectId(user_id)})
     appointments.update_one({'_id':ObjectId(appointment_id)},{'$set':{'status':"pending"}})
     session['APPOINTMENT_ID']=appointment_id
+    session['USER_ID']=user_id
     if user_data:
         pdf_reports = user_data.get('pdfReports', [])
         doctor_id = session.get('doctor_id')
         if doctor_id:
             doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
-        return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,doctor_data=doctor_data,pdf_reports=pdf_reports)
+        return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,pdf_reports=pdf_reports)
     else:
         return "User not found"
 
+@doctor.route('/lab_tests_required',methods=['POST'])
+def lab_tests_required():
+    appointment_id = session['APPOINTMENT_ID']
+    user_id = session['USER_ID']
+    if appointment_id:
+        plist=list(request.form['test'].split(','))
+        updated = appointments.update_one({'_id':ObjectId(appointment_id)},{'$push':{'lab_tests':{ '$each': plist }},'$set': {'status': 'tests_required'}})
+        if updated:
+            return redirect(url_for('doctor.doctordashboard'))
 
 @doctor.route('/doctor_reviews/<filename>',methods=['GET'])
 def doctor_display_pdf(filename):
@@ -203,21 +230,15 @@ def doctor_display_pdf(filename):
 def tabletsprescription():
     if request.method=='POST':
         reports_review = request.form.get('report_reviews')
-        current_date = datetime.now().date()
-        formatted_date = current_date.strftime('%Y-%m-%d')
-        doctor_data = doctors.find_one({"_id": ObjectId(session['doctor_id'])})
         medicine_list = list(medicines.find())
         prescriptions_list=[]
         prescriptions_list = list(appointments.find({'_id':ObjectId(session['APPOINTMENT_ID'])},{'prescription':1,'_id':0}))
-        return render_template('doctor/tablets-prescription.html',doctor_data = doctor_data,medicines=medicine_list,prescriptions_list=prescriptions_list)
+        return render_template('doctor/tablets-prescription.html',medicines=medicine_list,prescriptions_list=prescriptions_list)
     else:
-        current_date = datetime.now().date()
-        formatted_date = current_date.strftime('%Y-%m-%d')
-        doctor_data = doctors.find_one({"_id": ObjectId(session['doctor_id'])})
         medicine_list = list(medicines.find())
         prescriptions_list=[]
         prescriptions_list = list(appointments.find({'_id':ObjectId(session['APPOINTMENT_ID'])},{'prescription':1,'_id':0}))
-        return render_template('doctor/tablets-prescription.html',doctor_data = doctor_data,medicines=medicine_list,prescriptions_list=prescriptions_list)
+        return render_template('doctor/tablets-prescription.html',medicines=medicine_list,prescriptions_list=prescriptions_list)
 
     
 @doctor.route('/prescriptions_pdf',methods=['POST','GET'])
@@ -245,31 +266,27 @@ def delete_medication(medicine_names):
     
 @doctor.route('/prescription_submitted')
 def prescription_submitted():
-    user_id = session.get('user_id')
+    user_id = session.get('USER_ID')
     appointment_id=session['APPOINTMENT_ID']
     return redirect(url_for('doctor.patientreports',user_id=user_id,appointment_id=appointment_id))
 
 @doctor.route('/doctor_reviews/<appointment_id>/<user_id>')
 def doctor_reviews(appointment_id,user_id):
     doctor_id = session.get('doctor_id')
-    doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
-    print(plist)
-    return render_template('doctor/app-invoice.html',appointment_id=appointment_id,user_id=user_id,doctor_data=doctor_data,plist=plist)
+    return render_template('doctor/app-invoice.html',appointment_id=appointment_id,user_id=user_id,plist=plist)
 
 @doctor.route('/prescription')
 def prescription():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
-    return  render_template('doctor/app-invoice.html',doctor_data=doctor_data)
+        return  render_template('doctor/app-invoice.html')
 
 
 @doctor.route('/doctorappointments')
 def doctorappointments():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -285,7 +302,7 @@ def doctorappointments():
         
         appointment_ids = [str(appointment_with_user['appointment']['_id']) for appointment_with_user in appointments_with_users]
         session['appointment_ids'] = appointment_ids
-        return render_template('doctor/doctor-appointments.html', doctor_data=doctor_data, appointments_with_users=appointments_with_users)
+        return render_template('doctor/doctor-appointments.html', appointments_with_users=appointments_with_users)
     else:
         return 'Unauthorized'
 

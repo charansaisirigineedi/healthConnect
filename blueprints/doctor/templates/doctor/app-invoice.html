@@ -15,13 +15,13 @@
     <!-- Main Wrapper -->
     <!-- --------------------------------------------------- -->
     <div class="body-wrapper">
-      {%include 'doctor/header-doctor.html' %}
+      
       <div class="container-fluid">
 
         <ul class="nav nav-pills p-3 mb-3 rounded align-items-center card flex-row">
 
           <li class="nav-item">
-            <a href="{{url_for('patientreports',appointment_id=appointment_id,user_id=user_id)}}" class="
+            <a href="{{url_for('doctor.patientreports',appointment_id=appointment_id,user_id=user_id)}}" class="
                     nav-link
                     note-link
                     d-flex
@@ -35,7 +35,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{url_for('doctor_reviews',appointment_id=appointment_id,user_id=user_id)}}" class="
+            <a href="{{url_for('doctor.doctor_reviews',appointment_id=appointment_id,user_id=user_id)}}" class="
                     nav-link
                     note-link
                     d-flex
