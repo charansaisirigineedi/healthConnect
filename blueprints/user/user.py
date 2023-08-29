@@ -254,7 +254,10 @@ def recommendMydoctor():
         hospitals_names = hospitals.distinct('hospital_name')
         hospital_name = request.form['hospital']
         location = request.form['location']
+        doctors_data = doctors.find().limit(100)
+        doctors_data= list(doctors_data)
         symptoms = request.form.getlist('symptoms[]')
+        print(location)
         if symptoms!=[]  and hospital_name != 'Select Hospital' and location!='Select Location':
             specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
             sorted_doctors= doctors.find({'hospital':hospital_name,'speciality': specialist,'location': location}).sort('recommendation_score',-1)
@@ -279,16 +282,19 @@ def recommendMydoctor():
             specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
             sorted_doctors= doctors.find({'speciality': specialist}).sort('recommendation_score',-1)
             sorted_doctors=list(sorted_doctors)
-            return render_template('user/doctors.html',ai_doctors=sorted_doctors,doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
         elif hospital_name != 'Select Hospital':
             sorted_doctors= doctors.find({'hospital':hospital_name}).sort('recommendation_score',-1)
             sorted_doctors=list(sorted_doctors)
             return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
-        else:
+        elif location!='Selected Location':
             sorted_doctors=  doctors.find({'location': location}).sort('recommendation_score',-1)
             sorted_doctors=list(sorted_doctors)
             print(sorted_doctors)
             return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+        else:
+            return render_template('user/doctors.html',doctors_data=doctors_data,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+    
 
         
 

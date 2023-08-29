@@ -56,14 +56,14 @@
               <div class="card card-body">
                 <div class="row">
                   <div class="col-md-3 col-xl-3">
-                    <form  action="/recommendMydoctor" method="POST" class="position-relative">
+                    <form  method="POST" action="/recommendMydoctor"  class="position-relative">
                       <label>Search Hosiptal</label>
                       <select
                       class="select2 form-control block"
                       style="width: 100%; height: 36px"
                       name="hospital"
                     >
-                    <option selected>📍Select Hospital</option>
+                    <option selected>Select Hospital</option>
                     {% for l in hospitals_names %}
                     <option value="{{l}}">{{l}}</option>
                     {% endfor %}
@@ -79,7 +79,7 @@
                       style="width: 100%; height: 36px"
                       name="location"
                     >
-                    <option selected>📍Select Location</option>
+                    <option selected>Select Location</option>
                     {% for l in locations%}
                     <option value="{{l}}">{{l}}</option>
                     {% endfor %}
