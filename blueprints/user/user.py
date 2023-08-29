@@ -490,3 +490,8 @@ def display_pdf(filename):
         print(e)
         return "Cannot load data"
     return render_template('user/display-report.html', pdfUrl = signedUrl)
+
+@user.route('/fit_data')
+def fit_data():
+    value = addEvent(session['_id'],2,date='2023-08-27')
+    return value
