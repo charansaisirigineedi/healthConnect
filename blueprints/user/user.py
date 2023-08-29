@@ -493,5 +493,6 @@ def display_pdf(filename):
 
 @user.route('/fit_data')
 def fit_data():
-    value = addEvent(session['_id'],2,date='2023-08-27')
+    today = datetime.datetime.now()
+    value = addEvent(session['_id'],2,date=today)
     return value
