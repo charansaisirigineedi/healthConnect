@@ -27,6 +27,7 @@ def check_session():
 
 @user.route('/')
 def hello_world():
+   session.clear()
    res = make_response(render_template('user/indexMain.html'))
    res.set_cookie('FindDoctor', 'False')
    res.set_cookie('Book','False')
