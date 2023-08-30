@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+ {%include 'blog/header.html'%}
+  <body>
+ 
+    <!-- --------------------------------------------------- -->
+    <!-- Body Wrapper -->
+    <!-- --------------------------------------------------- -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+      <!-- --------------------------------------------------- -->
+      <!-- Sidebar -->
+      <!-- --------------------------------------------------- -->
+      {%include 'blog/sidebar-user.html'%}
+      <!-- --------------------------------------------------- -->
+      <!-- Main Wrapper -->
+      <!-- --------------------------------------------------- -->
+      <div class="body-wrapper">
+ 
+        <div class="container-fluid">
+          <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+            <div class="card-body px-4 py-3">
+              <div class="row align-items-center">
+                <div class="col-9">
+                  <h4 class="fw-semibold mb-8">Health Blog</h4>
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="javascript:void(0)">Health</a></li>
+                      <li class="breadcrumb-item" aria-current="page">Blog </li>
+                    </ol>
+                  </nav>
+                </div>
+                <div class="col-3">
+                  <div class="text-center mb-n5">  
+                    <img src="{{ url_for('static', filename='dist/images/breadcrumb/ChatBc.png')}}" alt="" class="img-fluid mb-n4">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card rounded-2 overflow-hidden">
+            <div class="position-relative">
+              <a href="javascript:void(0)"><img src="{{ url_for('static', filename=blog.image_path.replace('\\', '/')) }}" class="card-img-top rounded-0 object-fit-cover" alt="..." height="440"></a>
+              <span class="badge bg-white text-dark fs-2 rounded-4 lh-sm mb-9 me-9 py-1 px-2 fw-semibold position-absolute bottom-0 end-0">{{blog.reading_time}} min Read</span>
+              <img src="{{ url_for('static', filename='dist/images/profile/user-5.jpg')}}" alt="" class="img-fluid rounded-circle position-absolute bottom-0 start-0 mb-n9 ms-9" width="40" height="40" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Esther Lindsey">
+            </div>
+            <div class="card-body p-4">
+              <span class="badge text-bg-light fs-2 rounded-4 py-1 px-2 lh-sm  mt-3">{{blog.category}}</span>
+              <h2 class="fs-9 fw-semibold my-4" style="background-color: rgb(200, 233, 253);border-radius: 5px;padding:5;font-weight: 700;width:fit-content;">{{blog.doctor_name}}</h2>
+              <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-2"><i class="ti ti-eye text-dark fs-5"></i>{{blog.post_views}}</div>
+                <div class="d-flex align-items-center gap-2"><i class="ti ti-message-2 text-dark fs-5"></i>{{blog.post_comments}}</div>
+                <div class="d-flex align-items-center fs-2 ms-auto"><i class="ti ti-point text-dark"></i>{{blog.posted_date}}</div>
+              </div>
+            </div>
+            <div class="card-body border-top p-4">
+              <h2 class="fs-8 fw-semibold mb-3">{{blog.title}}</h2>
+              <p class="mb-3" style="background-color: rgb(200, 233, 253);border-radius: 5px;padding:5;font-weight: 700;width:fit-content;">
+               {{blog.content}}
+              </p>  
+            </div>
+          </div>
+ 
+        </div>
+      </div>
+  
+    <!--  Mobilenavbar -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="mobilenavbar" aria-labelledby="offcanvasWithBothOptionsLabel">
+      <nav class="sidebar-nav scroll-sidebar">
+        <div class="offcanvas-header justify-content-between">
+          <img src="../../dist/images/logos/favicon.ico" alt="" class="img-fluid">
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar=""  data-simplebar>
+          <ul id="sidebarnav">
+            <li class="sidebar-item">
+              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                <span>
+                  <i class="ti ti-apps"></i>
+                </span>
+                <span class="hide-menu">Apps</span>
+              </a>
+              <ul aria-expanded="false" class="collapse first-level my-3">
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-chat.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Chat Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">New messages arrived</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-invoice.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Invoice App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get latest invoice</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-mobile.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Contact Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">2 Unsaved Contacts</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-message-box.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Email App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get new emails</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-cart.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">User Profile</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">learn more information</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-date.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Calendar App</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Get dates</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-lifebuoy.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Contact List Table</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">Add new contact</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="sidebar-item py-2">
+                  <a href="#" class="d-flex align-items-center">
+                    <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
+                      <img src="../../dist/images/svgs/icon-dd-application.svg" alt="" class="img-fluid" width="24" height="24">
+                    </div>
+                    <div class="d-inline-block">
+                      <h6 class="mb-1 bg-hover-primary">Notes Application</h6>
+                      <span class="fs-2 d-block fw-normal text-muted">To-do and Daily tasks</span>
+                    </div>
+                  </a>
+                </li>
+                <ul class="px-8 mt-7 mb-4">
+                  <li class="sidebar-item mb-3">
+                    <h5 class="fs-5 fw-semibold">Quick Links</h5>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Pricing Page</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Authentication Design</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Register Now</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">404 Error Page</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Notes App</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">User Application</a>
+                  </li>
+                  <li class="sidebar-item py-2">
+                    <a class="fw-semibold text-dark" href="#">Account Settings</a>
+                  </li>
+                </ul>
+              </ul>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-chat.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-message-dots"></i>
+                </span>
+                <span class="hide-menu">Chat</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-calendar.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-calendar"></i>
+                </span>
+                <span class="hide-menu">Calendar</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="app-email.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-mail"></i>
+                </span>
+                <span class="hide-menu">Email</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <!--  Search Bar -->
+ 
+
+        <!-- ---------------------------------------------- -->
+    <!-- Customizer -->
+    <!-- ---------------------------------------------- -->
+    <!-- ---------------------------------------------- -->
+    <!-- Import Js Files -->
+    <!-- ---------------------------------------------- -->
+    {%include 'blog/footer.html'%}
+  </body>
+</html>

@@ -12,6 +12,7 @@ try:
     db = client['healthConnectdb']
     
     appointments = db['appointments']
+    blogVar = db['blogs']
     doctors = db['doctor']
     tokens = db['googleTokens']
     hospitals= db['hospitals']

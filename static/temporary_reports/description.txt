@@ -1,0 +1,1 @@
+This folder is used for temporary storage and processing of the pdf file for signature
