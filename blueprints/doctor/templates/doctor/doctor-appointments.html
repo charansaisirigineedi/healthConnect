@@ -99,6 +99,7 @@
                   <th>Location</th>
                   <th>Date</th>
                   <th>Appointment Time</th>
+                  <th>Status</th>
                 </thead>
                 <tbody>
                   <!-- start row -->
@@ -129,6 +130,9 @@
                     </td>
                     <td>
                       <span class="usr-ph-no" data-time="12:00:00">{{ appointment_with_user['appointment']['appointment_time'] }}</span>
+                    </td>
+                    <td>
+                      <span class="usr-location" data-location="Boston, USA">{{ appointment_with_user['appointment']['status'] }}</span>
                     </td>
                     <td>
                       <a href="{{ url_for('doctor.patientreports',user_id=appointment_with_user['appointment']['user_id'],appointment_id=appointment_with_user['appointment']['_id']) }}" class="link text-danger ms-2">

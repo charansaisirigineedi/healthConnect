@@ -7,6 +7,8 @@ from blueprints.redis_connection import r
 
 doctor = Blueprint("doctor",__name__,template_folder="templates")
 
+
+
 @doctor.route('/doctorsignup',methods=['POST','GET'])
 def doctorsignup():
     if request.method == 'POST':
@@ -112,7 +114,7 @@ def doctor_appointments():
     if doctor_id:
         current_date= datetime.datetime.now().date()
         date1 = str(current_date.strftime('%Y-%m-%d'))
-        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1,"status":'booked'})
+        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1,'$or':[{'status':'booked'},{'status':'pending'}]})
         appointments_with_users = []
         for appointment in doctor_appointments:
             user_id = appointment.get("user_id")
@@ -183,8 +185,6 @@ def patientreports(user_id,appointment_id):
     if user_data:
         pdf_reports = user_data.get('pdfReports', [])
         doctor_id = session.get('doctor_id')
-        if doctor_id:
-            doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
         return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,pdf_reports=pdf_reports)
     else:
         return "User not found"
@@ -203,23 +203,26 @@ def lab_tests_required():
 def doctor_display_pdf(filename):
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
         appointment_id = session['APPOINTMENT_ID']
         appointment = appointments.find_one({"_id": ObjectId(appointment_id)})
+        user_id=appointment['user_id']
+        pdf_reports = users.find_one({"_id": ObjectId(user_id)},{'pdfReports':1,'_id':0})
+        pdf_reports = pdf_reports['pdfReports']
         access_token = appointment.get("accessToken")
         getstatus = appointment.get("status")
         if not r.get(appointment_id) and getstatus == "pending":
-            r.set(appointment_id, access_token, ex=600)
+            r.set(appointment_id, access_token, ex=60)
+        if r.get(appointment_id):
+            print("hello")
         else:
-            return "Access Denied"
-        
+            return 'Acess Denied'
         bucket_name = 'healthconnectibm'
         key_name = filename
         http_method = 'get_object'
         expiration = 600
         try:
             signedUrl = cosReader.generate_presigned_url(http_method, Params={'Bucket': bucket_name, 'Key': key_name}, ExpiresIn=expiration)
-            return render_template('doctor/patient-pdfreports.html', pdfUrl=signedUrl,doctor_data = doctor_data)
+            return render_template('doctor/patient-pdfreports.html', pdfUrl=signedUrl,filename=filename,pdfreports=pdf_reports)
         except Exception as e:
             print(e)
             return "Cannot load data"
