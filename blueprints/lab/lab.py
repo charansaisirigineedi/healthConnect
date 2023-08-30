@@ -129,6 +129,14 @@ def upload_lab_reports(ap_id , user_id):
     else:
         return render_template('user/view-lab-app-details.html',message ="File not uploaded",type="error",user_details = user_details , app_details = app_details)
     
+@lab.route('/finish-reports/<ap_id>',methods=['GET'])
+def finish_reports(ap_id):
+    if '_id' in session:
+        query = {'_id': ObjectId(ap_id)}
+        update_data = {'$set': {'status': 'pending'}}
+        appointments.update_one(query, update_data)
+        return redirect(url_for('lab_dashboard'))
+
 @lab.route('/lablogout')
 def lablogout():
     session.clear()
