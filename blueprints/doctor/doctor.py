@@ -8,6 +8,12 @@ from blueprints.blockChainLogging import blockChain
 
 doctor = Blueprint("doctor",__name__,template_folder="templates")
 
+@doctor.before_request
+def check_session():
+    if request.endpoint not in ['doctor.doctorsignup', 'doctor.doctorlogin'] and '_id' not in session:
+        return redirect(url_for('lab.lab_login'))
+
+
 @doctor.route('/doctorsignup',methods=['POST','GET'])
 def doctorsignup():
     if request.method == 'POST':

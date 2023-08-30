@@ -9,12 +9,12 @@ from blueprints.database_connection import users, hospitals, appointments, docto
 import math,random
 from datetime import datetime
 
-
-
-
-
-
 blog = Blueprint("blog", __name__, template_folder="templates")
+
+@blog.before_request
+def check_session():
+    if '_id' not in session:
+        return redirect(url_for('user.login'))
 
 
 @blog.route('/blogDetails<string:blog_id>')
@@ -47,6 +47,7 @@ def blogs():
         error_message = f"An error occurred: {str(e)}"
         print(error_message)
         return "raising error"
+    
 @blog.route('/myblogs')
 def myblogs():
     try:

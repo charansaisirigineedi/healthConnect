@@ -11,7 +11,12 @@ from blueprints.blockChainLogging import blockChain
 
 lab = Blueprint("lab", __name__, template_folder="templates")
 
-@lab.route('/lab-register', methods=['GET', 'POST'])
+@lab.before_request
+def check_session():
+    if request.endpoint not in ['lab.lab_register', 'lab.lab_login'] and '_id' not in session:
+        return redirect(url_for('lab.lab_login'))
+
+@lab.route('/lab_register', methods=['GET', 'POST'])
 def lab_register():
     if request.method =="POST":
         labname = request.form.get('labname')
@@ -40,7 +45,7 @@ def lab_register():
         return render_template('lab/lab-register.html')    
     
 
-@lab.route('/lab-login', methods=['GET', 'POST'])
+@lab.route('/lab_login', methods=['GET', 'POST'])
 def lab_login():
     session.clear()
     if request.method == "POST":
@@ -48,6 +53,7 @@ def lab_login():
         password = request.form.get('password')
         lab = labs.find_one({'labname': lid})
         if lab and bcrypt.checkpw(password.encode('utf-8'), lab['password']):
+            session.permanent = True 
             session['_id'] = str(lab['_id'])
             session['username']=lab['labname']
             message = "Lab ID: " + str(session['_id']) + " logged into his account"

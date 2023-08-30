@@ -18,10 +18,16 @@ from blueprints.confidential import OPEN_AI_KEY
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
 
+@user.before_request
+def check_session():
+    print(request.endpoint)
+    if request.endpoint not in ['user.login', 'user.register','user.hello_world'] and '_id' not in session:
+        return redirect(url_for('lab.lab_login'))
+
+
 @user.route('/')
 def hello_world():
    return render_template('user/login.html')
-
 
 # Route for user registration
 @user.route('/register', methods=['GET', 'POST'])
