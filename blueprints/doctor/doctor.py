@@ -7,8 +7,6 @@ from blueprints.redis_connection import r
 
 doctor = Blueprint("doctor",__name__,template_folder="templates")
 
-
-
 @doctor.route('/doctorsignup',methods=['POST','GET'])
 def doctorsignup():
     if request.method == 'POST':
@@ -180,13 +178,9 @@ def patientreports(user_id,appointment_id):
     session['USER_ID']=user_id
     if user_data:
         pdf_reports = user_data.get('pdfReports', [])
-<<<<<<< HEAD
-        doctor_id = session.get('doctor_id')
-=======
         # doctor_id = session.get('doctor_id')
         # if doctor_id:
         #     doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
->>>>>>> 186f4996194bae5879abefd22e47a7ac695fba67
         return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,pdf_reports=pdf_reports)
     else:
         return "User not found"
@@ -205,10 +199,6 @@ def lab_tests_required():
 def doctor_display_pdf(filename):
     doctor_id = session.get('doctor_id')
     if doctor_id:
-<<<<<<< HEAD
-=======
-        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
->>>>>>> 186f4996194bae5879abefd22e47a7ac695fba67
         appointment_id = session['APPOINTMENT_ID']
         appointment = appointments.find_one({"_id": ObjectId(appointment_id)})
         user_id=appointment['user_id']
@@ -217,16 +207,9 @@ def doctor_display_pdf(filename):
         access_token = appointment.get("accessToken")
         getstatus = appointment.get("status")
         if not r.get(appointment_id) and getstatus == "pending":
-<<<<<<< HEAD
             r.set(appointment_id, access_token, ex=60)
         if r.get(appointment_id):
             print("hello")
-=======
-            print(getstatus)
-            r.set(appointment_id, access_token, ex=60)
-        if r.get(appointment_id):
-            print("Hello")
->>>>>>> 186f4996194bae5879abefd22e47a7ac695fba67
         else:
             return 'Acess Denied'
         bucket_name = 'healthconnectibm'
@@ -239,7 +222,6 @@ def doctor_display_pdf(filename):
         except Exception as e:
             print(e)
             return "Cannot load data"
-
     return "No valid appointment IDs found"
 
 @doctor.route('/tabletsprescription',methods=['POST','GET'])
