@@ -3,6 +3,7 @@ import bcrypt
 import pymongo
 import os
 import openai
+from blueprints.confidential import OPEN_AI_KEY
 from blueprints.getTokens import addEvent
 from blueprints.ibm_connection import cos, cosReader
 from blueprints.user.generate_slots import generate_slots
@@ -293,7 +294,7 @@ def recommendMydoctor():
         
 
 def get_specialist(symptoms, age, gender):
-  openai.api_key = "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"
+  openai.api_key = OPEN_AI_KEY
   prompt = f"Based on these symptoms: {symptoms}, for a {gender} aged {age}, the most accurate initially needed medical specialty from this list: {specialties} is:"
 
   response = openai.Completion.create(
