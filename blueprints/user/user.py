@@ -516,4 +516,4 @@ def display_pdf(filename):
 def fit_data():
     today = datetime.datetime.now()
     value = addEvent(session['_id'],2,date=today)
-    return value
+    return render_template('user/fitness_data.html', fitness_data=value)
