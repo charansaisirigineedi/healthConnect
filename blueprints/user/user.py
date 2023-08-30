@@ -9,10 +9,11 @@ from blueprints.user.generate_slots import generate_slots
 from bson import ObjectId
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 from blueprints.database_connection import users, hospitals, appointments, doctors,tokens
-
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from blueprints.redis_connection import r 
+from blueprints.blockChainLogging import blockChain
+from blueprints.confidential import OPEN_AI_KEY
 
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
@@ -79,6 +80,7 @@ def register():
 
 @user.route('/login', methods=['GET', 'POST'])
 def login():
+    session.clear()
     if request.method == 'POST':
         aadharnumber = request.form['aadharnumber']
         password = request.form['password']
@@ -87,6 +89,8 @@ def login():
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['aadharnumber'] = aadharnumber
             session['_id'] = str(user['_id'])
+            message = "User ID: "+ str(user['_id']) + " logged into his account"
+            blockChain(message)
             return redirect(url_for('user.user_dashboard'))
         else:
             return render_template('user/login.html', message='Incorrect aadharnumber/password combination')
@@ -195,6 +199,7 @@ def get_doc_details(doctor_id):
     else:
         doctor_details = doctors.find_one({'_id':doctor_id})
         return  doctor_details
+    
 @user.route('/my-reports',methods=['GET'])
 def my_reports():
     if 'aadharnumber' not in session:
@@ -244,6 +249,7 @@ def get_doctors():
         hospitals_loc_data = doctors.distinct('location')
         hospitals_names = hospitals.distinct('hospital_name')
         return render_template('user/doctors.html',doctors_data=doctors_data , hospitals_names=hospitals_names ,locations=hospitals_loc_data)
+    
 @user.route('/prescriptions_list',methods=['GET','POST'])
 def prescriptions_list():
      if request.method == 'POST':
@@ -299,11 +305,8 @@ def recommendMydoctor():
         else:
             return render_template('user/doctors.html',doctors_data=doctors_data,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
     
-
-        
-
 def get_specialist(symptoms, age, gender):
-  openai.api_key = "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"
+  openai.api_key = OPEN_AI_KEY
   prompt = f"Based on these symptoms: {symptoms}, for a {gender} aged {age}, the most accurate initially needed medical specialty from this list: {specialties} is:"
 
   response = openai.Completion.create(
@@ -315,9 +318,7 @@ def get_specialist(symptoms, age, gender):
     frequency_penalty=0,
     presence_penalty=0
   )
-
   return response.choices[0].text.strip()
-
 
 @user.route('/book_appointment/<doctor_id>/<user_id>',methods=['GET'])
 def book_appointment(doctor_id, user_id):
@@ -328,10 +329,10 @@ def book_appointment(doctor_id, user_id):
         return render_template('user/book-appointment.html',doctor_data=doctor_data)
 
 
-@user.route('/logout',methods=['GET'])
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('login'))
+@user.route('/user_logout',methods=['GET'])
+def user_logout():
+    session.clear()
+    return redirect(url_for('user.login'))
 
 
 @user.route('/get_hospitals_locations',methods=['GET'])
@@ -488,9 +489,9 @@ def upload_file():
             os.remove(filename)
             return f"Error uploading to COS: {e}"
         else:
-            # Remove the uploaded file after successful upload
+            message = "User ID: " + str(session['_id']) + " uploaded file(" + str(filename) +") into COS"
+            blockChain(message)
             os.remove(filename)
-
             report_info = {'reportType': report_type, 'filename': filename}
             query = {"_id": ObjectId(session['_id'])}
             update = {"$push": {"pdfReports": report_info}}
@@ -515,9 +516,10 @@ def display_pdf(filename):
     key_name = filename
     http_method = 'get_object'
     expiration = 600
-    # Generate pre-signed URL that is valid for 60 seconds
     try:
         signedUrl = cosReader.generate_presigned_url(http_method, Params={'Bucket': bucket_name, 'Key': key_name}, ExpiresIn=expiration)
+        message = "User ID: " + str(session['_id']) + " viewed file " + str(key_name)
+        blockChain(message)
     except Exception as e:
         print(e)
         return "Cannot load data"

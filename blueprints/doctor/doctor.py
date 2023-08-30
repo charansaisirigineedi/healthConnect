@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, redirect, render_template, session, url_fo
 from blueprints.database_connection import doctors, appointments, users, medicines
 from blueprints.ibm_connection import cosReader 
 from blueprints.redis_connection import r
+from blueprints.blockChainLogging import blockChain
 
 doctor = Blueprint("doctor",__name__,template_folder="templates")
 
@@ -52,6 +53,7 @@ def doctorsignup():
 
 @doctor.route('/doctorlogin',methods=['POST','GET'])
 def doctorlogin():
+    session.clear()
     if request.method == 'POST':
         demail = request.form['d-email']
         dpassword = request.form['d-password']
@@ -59,10 +61,11 @@ def doctorlogin():
         if doctor:                       
             session['email'] = demail
             session['doctor_id'] = str(doctor['_id'])
+            message = "Doctor ID: " + str(doctor['_id']) + " logged into his account"
+            blockChain(message)
             return redirect(url_for('doctor.doctordashboard'))
         else:
-            return 'Invalid username or password'
-            
+            return 'Invalid username or password'     
     return render_template('doctor/authentication-login2.html')
 
 @doctor.route('/doctordashboard')
@@ -113,18 +116,16 @@ def doctor_appointments():
         for appointment in doctor_appointments:
             user_id = appointment.get("user_id")
             user_data = users.find_one({"_id": ObjectId(user_id)})
-
             # Include the user data along with appointment data
             appointment_with_user = {
                 "appointment": appointment,
                 "user": user_data
             }
             appointments_with_users.append(appointment_with_user)
-        # appointment_ids = [str(appointment_with_user['appointment']['_id']) for appointment_with_user in appointments_with_users]
-        # session['appointment_ids'] = appointment_ids
         return render_template('doctor/doctor-appointments.html', appointments_with_users=appointments_with_users)
     else:
-        return 'Unauthorized'   
+        return 'Unauthorized'  
+ 
 @doctor.route('/completed_doctor_appointments')
 def completed_doctor_appointments():
     doctor_id = session.get('doctor_id')
@@ -143,10 +144,10 @@ def completed_doctor_appointments():
                 "user": user_data
             }
             appointments_with_users.append(appointment_with_user)
-        
         return render_template('doctor/completed_doctor-appointments.html', appointments_with_users=appointments_with_users)
     else:
         return 'Unauthorized'  
+
 @doctor.route('/lab_doctor_appointments')
 def lab_doctor_appointments():
     doctor_id = session.get('doctor_id')
@@ -158,14 +159,11 @@ def lab_doctor_appointments():
         for appointment in doctor_appointments:
             user_id = appointment.get("user_id")
             user_data = users.find_one({"_id": ObjectId(user_id)})
-
-            # Include the user data along with appointment data
             appointment_with_user = {
                 "appointment": appointment,
                 "user": user_data
             }
             appointments_with_users.append(appointment_with_user)
-        
         return render_template('doctor/lab_doctor-appointments.html', appointments_with_users=appointments_with_users)
     else:
         return 'Unauthorized' 
@@ -178,9 +176,6 @@ def patientreports(user_id,appointment_id):
     session['USER_ID']=user_id
     if user_data:
         pdf_reports = user_data.get('pdfReports', [])
-        # doctor_id = session.get('doctor_id')
-        # if doctor_id:
-        #     doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
         return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,pdf_reports=pdf_reports)
     else:
         return "User not found"
@@ -218,6 +213,8 @@ def doctor_display_pdf(filename):
         expiration = 600
         try:
             signedUrl = cosReader.generate_presigned_url(http_method, Params={'Bucket': bucket_name, 'Key': key_name}, ExpiresIn=expiration)
+            message = "Doctor ID: " + str(doctor_id) + " (Appointment ID: " + appointment_id + " - User ID: " + user_id + ") Viwed file " + filename
+            blockChain(message)
             return render_template('doctor/patient-pdfreports.html', pdfUrl=signedUrl,filename=filename,pdfreports=pdf_reports)
         except Exception as e:
             print(e)
@@ -314,8 +311,6 @@ def doctorpatients():
         for appointment in doctor_appointments:
             user_id = appointment.get("user_id")
             user_data = users.find_one({"_id": ObjectId(user_id)})
-
-            # Include the user data along with appointment data
             appointment_with_user = {
                 "appointment": appointment,
                 "user": user_data
@@ -352,5 +347,5 @@ def doctorprofile():
     
 @doctor.route('/doctorlogout')
 def doctorlogout():
-    session.pop('doctor_id', None)
+    session.clear()
     return redirect(url_for('doctor.doctorlogin'))

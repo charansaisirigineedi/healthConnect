@@ -6,6 +6,7 @@ from bson import ObjectId
 from blueprints.database_connection import users, appointments, labs
 from blueprints.ibm_connection import cos
 from blueprints.signPDF import sign
+from blueprints.blockChainLogging import blockChain
 
 
 lab = Blueprint("lab", __name__, template_folder="templates")
@@ -41,6 +42,7 @@ def lab_register():
 
 @lab.route('/lab-login', methods=['GET', 'POST'])
 def lab_login():
+    session.clear()
     if request.method == "POST":
         lid= request.form.get('username')
         password = request.form.get('password')
@@ -48,6 +50,8 @@ def lab_login():
         if lab and bcrypt.checkpw(password.encode('utf-8'), lab['password']):
             session['_id'] = str(lab['_id'])
             session['username']=lab['labname']
+            message = "Lab ID: " + str(session['_id']) + " logged into his account"
+            blockChain(message)
             return redirect(url_for('lab.lab_dashboard'))
         else:
             return render_template('lab/lab-login.html', message='Incorrect aadharnumber/password combination')
@@ -93,7 +97,6 @@ def upload_lab_reports(ap_id , user_id):
     pdf_bytes = uploaded_file.read()
     app_details , user_details = get_patient_lab_appointments(user_id)
     location, filename = sign(pdf_bytes=pdf_bytes, username=str(user_details['_id']),report_type=report_type)
-
     if uploaded_file:
         try:
             cos.upload_file(Filename=location, Bucket='healthconnectibm', Key=filename)
@@ -102,7 +105,8 @@ def upload_lab_reports(ap_id , user_id):
             return f"Error uploading to COS: {e}"
         else:
             os.remove(location)
-
+            message = "Lab ID: " + str(session['_id']) + " (Appointment ID: " + ap_id + ") uploaded file " + filename + " of user(ID: " + user_id + ")"
+            blockChain(message)
             report_info = {'reportType': report_type, 'filename': filename , 'timestamp': datetime.now()}
             query = {"_id": ObjectId(app_details[0]['_id'])}
             update = {"$push": {"lab_reports": report_info}}
@@ -118,3 +122,8 @@ def upload_lab_reports(ap_id , user_id):
             return render_template('lab/view-lab-app-details.html',message ="File uploaded Succesfully !",type="success", user_details = user_details , app_details = app_details)
     else:
         return render_template('user/view-lab-app-details.html',message ="File not uploaded",type="error",user_details = user_details , app_details = app_details)
+    
+@lab.route('/lablogout')
+def lablogout():
+    session.clear()
+    return redirect(url_for('lab.lab_login'))
