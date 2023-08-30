@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, redirect, render_template, request, sessio
 from blueprints.database_connection import users, hospitals, appointments, doctors
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from blueprints.redis_connection import r 
 
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
@@ -119,6 +120,15 @@ def user_dashboard():
     else:
         user_id = users.find_one({'aadharnumber':session['aadharnumber']},"_id")
         userdata = users.find_one({'_id':user_id['_id']},{'password':0})
+        today, _ = str(datetime.datetime.now()).split()
+        appointment_id = appointments.find({'user_id':ObjectId(user_id['_id']), 'appointment_date': today},{'_id':1})
+        code = ''
+        for i in appointment_id:
+            print(i)
+            if r.get(str(i['_id'])):
+                code = r.get(str(i['_id']))
+                code = code.decode('utf-8')
+                break
         query ={'user_id':user_id['_id']}
         res=[]
         appointments_data = appointments.find(query)
@@ -142,7 +152,7 @@ def user_dashboard():
                 }
             }
             res.append(combined_data)
-    return render_template('user/user-dashboard.html',appointments=res,userdata=userdata)
+    return render_template('user/user-dashboard.html',appointments=res,userdata=userdata, code=code)
 
 
 @user.route('/my-appointments',methods=['GET'])
