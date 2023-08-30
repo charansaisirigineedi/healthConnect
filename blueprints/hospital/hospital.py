@@ -71,14 +71,6 @@ def hospital_dashboard():
         doc_details = doctors.find({'hospitalId': ObjectId(session['_id']) , 'availability': 1})
         doc_details = list(doc_details)
         res=[]
-        # for i in doc_details:
-        #     appointments_data = appointments.find({'doctor_id': ObjectId(i['_id'])})
-        #     appointments_data = list(appointments_data)
-        #     user_details = users.find({'_id': ObjectId(appointments_data[0]['user_id'])} ,{'name':1,'aadharnumber':1,'_id':1})
-        #     user_details = list(user_details)
-        #     print(user_details)
-        #     appointments_data.extend(user_details[0])
-        #     res.append(appointments_data)
         for i in doc_details:
             doctor_id = i['_id']
             
@@ -170,14 +162,6 @@ def hospital_get_patients():
         doc_details = doctors.find({'hospitalId': ObjectId(session['_id'])})
         doc_details = list(doc_details)
         res=[]
-        # for i in doc_details:
-        #     appointments_data = appointments.find({'doctor_id': ObjectId(i['_id'])})
-        #     appointments_data = list(appointments_data)
-        #     user_details = users.find({'_id': ObjectId(appointments_data[0]['user_id'])} ,{'name':1,'aadharnumber':1,'_id':1})
-        #     user_details = list(user_details)
-        #     print(user_details)
-        #     appointments_data.extend(user_details[0])
-        #     res.append(appointments_data)
         for i in doc_details:
             doctor_id = i['_id']
             
@@ -209,14 +193,6 @@ def view_appointments():
         doc_details = doctors.find({'hospitalId': ObjectId(session['_id']) , 'availability': 1})
         doc_details = list(doc_details)
         res=[]
-        # for i in doc_details:
-        #     appointments_data = appointments.find({'doctor_id': ObjectId(i['_id'])})
-        #     appointments_data = list(appointments_data)
-        #     user_details = users.find({'_id': ObjectId(appointments_data[0]['user_id'])} ,{'name':1,'aadharnumber':1,'_id':1})
-        #     user_details = list(user_details)
-        #     print(user_details)
-        #     appointments_data.extend(user_details[0])
-        #     res.append(appointments_data)
         for i in doc_details:
             doctor_id = i['_id']
             
