@@ -24,9 +24,6 @@ def doctorsignup():
 
         if existing_user:
             return jsonify({'message': 'Email already exists'}), 400
-    
-        # Hash password 
-        #hashed_password = bcrypt.hashpw(dpassword.encode('utf-8'), bcrypt.gensalt())
 
         # Insert user
         user = {
@@ -69,11 +66,16 @@ def doctorlogin():
     return render_template('doctor/authentication-login2.html')
 
 @doctor.route('/doctordashboard')
-
 def doctordashboard():
      doctor_id = session.get('doctor_id')
      if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
+        result = doctors.aggregate(pipeline).next()
+        doctor_data = result['doctor']
+        del doctor_data['hospital']
+        doctor_data["hospital"] = result["hospital"]["hospital_name"]
+        doctor_data["hospital_address"] = result["hospital"]["address"]
+        doctor_data["location"] = result["hospital"]["location"]
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -182,9 +184,9 @@ def patientreports(user_id,appointment_id):
     session['USER_ID']=user_id
     if user_data:
         pdf_reports = user_data.get('pdfReports', [])
-        doctor_id = session.get('doctor_id')
-        if doctor_id:
-            doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        # doctor_id = session.get('doctor_id')
+        # if doctor_id:
+        #     doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
         return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,pdf_reports=pdf_reports)
     else:
         return "User not found"
@@ -203,7 +205,13 @@ def lab_tests_required():
 def doctor_display_pdf(filename):
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
+        result = doctors.aggregate(pipeline).next()
+        doctor_data = result['doctor']
+        del doctor_data['hospital']
+        doctor_data["hospital"] = result["hospital"]["hospital_name"]
+        doctor_data["hospital_address"] = result["hospital"]["address"]
+        doctor_data["location"] = result["hospital"]["location"]
         appointment_id = session['APPOINTMENT_ID']
         appointment = appointments.find_one({"_id": ObjectId(appointment_id)})
         access_token = appointment.get("accessToken")
@@ -310,7 +318,13 @@ def doctorappointments():
 def doctorpatients():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
+        result = doctors.aggregate(pipeline).next()
+        doctor_data = result['doctor']
+        del doctor_data['hospital']
+        doctor_data["hospital"] = result["hospital"]["hospital_name"]
+        doctor_data["hospital_address"] = result["hospital"]["address"]
+        doctor_data["location"] = result["hospital"]["location"]
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -333,7 +347,13 @@ def doctorpatients():
 def doctorprofile():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
+        result = doctors.aggregate(pipeline).next()
+        doctor_data = result['doctor']
+        del doctor_data['hospital']
+        doctor_data["hospital"] = result["hospital"]["hospital_name"]
+        doctor_data["hospital_address"] = result["hospital"]["address"]
+        doctor_data["location"] = result["hospital"]["location"]
 
         if request.method == 'POST':
             experience = request.form.get('experience')

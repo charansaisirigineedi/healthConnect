@@ -184,7 +184,13 @@ def get_doc_details(doctor_id):
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))
     else:
-        doctor_details = doctors.find_one({'_id':doctor_id})
+        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
+        result = doctors.aggregate(pipeline).next()
+        doctor_data = result['doctor']
+        del doctor_data['hospital']
+        doctor_data["hospital"] = result["hospital"]["hospital_name"]
+        doctor_data["hospital_address"] = result["hospital"]["address"]
+        doctor_data["location"] = result["hospital"]["location"]
         return  doctor_details
 @user.route('/my-reports',methods=['GET'])
 def my_reports():
