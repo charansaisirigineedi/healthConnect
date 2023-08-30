@@ -69,13 +69,7 @@ def doctorlogin():
 def doctordashboard():
      doctor_id = session.get('doctor_id')
      if doctor_id:
-        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
-        result = doctors.aggregate(pipeline).next()
-        doctor_data = result['doctor']
-        del doctor_data['hospital']
-        doctor_data["hospital"] = result["hospital"]["hospital_name"]
-        doctor_data["hospital_address"] = result["hospital"]["address"]
-        doctor_data["location"] = result["hospital"]["location"]
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -205,13 +199,7 @@ def lab_tests_required():
 def doctor_display_pdf(filename):
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
-        result = doctors.aggregate(pipeline).next()
-        doctor_data = result['doctor']
-        del doctor_data['hospital']
-        doctor_data["hospital"] = result["hospital"]["hospital_name"]
-        doctor_data["hospital_address"] = result["hospital"]["address"]
-        doctor_data["location"] = result["hospital"]["location"]
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         appointment_id = session['APPOINTMENT_ID']
         appointment = appointments.find_one({"_id": ObjectId(appointment_id)})
         access_token = appointment.get("accessToken")
@@ -318,13 +306,7 @@ def doctorappointments():
 def doctorpatients():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
-        result = doctors.aggregate(pipeline).next()
-        doctor_data = result['doctor']
-        del doctor_data['hospital']
-        doctor_data["hospital"] = result["hospital"]["hospital_name"]
-        doctor_data["hospital_address"] = result["hospital"]["address"]
-        doctor_data["location"] = result["hospital"]["location"]
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -347,14 +329,7 @@ def doctorpatients():
 def doctorprofile():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        pipeline = [{"$match": {"_id": ObjectId(doctor_id)}}, {"$lookup": {"from": "hospitals", "localField": "hospitalID", "foreignField": "_id", "as": "hospital"}}, {"$unwind": "$hospital"}, {"$project": {"_id": 0, "doctor": "$$ROOT", "hospital": "$hospital"}}]
-        result = doctors.aggregate(pipeline).next()
-        doctor_data = result['doctor']
-        del doctor_data['hospital']
-        doctor_data["hospital"] = result["hospital"]["hospital_name"]
-        doctor_data["hospital_address"] = result["hospital"]["address"]
-        doctor_data["location"] = result["hospital"]["location"]
-
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         if request.method == 'POST':
             experience = request.form.get('experience')
             new_password = request.form.get('new_password')
