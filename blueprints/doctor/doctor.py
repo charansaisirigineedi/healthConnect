@@ -205,7 +205,10 @@ def doctor_display_pdf(filename):
         access_token = appointment.get("accessToken")
         getstatus = appointment.get("status")
         if not r.get(appointment_id) and getstatus == "pending":
-            r.set(appointment_id, access_token, ex=600)
+            print(getstatus)
+            r.set(appointment_id, access_token, ex=60)
+        if r.get(appointment_id):
+            print("Hello")
         else:
             return "Access Denied"
         
