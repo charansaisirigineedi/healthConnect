@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, redirect, render_template, request, sessio
 from bson import ObjectId
 from blueprints.database_connection import users, appointments, labs
 from blueprints.ibm_connection import cos
+from blueprints.signPDF import sign
 
 
 lab = Blueprint("lab", __name__, template_folder="templates")
@@ -89,26 +90,18 @@ def get_patient_lab_appointments(user_id):
 def upload_lab_reports(ap_id , user_id):
     report_type = request.form.get('report_type')
     uploaded_file = request.files['file']
-
+    pdf_bytes = uploaded_file.read()
     app_details , user_details = get_patient_lab_appointments(user_id)
-
+    location, filename = sign(pdf_bytes=pdf_bytes, username=str(user_details['_id']),report_type=report_type)
 
     if uploaded_file:
-        user_name = session['_id']
-        filename = f"{user_name}_{ap_id}_{user_id}_{report_type}.pdf"
-
-        # Save the uploaded file in the current folder
-        uploaded_file.save(filename)
-
         try:
-            # Upload the file to COS
-            cos.upload_file(Filename=filename, Bucket='healthconnectibm', Key=filename)
+            cos.upload_file(Filename=location, Bucket='healthconnectibm', Key=filename)
         except Exception as e:
-            os.remove(filename)
+            os.remove(location)
             return f"Error uploading to COS: {e}"
         else:
-            # Remove the uploaded file after successful upload
-            os.remove(filename)
+            os.remove(location)
 
             report_info = {'reportType': report_type, 'filename': filename , 'timestamp': datetime.now()}
             query = {"_id": ObjectId(app_details[0]['_id'])}

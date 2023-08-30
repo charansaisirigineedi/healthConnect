@@ -26,9 +26,6 @@ def doctorsignup():
 
         if existing_user:
             return jsonify({'message': 'Email already exists'}), 400
-    
-        # Hash password 
-        #hashed_password = bcrypt.hashpw(dpassword.encode('utf-8'), bcrypt.gensalt())
 
         # Insert user
         user = {
@@ -71,11 +68,10 @@ def doctorlogin():
     return render_template('doctor/authentication-login2.html')
 
 @doctor.route('/doctordashboard')
-
 def doctordashboard():
      doctor_id = session.get('doctor_id')
      if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -184,7 +180,13 @@ def patientreports(user_id,appointment_id):
     session['USER_ID']=user_id
     if user_data:
         pdf_reports = user_data.get('pdfReports', [])
+<<<<<<< HEAD
         doctor_id = session.get('doctor_id')
+=======
+        # doctor_id = session.get('doctor_id')
+        # if doctor_id:
+        #     doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+>>>>>>> 186f4996194bae5879abefd22e47a7ac695fba67
         return render_template('doctor/patient-records-list.html',user_id=user_id,appointment_id=appointment_id, user_data=user_data,pdf_reports=pdf_reports)
     else:
         return "User not found"
@@ -203,6 +205,10 @@ def lab_tests_required():
 def doctor_display_pdf(filename):
     doctor_id = session.get('doctor_id')
     if doctor_id:
+<<<<<<< HEAD
+=======
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
+>>>>>>> 186f4996194bae5879abefd22e47a7ac695fba67
         appointment_id = session['APPOINTMENT_ID']
         appointment = appointments.find_one({"_id": ObjectId(appointment_id)})
         user_id=appointment['user_id']
@@ -211,9 +217,16 @@ def doctor_display_pdf(filename):
         access_token = appointment.get("accessToken")
         getstatus = appointment.get("status")
         if not r.get(appointment_id) and getstatus == "pending":
+<<<<<<< HEAD
             r.set(appointment_id, access_token, ex=60)
         if r.get(appointment_id):
             print("hello")
+=======
+            print(getstatus)
+            r.set(appointment_id, access_token, ex=60)
+        if r.get(appointment_id):
+            print("Hello")
+>>>>>>> 186f4996194bae5879abefd22e47a7ac695fba67
         else:
             return 'Acess Denied'
         bucket_name = 'healthconnectibm'
@@ -313,7 +326,7 @@ def doctorappointments():
 def doctorpatients():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id)})
         appointments_with_users = []
         for appointment in doctor_appointments:
@@ -336,8 +349,7 @@ def doctorpatients():
 def doctorprofile():
     doctor_id = session.get('doctor_id')
     if doctor_id:
-        doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
-
+        doctor_data = doctors.find_one({'_id':ObjectId(doctor_id)})
         if request.method == 'POST':
             experience = request.form.get('experience')
             new_password = request.form.get('new_password')

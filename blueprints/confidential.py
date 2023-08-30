@@ -15,3 +15,5 @@ REDIS_URI = "mongodb+srv://charanmcr:Charansai20020902@healthconnect.bfcrznb.mon
 REDIS_HOST = "redis-12013.c264.ap-south-1-1.ec2.cloud.redislabs.com"
 
 REDIS_PADDWORD = "4fOBUp5AUER9gdGqfHmN7ZIKzLzJyziM"
+
+OPEN_AI_KEY = "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"
