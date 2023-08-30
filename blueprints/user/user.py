@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, redirect, render_template, request, sessio
 from blueprints.database_connection import users, hospitals, appointments, doctors
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from blueprints.user.signPDF import sign
 
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
@@ -462,17 +463,13 @@ def doctor_profile(doctor_id):
 def upload_file():
     report_type = request.form['report_type']
     uploaded_file = request.files['file']
-
+    pdf_bytes = uploaded_file.read()
+    location, filename = sign(pdf_bytes=pdf_bytes, username=session['_id'],report_type=report_type)
     if uploaded_file:
-        user_name = session['_id']
-        filename = f"{user_name}_{report_type}.pdf"
-
-        # Save the uploaded file in the current folder
-        uploaded_file.save(filename)
-
+        
         try:
             # Upload the file to COS
-            cos.upload_file(Filename=filename, Bucket='healthconnectibm', Key=filename)
+            cos.upload_file(Filename=location, Bucket='healthconnectibm', Key=filename)
         except Exception as e:
             os.remove(filename)
             return f"Error uploading to COS: {e}"
@@ -504,7 +501,6 @@ def display_pdf(filename):
     key_name = filename
     http_method = 'get_object'
     expiration = 600
-    # Generate pre-signed URL that is valid for 60 seconds
     try:
         signedUrl = cosReader.generate_presigned_url(http_method, Params={'Bucket': bucket_name, 'Key': key_name}, ExpiresIn=expiration)
     except Exception as e:
