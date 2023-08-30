@@ -191,7 +191,7 @@ def get_doc_details(doctor_id):
         doctor_data["hospital"] = result["hospital"]["hospital_name"]
         doctor_data["hospital_address"] = result["hospital"]["address"]
         doctor_data["location"] = result["hospital"]["location"]
-        return  doctor_details
+        return  doctor_data
 @user.route('/my-reports',methods=['GET'])
 def my_reports():
     if 'aadharnumber' not in session:
