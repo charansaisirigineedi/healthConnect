@@ -11,7 +11,7 @@ from flask import Blueprint, jsonify, redirect, render_template, request, sessio
 from blueprints.database_connection import users, hospitals, appointments, doctors
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from blueprints.user.signPDF import sign
+from blueprints.signPDF import sign
 
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
@@ -466,16 +466,15 @@ def upload_file():
     pdf_bytes = uploaded_file.read()
     location, filename = sign(pdf_bytes=pdf_bytes, username=session['_id'],report_type=report_type)
     if uploaded_file:
-        
         try:
             # Upload the file to COS
             cos.upload_file(Filename=location, Bucket='healthconnectibm', Key=filename)
         except Exception as e:
-            os.remove(filename)
+            os.remove(location)
             return f"Error uploading to COS: {e}"
         else:
             # Remove the uploaded file after successful upload
-            os.remove(filename)
+            os.remove(location)
 
             report_info = {'reportType': report_type, 'filename': filename}
             query = {"_id": ObjectId(session['_id'])}
