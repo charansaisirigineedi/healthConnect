@@ -7,7 +7,7 @@ from blueprints.getTokens import addEvent
 from blueprints.ibm_connection import cos, cosReader
 from blueprints.user.generate_slots import generate_slots
 from bson import ObjectId
-from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
+from flask import Blueprint, jsonify, make_response, redirect, render_template, request, session, url_for
 from blueprints.database_connection import users, hospitals, appointments, doctors,tokens
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -21,13 +21,16 @@ specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology',
 @user.before_request
 def check_session():
     print(request.endpoint)
-    if request.endpoint not in ['user.login', 'user.register','user.hello_world'] and '_id' not in session:
-        return redirect(url_for('lab.lab_login'))
+    if request.endpoint not in ['user.login', 'user.register','user.hello_world','user.doc_out'] and '_id' not in session:
+        return redirect(url_for('user.login'))
 
 
 @user.route('/')
 def hello_world():
-   return render_template('user/login.html')
+   res = make_response(render_template('user/indexMain.html'))
+   res.set_cookie('FindDoctor', 'False')
+   res.set_cookie('Book','False')
+   return res
 
 # Route for user registration
 @user.route('/register', methods=['GET', 'POST'])
@@ -90,13 +93,20 @@ def login():
     if request.method == 'POST':
         aadharnumber = request.form['aadharnumber']
         password = request.form['password']
-        
         user = users.find_one({'aadharnumber': aadharnumber})
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['aadharnumber'] = aadharnumber
             session['_id'] = str(user['_id'])
             message = "User ID: "+ str(user['_id']) + " logged into his account"
             blockChain(message)
+            if request.cookies.get('FindDoctor') == 'True':
+                res = make_response(redirect(url_for('user.get_doctors')))
+                res.set_cookie('FindDoctor', 'False')
+                return res
+            if request.cookies.get('Book') == 'True':
+                res = make_response(redirect(url_for('user.get_doctors')))
+                res.set_cookie('FindDoctor', 'False')
+                return res
             return redirect(url_for('user.user_dashboard'))
         else:
             return render_template('user/login.html', message='Incorrect aadharnumber/password combination')
@@ -530,6 +540,12 @@ def display_pdf(filename):
         print(e)
         return "Cannot load data"
     return render_template('user/display-report.html', pdfUrl = signedUrl)
+
+@user.route('/doc_out')
+def doc_out():
+    res = make_response(redirect(url_for('user.login')))
+    res.set_cookie('FindDoctor', 'True')
+    return res 
 
 @user.route('/fit_data')
 def fit_data():
