@@ -8,7 +8,8 @@ from blueprints.ibm_connection import cos, cosReader
 from blueprints.user.generate_slots import generate_slots
 from bson import ObjectId
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
-from blueprints.database_connection import users, hospitals, appointments, doctors
+from blueprints.database_connection import users, hospitals, appointments, doctors,tokens
+
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
@@ -516,4 +517,8 @@ def display_pdf(filename):
 def fit_data():
     today = datetime.datetime.now()
     value = addEvent(session['_id'],2,date=today)
-    return render_template('user/fitness_data.html', fitness_data=value)
+    user_age = users.find({'_id':ObjectId(session['_id'])},{'age':1,'_id':0})
+    age= user_age[0]['age']
+    streakc = tokens.find({'userID':ObjectId(session['_id'])},{'streak':1,'_id':0})
+    streak = streakc[0]['streak']
+    return render_template('user/fitness_data.html', fitness_data=value, age=age , streak=str(streak))

@@ -67,6 +67,7 @@ def addEvent(id, what, event=None,date=None):
             creds = flow.run_local_server(port=0)
             creds_json = json.loads(creds.to_json())
             creds_json["userID"] = ObjectId(id)
+            creds_json["streak"] = -1
             tokens.insert_one(creds_json)
         
     if what == 1:
@@ -92,7 +93,7 @@ def addEvent(id, what, event=None,date=None):
         # API endpoint and headers
         url = 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate'
         headers = {
-            'Authorization': 'Bearer ' + str(creds.token) 
+            'Authorization': 'Bearer ' + str(creds.token)
         }
 
         # Request body
