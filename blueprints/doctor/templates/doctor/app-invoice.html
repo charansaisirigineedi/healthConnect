@@ -21,7 +21,7 @@
         <ul class="nav nav-pills p-3 mb-3 rounded align-items-center card flex-row">
 
           <li class="nav-item">
-            <a href="{{url_for('doctor.patientreports',appointment_id=appointment_id,user_id=user_id)}}" class="
+            <a href="{{url_for('doctor.patientreports',appointment_id=session['APPOINTMENT_ID'],user_id=user_id)}}" class="
                     nav-link
                     note-link
                     d-flex
@@ -35,7 +35,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{url_for('doctor.doctor_reviews',appointment_id=appointment_id,user_id=user_id)}}" class="
+            <a href="{{url_for('doctor.doctor_reviews',appointment_id=session['APPOINTMENT_ID'],user_id=user_id)}}" class="
                     nav-link
                     note-link
                     d-flex
@@ -50,24 +50,14 @@
             </a>
           </li>
         </ul>
-        <div class="row align-items-center">
-          <div class="col-9">
+        <div class="col-3">
+          <div class="text-center mb-n5">
               <h2 class="fw-semibold mb-8">Report Reviews</h2>
-             <p class="fw-semibold mb-8">{{report_review}}</p>
-            </div>
-          </div>
-        <div class="card bg-light-info shadow-none position-relative overflow-hidden">
-            <div class="row align-items-center">
-              <div class="col-9">
-                <h4 class="fw-semibold mb-8">Prescribed Prescription</h4>
-              </div>
-              <div class="col-3">
-                <div class="text-center mb-n5">
+              <div class="card-body">
+             <p class="fw-semibold mb-8">{{report_review}}</p></div>
+
                   <img src="../../dist/images/breadcrumb/ChatBc.png" alt="" class="img-fluid mb-n4">
-                </div>
-              </div>
-            </div>
-          </div>
+</div>
         </div>
         <div class="selected-medicines">
           <div class="border-bottom title-part-padding">

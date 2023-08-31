@@ -287,7 +287,7 @@ def doctor_reviews(appointment_id,user_id):
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
     report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'reviews':1})
     report_review=report_review1[0]['reviews']
-    return render_template('doctor/app-invoice.html',appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
+    return render_template('doctor/app-invoice.html', plist=plist,user_id=user_id,report_review=str(report_review))
 
 @doctor.route('/doctor_reviews2/<appointment_id>/<user_id>')
 def doctor_reviews2(appointment_id,user_id):
@@ -295,7 +295,7 @@ def doctor_reviews2(appointment_id,user_id):
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
     report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'reviews':1})
     report_review=report_review1[0]['reviews']
-    return render_template('doctor/app-invoice1.html',appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
+    return render_template('doctor/app-invoice1.html', plist=plist,appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
 
 @doctor.route('/prescription')
 def prescription():
