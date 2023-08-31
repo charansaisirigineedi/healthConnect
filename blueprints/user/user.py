@@ -76,7 +76,8 @@ def register():
             result = users.insert_one(user)
         
             if result.inserted_id:
-                return redirect(url_for('user.user-dashboard'))
+                session['aadharnumber'] = aadharnumber
+                return redirect(url_for('user.stepsform'))
             else:
                 return render_template('user/login.html', message='User not created')
 
@@ -87,6 +88,56 @@ def register():
         # GET request - show signup form
         return render_template('user/register.html')
 
+#stepsform
+@user.route('/stepsform',methods=['GET','POST'])
+def stepsform():
+    if request.method == "POST":
+        fname = request.form['fName']
+        lname = request.form['lName']
+        email = request.form['email']
+        phno = request.form['phno']
+        city = request.form['city']
+        dob = request.form['dob']
+        gender = request.form['gender'] 
+        marstat = request.form['marstat']
+        ch = request.form['children']
+        cargiv = request.form['cargiv']
+        hndcp = request.form['handicapp']
+        occ = request.form['occupation'] 
+        bg = request.form['bloodgroup']
+        alc = request.form['alcohol']
+        currmed = request.form['currmed']
+        emercon = request.form['emercon']
+        chcom = request.form['chcom'] 
+        aadharnumber = session.get('aadharnumber')
+        #Insert form details
+        data = {
+        'firstName': fname,
+        'lastname': lname,
+        'email': email,
+        'phno': phno,
+        'email': email,
+        'city': city,
+        'dob': dob,
+        'noofchildren' : ch,
+        'cargivers' : cargiv,
+        'gender': gender,
+        'marriage_status': marstat,
+        'bloodgroup': bg,
+        'smokingConsumerHabits': alc,
+        'is_handicapped': hndcp,
+        'occupation': occ,
+        'currentMedications': currmed,
+        'emergency_contact': emercon,
+        'cheif_complaint': chcom,      
+        }
+        result = users.update_one(
+        {'aadharnumber': aadharnumber},
+        {'$set': data},
+        upsert=True
+    )
+        return "Form Submitted Successfully"
+    return render_template('user/stepreq.html')
 
 @user.route('/login', methods=['GET', 'POST'])
 def login():
@@ -135,7 +186,7 @@ def get_autocomplete_suggestions(keyword):
 
 
 # user dashboard
-@user.route('/user-dashboard',methods=['GET'])
+@user.route('/user_dashboard',methods=['GET'])
 def user_dashboard():
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))
@@ -175,6 +226,7 @@ def user_dashboard():
             }
             res.append(combined_data)
     return render_template('user/user-dashboard.html',appointments=res,userdata=userdata, code=code)
+
 
 
 @user.route('/my-appointments',methods=['GET'])
@@ -559,7 +611,6 @@ def fit_data():
     return render_template('user/fitness_data.html', fitness_data=value, age=age , streak=str(streak))
 
 
-
 @user.route('/chatbot')
 def chatbot():
     user=users.find_one({'_id':ObjectId(session['_id'])},{'name':1})
@@ -659,9 +710,7 @@ def get_bot():
     else:
         return "I didn't understand, say 'book appointment' to start booking"
     
-def get_doc_details(doctor_id):
-    doctor_details = doctors.find_one({'_id':doctor_id})
-    return  doctor_details
+
 def get_specialist2(symptoms, age, gender):
   openai.api_key = "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"
   prompt = f"Based on these symptoms: {symptoms}, for a {gender} aged {age}, the most accurate initially needed medical specialty from this list: {specialties} is:"
@@ -692,6 +741,9 @@ def check_appointments1(doctor_id, selected_date, dayOfWeek):
     print(available_slots)
     return list(available_slots)
 
+def get_doc_details1(doctor_id):
+    doctor_details = doctors.find_one({'_id':doctor_id})
+    return  doctor_details
 def confirm_booking1():
     doctor_id=appointments2['doctor_id']
     accessToken = str(doctor_id)+ str(session['_id'])
@@ -775,3 +827,4 @@ def confirm_booking1():
             
 
     
+

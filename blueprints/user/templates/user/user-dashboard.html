@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     {% include 'user/header.html' %}
@@ -28,8 +31,7 @@
                   <div class="border border-2 border-primary rounded-circle">
                     <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg') }}" class="rounded-circle m-1" alt="user1" width="60">
                   </div>
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"> 3 <span class="visually-hidden">unread messages</span>
-                  </span>
+                  
                 </div>
                 <div>
                   <h3 class="fw-semibold">Hi, <span class="text-dark">{{userdata['name']}}</span>
@@ -38,7 +40,7 @@
                 </div>
               </div>
            </div>
-            <div class="col-lg-5 d-flex align-items-stretch">
+            <div class="col-lg-8 d-flex align-items-stretch">
               <div class="card w-100">
                 <div class="card-body">
                   <h5 class="card-title fw-semibold">Appointments</h5>
@@ -64,27 +66,31 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-7 d-flex align-items-stretch">
-              <div class="card w-100 bg-light-primary overflow-hidden">
+            <div class="col-lg-4 d-flex align-items-stretch">
+              <div class="card w-100">
                 <div class="card-body">
-                  <div class="d-flex align-items-center">
-                    <div>
-                      <h5 class="card-title fw-semibold">Sales Hourly</h5>
-                      <div class="d-flex gap-2">
-                        <span>
-                          <span class="round-8 bg-primary rounded-circle d-inline-block"></span>
-                        </span>
-                        <span>Your data updates every 3 hours</span>
-                      </div>
-                    </div>
-                    <div class="ms-auto d-flex align-items-stretch gap-2">
-                      <a href="javascript:void(0)" class="btn btn-primary">
-                        <i class="ti ti-download fs-6"></i>
-                      </a>
-                    </div>
-                  </div>
+                  <h5 class="card-title fw-semibold">Quick Access</h5>
+                  <!-- <p class="card-subtitle">Current Scheduled Appointments</p> -->
+
+               <div class="mt-4 py-6 d-flex align-items-center">
+                <div class="row">
+                  <div class="col-md-4">
+                  <BUtton class="btn btn-primary">upload Reports</BUtton>
                 </div>
-                <div id="activity-status"></div>
+              <div class="col-md-8">
+                  <BUtton class="btn btn-primary ">Recommend a Doctor</BUtton>
+                </div>
+              </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                  <BUtton class="btn btn-primary">chatbot</BUtton>
+                </div>
+              <div class="col-md-8">
+                  <BUtton class="btn btn-primary ">Google fit streak Game</BUtton>
+                </div>
+              </div>
+                </div>
               </div>
             </div>
             <div class="col-lg-12">
@@ -104,7 +110,7 @@
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" data-bs-toggle="tab" href="#profile" role="tab">
-                            <span>Cancled</span>
+                            <span>Cancelled</span>
                           </a>
                         </li>
                       </ul>
@@ -148,7 +154,8 @@
                       <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 text-nowrap">
                           <tbody>
-                            {% for appointment in canclled_appointments %}
+                            {% for appointment in appointments %}
+                            {% if appointment['appointment']['status'] == 'cancelled' %}
                             <tr>
                               <td class="ps-0">
                                 <div class="d-flex align-items-center gap-3">
@@ -172,6 +179,7 @@
                                   <span class="round-8 bg-success rounded-circle d-inline-block me-1"></span>delivered </span>
                               </td>
                             </tr>
+                            {% endif %}
                             {% endfor %}
                           </tbody>
                         </table>
@@ -747,9 +755,13 @@
       </div>
     </div>
    <!--  Customizer -->
-   <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+   <!-- <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
     <i class="ti ti-settings fs-7" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Settings"></i>
-  </button>
+  </button> -->
+<a href="{{ url_for('user.chatbot') }}">
+  <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" >
+    <i class="ti ti-message-dots"></i>
+  </button></a>
   <div class="offcanvas offcanvas-end customizer" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-simplebar="">
     <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
       <h4 class="offcanvas-title fw-semibold" id="offcanvasExampleLabel">Settings</h4>
@@ -863,5 +875,5 @@
   </div>
   {% include 'user/footer.html' %}
   </body>
-</html>
+</html>">
    

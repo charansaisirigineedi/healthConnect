@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include 'user/header.html' %}
+{% include 'header.html' %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/codemirror.min.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/theme/blackboard.min.css')}}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.41.0/theme/monokai.min.css')}}" />
@@ -54,14 +54,14 @@
                   <div class="mb-3">
                     <label for="wfirstName2"> First Name : <span class="danger">*</span>
                     </label>
-                    <input type="text" class="form-control" id="wfirstName2" name="firstName">
+                    <input type="text" class="form-control" id="wfirstName2" name="fName">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="mb-3">
                     <label for="wlastName2"> Last Name : <span class="danger">*</span>
                     </label>
-                    <input type="text" class="form-control" id="wlastName2" name="lastName">
+                    <input type="text" class="form-control" id="wlastName2" name="lName">
                   </div>
                 </div>
               </div>
@@ -70,13 +70,13 @@
                   <div class="mb-3">
                     <label for="wemailAddress2"> Email Address : <span class="danger">*</span>
                     </label>
-                    <input type="email" class="form-control" id="wemailAddress2" name="emailAddress">
+                    <input type="email" class="form-control" id="wemailAddress2" name="email">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="mb-3">
                     <label for="wphoneNumber2">Phone Number : <span class="danger">*</span></label>
-                    <input type="tel" class="form-control" id="wphoneNumber2">
+                    <input type="tel" class="form-control" id="wphoneNumber2" name="phno">
                   </div>
                 </div>
               </div>
@@ -85,13 +85,13 @@
                   <div class="mb-3">
                     <label for="wlocation2"> Enter City : <span class="danger">*</span>
                     </label>
-                    <input type="location" class="form-control" id="location">
+                    <input type="location" class="form-control" id="location" name="city">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="mb-3">
                     <label for="wdate2"> Date of Birth : <span class="danger">*</span></label>
-                    <input type="date" class="form-control" id="wdate2">
+                    <input type="date" class="form-control" id="wdate2" name="dob">
                   </div>
                 </div>
               </div>
@@ -124,7 +124,7 @@
                     <div class="mb-3">
                         <label for="wemailAddress2"> Marital Status <span class="danger">*</span>
                         </label>
-                        <select class="form-select " id="wlocation2" name="gender">
+                        <select class="form-select " id="wlocation2" name="marstat">
                             <option value="">Select option</option>
                             <option value="Married">Married</option>
                             <option value="Unmarried">Unmarried</option>
@@ -134,7 +134,7 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="wphoneNumber2"> Are you handicapped : <span class="danger">*</span></label>
-                      <select class="form-select" id="wlocation2" name="location">
+                      <select class="form-select" id="wlocation2" name="handicapp">
                         <option value="">Select Option</option>
                         <option value="Male">Yes</option>
                         <option value="Female">No</option>
@@ -145,13 +145,17 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="wlocation2"> Aadhar No. : <span class="danger">*</span></label>
-                      <input type="text" class="form-control " name="aadhar">
+                      <label for="cargiv"> Add your Caregivers : <span class="danger">*</span></label>
+                      <select class="form-select" id="cargiv" name="cargiv">
+                        <option value="">Select Option</option>
+                        <option value="Male">Yes</option>
+                        <option value="Female">No</option>
+                      </select>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="wdate2">Occupation : <span class="danger">*</span></label>
+                      <label for="wdate2"> Occupation : <span class="danger">*</span></label>
                       <input type="text" class="form-control " name="occupation">
                     </div>
                   </div>
@@ -169,41 +173,10 @@
                 </div>
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label for="medhist"> Medical History (Previous illnesses, Allergies, surgeries)<span class="danger">*</span>
-                    </label>
-                    <div class="email-repeater mb-3">
-                      <div data-repeater-list="repeater-group">
-                        <div data-repeater-item class="row mb-3">
-                          <div class="col-md-10">
-                            <div class="fileInput">
-                              <input type="file" class="form-control" id="fileInput" name="fileInput" />
-                            </div> 
-                            <div class="mb-3">
-                              <select class="form-select " id="fileType" name="fileType">
-                                <option value="">Select type</option>
-                                <option value="Married">Married</option>
-                                <option value="Unmarried">Unmarried</option>
-                            </select>
-                            <button type="">Upload </button>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <button data-repeater-delete="" class="btn btn-danger waves-effect waves-light"
-                              type="button">
-                              <i class="ti ti-circle-x fs-5"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <button type="button" data-repeater-create="" class="btn btn-info waves-effect waves-light">
-                        <div class="d-flex align-items-center">
-                          Add More File
-                          <i class="ti ti-circle-plus ms-1 fs-5"></i>
-                        </div>
-                      </button>
-                    </div>
+                    <label for="currmed"> Current medications : <span class="danger">*</span></label>
+                    <textarea name="currmed" id="currmed" rows="4" class="form-control"></textarea>
                   </div>
-                </div>
+                </div> 
               </div>
               <div class="row">
                 <div class="col-md-6">
@@ -215,27 +188,22 @@
                       <option value="alcohol">Consume Alcohol</option>
                       <option value="smoke">Smoke</option>
                       <option value="both">Both</option>
+                      <option value="no">No</option>
                     </select>                  
                 </div>
               </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="currmed"> Current medications : <span class="danger">*</span></label>
-                    <textarea name="currmed" id="currmed" rows="4" class="form-control"></textarea>
-                  </div>
-                </div>    
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="chcom"> Cheif Complaint(Reason for Visit) : <span class="danger">*</span></label>
+                  <textarea name="chcom" id="chcom" rows="2" class="form-control"></textarea>
+                </div>
+              </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
                   <div class="mb-3">
                     <label for="emercon"> Emergency Contact : <span class="danger">*</span></label>
-                    <input type="tel" class="form-control" id="emercon">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="chcom"> Cheif Complaint(Reason for Visit) : <span class="danger">*</span></label>
-                    <textarea name="chcom" id="chcom" rows="2" class="form-control"></textarea>
+                    <input type="tel" class="form-control" id="emercon" name="emercon">
                   </div>
                 </div>
               </div>
@@ -301,7 +269,7 @@
             </section> -->
       </div>
 </body>
-{% include 'user/footer.html' %}
+{% include 'footer.html' %}
 <script>
   // Define the function to be called
   function afterSubmitClick() {
