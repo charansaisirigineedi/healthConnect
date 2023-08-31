@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 {%include 'doctor/header.html' %}
 
@@ -21,20 +21,6 @@
         <ul class="nav nav-pills p-3 mb-3 rounded align-items-center card flex-row">
 
           <li class="nav-item">
-            <a href="{{url_for('doctor.patientreports',appointment_id=appointment_id,user_id=user_id)}}" class="
-                    nav-link
-                    note-link
-                    d-flex
-                    align-items-center
-                    justify-content-center
-                    px-3 px-md-3
-                    me-0 me-md-2 text-body-color
-                  " id="all-category">
-              <i class="ti ti-list fill-white me-0 me-md-1"></i>
-              <span class="d-none d-md-block font-weight-medium">Medical Reports</span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="{{url_for('doctor.doctor_reviews',appointment_id=appointment_id,user_id=user_id)}}" class="
                     nav-link
                     note-link
@@ -50,13 +36,11 @@
             </a>
           </li>
         </ul>
-        <div class="row align-items-center">
-          <div class="col-9">
-              <h2 class="fw-semibold mb-8">Report Reviews</h2>
-             <p class="fw-semibold mb-8">{{report_review}}</p>
-            </div>
-          </div>
+
         <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+          <div class="card-body px-4 py-3">
+
+
             <div class="row align-items-center">
               <div class="col-9">
                 <h4 class="fw-semibold mb-8">Prescribed Prescription</h4>
@@ -69,6 +53,12 @@
             </div>
           </div>
         </div>
+        <div class="row align-items-center">
+            <div class="col-9">
+                <h2 class="fw-semibold mb-8">Report Reviews</h2>
+               <p class="fw-semibold mb-8">{{report_review}}</p>
+              </div>
+            </div>
         <div class="selected-medicines">
           <div class="border-bottom title-part-padding">
           <h4>Selected Medicines</h4>

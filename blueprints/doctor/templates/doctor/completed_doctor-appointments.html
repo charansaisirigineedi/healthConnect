@@ -129,7 +129,7 @@
                       <span class="usr-ph-no" data-time="12:00:00">{{ appointment_with_user['appointment']['appointment_time'] }}</span>
                     </td>
                     <td>
-                      <a href="{{ url_for('doctor.doctor_reviews',appointment_id=appointment_with_user['appointment']['_id'],user_id=appointment_with_user['appointment']['user_id']) }}" class="link text-danger ms-2">
+                      <a href="{{ url_for('doctor.doctor_reviews2',appointment_id=appointment_with_user['appointment']['_id'],user_id=appointment_with_user['appointment']['user_id']) }}" class="link text-danger ms-2">
                         <buttton class="btn btn-primary">Prescriptions</buttton>
                       </a>
                     </td>
