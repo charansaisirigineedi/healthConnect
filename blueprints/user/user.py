@@ -557,3 +557,221 @@ def fit_data():
     streakc = tokens.find({'userID':ObjectId(session['_id'])},{'streak':1,'_id':0})
     streak = streakc[0]['streak']
     return render_template('user/fitness_data.html', fitness_data=value, age=age , streak=str(streak))
+
+
+
+@user.route('/chatbot')
+def chatbot():
+    user=users.find_one({'_id':ObjectId(session['_id'])},{'name':1})
+    return render_template('user/chatbot.html',user=user['name'])
+
+
+appointments2 = {}
+@user.route("/get_bot", methods=['GET'])
+def get_bot():
+    user_id=session['_id']
+    user=users.find({'_id':ObjectId(user_id)},{'_id':0})
+    age= user[0]['age']
+    gender= user[0]['gender']
+    symptoms_list = ["asthma","bronchitis","pneumonia","emphysema","hypertension","heart-disease","atherosclerosis","arrhythmia","ulcer","gastritis","crohns-disease","migraine","epilepsy","arthritis","osteoporosis","fibromyalgia","diabetes",
+    "thyroid",
+    "cushing-syndrome",
+    "psoriasis",
+    "eczema",
+    "acne",
+    "covid",
+    "influenza",
+    "hiv",
+    "hepatitis",
+    "lyme-disease",
+    "breast-cancer",
+    "lung-cancer",
+    "prostate-cancer",
+    "colon-cancer",
+    "leukemia",
+    "kidney-stones",
+    "kidney-failure",
+    "polycystic-kidney",
+    "glaucoma",
+    "cataracts",
+    "macular-degeneration",
+    "depression",
+    "anxiety",
+    "addiction",
+    "ptsd"
+    ]
+    current_date = datetime.datetime.now().date()
+
+    # Create a list to store the next seven days
+    next_seven_days = [current_date + datetime.timedelta(days=i) for i in range(7)]
+
+    # Convert the dates to strings in a desired format (e.g., 'YYYY-MM-DD')
+    formatted_dates = [date.strftime('%Y-%m-%d') for date in next_seven_days]
+    locations = hospitals.distinct('location')
+    user_text = request.args.get('msg')
+
+    if user_text.lower() == "book appointment":
+        return jsonify(symptoms_list) # return symptoms list
+
+    if user_text in symptoms_list:
+        appointments2['symptoms']=user_text
+        speciality = get_specialist(user_text,age,gender)
+        appointments2['speciality']=speciality
+        return jsonify(locations)
+    if user_text in locations:
+        appointments2['location']=user_text
+        data = doctors.find({'location':appointments2['location'],'speciality':appointments2['speciality']},{'name':1,'_id':0})
+        doctor_names = [item['name'] for item in data]
+        appointments2['doctors']=doctor_names
+        return jsonify(doctor_names)  
+
+    if user_text in appointments2['doctors']:
+        appointments2['doctor'] = user_text
+        return jsonify(formatted_dates)
+
+    if user_text in  formatted_dates:
+        appointments2['date']=str(user_text)
+        date2=str(user_text)
+        date2 = datetime.datetime.strptime(date2, "%Y-%m-%d").date()
+        dow = date2.weekday()
+        doctorid=doctors.find({'name':appointments2['doctor'],'speciality':appointments2['speciality']},{'_id':1})
+        doctor_id=doctorid[0]['_id']
+        appointments2['doctor_id']=doctor_id
+        check_appointments = check_appointments1(doctor_id,appointments2['date'],dow)
+        appointments2['check_appointments']=check_appointments
+        return jsonify(check_appointments)
+    if user_text in appointments2['check_appointments']:
+         time = user_text
+         appointments2['time']=time
+         status=confirm_booking1()
+         if status == 'booked':
+             return f'''Thank You for Choosing AI Online Booking Chatbot!!     Hope you get well soon!!      booked successfully!!
+                        Your Slot Details:
+                         NAME OF THE DOCTOR:{appointments2['doctor']},
+                         date of booking:{appointments2['date']},
+                         Time Slot:{appointments2['time']},
+                         Speciality:{appointments2['speciality']},
+                        location:{appointments2['location']},
+                        You can Go Back Now, by clicking back button
+             '''
+         else:
+             return 'booked not successfully'
+    else:
+        return "I didn't understand, say 'book appointment' to start booking"
+    
+def get_doc_details(doctor_id):
+    doctor_details = doctors.find_one({'_id':doctor_id})
+    return  doctor_details
+def get_specialist2(symptoms, age, gender):
+  openai.api_key = "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"
+  prompt = f"Based on these symptoms: {symptoms}, for a {gender} aged {age}, the most accurate initially needed medical specialty from this list: {specialties} is:"
+
+  response = openai.Completion.create(
+    engine="text-davinci-002",
+    prompt=prompt,
+    temperature=0.5, 
+    max_tokens=60,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+  )
+
+  return response.choices[0].text.strip()
+
+
+def check_appointments1(doctor_id, selected_date, dayOfWeek):
+    days_of_week = {0: "Sunday", 1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday"}
+    doctor_id = ObjectId(doctor_id)
+    get_schedule = doctors.find_one({"_id":doctor_id},{"schedule":1})
+    schedule = get_schedule['schedule'][days_of_week[dayOfWeek]]
+    if 'surgery' in schedule:
+        del schedule['surgery']
+    available_slots = generate_slots(schedule, selected_date)
+    get_appointments = list(appointments.find({"doctor_id":doctor_id,"appointment_date":selected_date},{"appointment_time":1, "_id":0}))
+    get_appointments = [appointment['appointment_time'] for appointment in get_appointments]
+    print(available_slots)
+    return list(available_slots)
+
+def confirm_booking1():
+    doctor_id=appointments2['doctor_id']
+    accessToken = str(doctor_id)+ str(session['_id'])
+
+    doctor_id = ObjectId(doctor_id)
+    doctor_data = get_doc_details1(ObjectId(doctor_id))
+    user_id = ObjectId(session['_id'])
+    selected_date = appointments2['date']
+    selected_time_slot = appointments2['time']  
+    reason = appointments2['symptoms']
+    # Convert selected date and time to datetime objects
+    selected_datetime = datetime.datetime.strptime(selected_date + ' ' + selected_time_slot, '%Y-%m-%d %I:%M %p')
+    current_datetime = datetime.datetime.now()
+
+    # Calculate the difference in days between selected date and current date
+    days_difference = (selected_datetime.date() - current_datetime.date()).days
+    # Check booking conditions
+    if days_difference <= 15:
+        if days_difference >= 0:
+            # Booking is within 15 days, proceed with time check
+            if selected_datetime > current_datetime + datetime.timedelta(minutes=1):
+                start_time = datetime.datetime.strptime(selected_time_slot, "%I:%M %p")
+                end_time = start_time + datetime.timedelta(minutes=30)
+                _ ,start_time = str(start_time).split()
+                _ ,end_time = str(end_time).split()
+                start_time = start_time[:-3]
+                end_time = end_time[:-3]
+                start_datetime = datetime.datetime.strptime(selected_date + " " + str(start_time), "%Y-%m-%d %H:%M").isoformat() + "+05:30"
+                end_datetime = datetime.datetime.strptime(selected_date + " " + str(end_time), "%Y-%m-%d %H:%M").isoformat() + "+05:30"
+                location = doctor_data['hospital_address'] + " " + doctor_data['location']
+                description = "Appointment with doctor "+ doctor_data['name'] + " (" + doctor_data['speciality'] +") @ " + str(selected_time_slot)
+                event = {
+                    "summary": "Doctor Appointment",
+                    "location": location,
+                    "description": description,
+                    
+                    "start": {
+                        "dateTime": start_datetime, 
+                        "timeZone": "Asia/Kolkata"
+                    },
+                    
+                    "end": {
+                        "dateTime": end_datetime,
+                        "timeZone": "Asia/Kolkata"
+                    },
+
+                    "reminders": {
+                        "useDefault": False,
+                        "overrides": [
+                        {"method": "email", "minutes":180},
+                        {"method": "popup", "minutes": 30}
+                    ]
+                    },
+                    "visibility":"public",
+                    "sendNotifications": True,
+                    "sendUpdates": "all"
+                }
+
+                event_id  = addEvent(session['_id'],1,event=event)
+                booking_data = {
+                    'user_id': user_id,
+                    'doctor_id': doctor_id,
+                    'appointment_date': selected_date,
+                    'appointment_time': selected_time_slot,
+                    'accessToken': accessToken,
+                    'accessed':'0',
+                    'timestamp': datetime.datetime.now(),
+                    'issue': reason,
+                    'reviews': '',
+                    'notes': [],
+                    'status': 'booked',
+                    'lab_tests': [],
+                    'lab_report': [],
+                    'calendar_event_id':str(event_id)
+                }
+        
+                # Insert the booking data into the database
+                appointments.insert_one(booking_data)
+                return "booked"
+            
+            
+
+    

@@ -1,3 +1,5 @@
+//fitness_data
+
 <!DOCTYPE html>
 <html lang="en">
     {% include 'user/header.html' %}
@@ -47,7 +49,7 @@
         <div class="col-md-2">
           <div class="card">
             <div class="card-body pb-0 mb-xxl-4 pb-1">
-              <p class="mb-1 fs-3">Today's Step Count 🏃‍♀️🏃‍♀️</p>
+              <p class="mb-1 fs-3"> Yesterday's Step Count 🏃‍♀️🏃‍♀️</p>
               <div id="todaysteps" class="d-flex align-items-center mb-3"> </div>
             </div>
           </div>
@@ -97,7 +99,7 @@
           <div class="card w-100">
             <div class="card-body">
               <div class="mb-4">
-                <h5 class="card-title fw-semibold">Today's MileStone 🎯</h5>
+                <h5 class="card-title fw-semibold">Yesterday's MileStone 🎯</h5>
                 <p class="card-subtitle">Walk and Build your Health</p>
               </div>
               <ul class="timeline-widget mb-0 position-relative mb-n5">
@@ -216,7 +218,7 @@
       {
         streak=0;
         let i=0;
-        for(let i=0; i<calories.length;i++){
+        for(let i=0; i<calories.length-1;i++){
         if(calories[i] >=6000 && age >= 60 ) {
           streak=streak+1;
 
@@ -325,14 +327,11 @@
     // Updating the chart with the received data
     updateChart(dates, calories);
     streakCalculate(calories);
-    
-    
-  </script>
-<script>
-// Get step count
-const steps = 6500; 
 
-// Milestones
+    
+const steps= calories[6]
+document.getElementById('todaysteps').textContent = steps.toString();
+    // Milestones
 const milestones = [0, 6000, 8000, 10000];
 
 // Get current milestone 
@@ -349,7 +348,8 @@ for(let i=0; i<milestones.length; i++) {
 for(let i=1; i<=milestoneIndex; i++) {
   document.querySelectorAll(".timeline-badge")[i].classList.replace("border-warning", "border-success"); 
 }
-</script>
+  </script>
+
 
 
 {% include 'user/footer.html' %}
