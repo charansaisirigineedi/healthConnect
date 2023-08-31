@@ -249,7 +249,12 @@ def my_appointements():
                     'email': doctor_data['email'],
                     'hospital_name': doctor_data['hospital_address'],
                     'location': doctor_data['location'],
+                    'recommendation_score': doctor_data['recommendation_score'],
+                    'speciality': doctor_data['speciality'],
+                    'experience': doctor_data['experience'],
+                    'fees': doctor_data['fees'],
                     # Other doctor fields
+
                 },
                 'appointment': {
                     'appointment_date': appointment_data['appointment_date'],
