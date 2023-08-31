@@ -274,7 +274,7 @@ def get_doc_details(doctor_id):
         doctor_details = doctors.find_one({'_id':doctor_id})
         return  doctor_details
     
-@user.route('/my-reports',methods=['GET'])
+@user.route('/my_reports',methods=['GET'])
 def my_reports():
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))

@@ -1712,6 +1712,44 @@
           
         </form>
       </div>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+    // Function to show error alert with auto-close feature
+    <script>
+    function showErrorAlert() {
+        Swal.fire({
+            icon: 'info',
+            title:'Features of HealthConnect',
+            html:`<ul class="list-group">
+                    <li class="list-group-item">Expert Matchmaking 🤝: Discover your ideal medical practitioner.</li>
+                    <li class="list-group-item">🤖 AI-powered chatbot for effortless appointment scheduling.</li>
+                    <li class="list-group-item">Rx Made Simple 💊: Managing prescriptions without the hassle.</li>
+                    <li class="list-group-item">Lock & Key Security 🔐: Your health info, your control.</li>
+                    <li class="list-group-item">Seamless Sharing for Physicians 👨‍⚕👩‍⚕: Effortless file access for doctors.</li>
+                    <li class="list-group-item">Health Insights at a Glance 👁‍🗨: Visualize your wellness journey.</li>
+                    <li class="list-group-item">Beyond Safe: Unparalleled data security inspired by the blockchain.</li>
+                    <li class="list-group-item">Your Health Vault 🏛: Where data security meets innovation.</li>
+                    <li class="list-group-item">Fort Knox for Health Data 🔒: Top-tier digital record protection.</li>
+                    <li class="list-group-item">Your Health, Your Data 🔑: Encryption powered by keys you own</li>
+                </ul>`,
+            confirmButtonText: 'OK',
+            timer: 10000, // Auto close after 4 seconds
+            timerProgressBar: true,
+            width: '50%', 
+            heightAuto: false,
+            onClose: () => {
+                // This code will execute after the alert is closed
+                console.log('Alert closed');
+            }
+        });
+      }
+  
+    // Execute this function when the window is loaded/reloaded
+    window.onload = function() {
+        
+            showErrorAlert();
+       }
+      
+  </script>
     </div>
   </div>
   {% include 'user/footerMain.html'%}
