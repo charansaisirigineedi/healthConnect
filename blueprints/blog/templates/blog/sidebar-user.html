@@ -1,181 +1,195 @@
+
+
+
 <aside class="left-sidebar">
-    <!-- Sidebar scroll-->
-    <div>
-      <div class="brand-logo d-flex align-items-center justify-content-between">
-        <a href="index.html" class="text-nowrap logo-img">
-          <img src="{{ url_for('static', filename='dist/images/logos/logo.png')}}" class="dark-logo" width="180" alt="">
-          <!-- <img src="{{ url_for('static', filename='dist/images/logos/logo.png')}}" class="light-logo" width="180" alt=""> -->
-        </a>
-        <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-          <i class="ti ti-x fs-8 text-muted"></i>
-        </div>
+  <!-- Sidebar scroll-->
+  <div>
+    <div class="brand-logo d-flex align-items-center justify-content-between">
+      <a href="index.html" class="text-nowrap logo-img">
+        <img src="{{ url_for('static', filename='dist/images/logos/logo.png')}}" class="dark-logo" width="180" alt="">
+        <!-- <img src="{{ url_for('static', filename='dist/images/logos/logo.png')}}" class="light-logo" width="180" alt=""> -->
+      </a>
+      <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+        <i class="ti ti-x fs-8 text-muted"></i>
       </div>
-      <!-- Sidebar navigation-->
-      <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-        <ul id="sidebarnav">
-          <!-- ============================= -->
-          <!-- Home -->
-          <!-- ============================= -->
-          <li class="nav-small-cap">
-            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-           
+    </div>
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+      <ul id="sidebarnav">
+        <!-- ============================= -->
+        <!-- Home -->
+        <!-- ============================= -->
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+         
+        </li>
+        <!-- =================== -->
+        <!-- Dashboard -->
+        <!-- =================== -->
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="/user_dashboard" aria-expanded="false">
+              <span>
+                <i class="ti ti-dashboard"></i>
+              </span>
+              <span class="hide-menu">Dashboard</span>
+            </a>
           </li>
-          <!-- =================== -->
-          <!-- Dashboard -->
-          <!-- =================== -->
+
+        <!-- ============================= -->
+        <!-- Apps -->
+        <!-- ============================= -->
+      
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/my_appointments" aria-expanded="false">
+            <span>
+              <i class="ti ti-calendar-event"></i>
+            </span>
+            <span class="hide-menu">My Appointments</span>
+          </a>
+        </li>
+        <!-- ============================= -->
+        <!-- PAGES -->
+        <!-- ============================= -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/my_reports" aria-expanded="false">
+            <span>
+              <i class="ti ti-report-medical"></i>
+            </span>
+            <span class="hide-menu">My Medical Records</span>
+          </a>
+        </li>
+
+        <!-- ============================= -->
+        <!-- UI -->
+        <!-- ============================= -->
+        <!-- =================== -->
+        <!-- UI Elements -->
+        <!-- =================== -->
+        <li class="sidebar-item">
+          <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
+            <span class="d-flex">
+              <i class="ti ti-stethoscope"></i>
+            </span>
+            <span class="hide-menu">View Doctors</span>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/user-dashboard" aria-expanded="false">
-                <span>
-                  <i class="ti ti-dashboard"></i>
-                </span>
-                <span class="hide-menu">Dashboard</span>
+              <a href="/get_doctors" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  <i class="ti ti-circle"></i>
+                </div>
+                <span class="hide-menu">Doctors Near Me</span>
               </a>
             </li>
-          <!-- ============================= -->
-          <!-- Apps -->
-          <!-- ============================= -->
-        
-
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/my-appointments" aria-expanded="false">
-              <span>
-                <i class="ti ti-calendar-event"></i>
-              </span>
-              <span class="hide-menu">My Appointments</span>
-            </a>
-          </li>
-          <!-- ============================= -->
-          <!-- PAGES -->
-          <!-- ============================= -->
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/my-reports" aria-expanded="false">
-              <span>
-                <i class="ti ti-report-medical"></i>
-              </span>
-              <span class="hide-menu">My Medical Records</span>
-            </a>
-          </li>
-
-          <!-- ============================= -->
-          <!-- UI -->
-          <!-- ============================= -->
-          <!-- =================== -->
-          <!-- UI Elements -->
-          <!-- =================== -->
-          <li class="sidebar-item">
-            <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
-              <span class="d-flex">
-                <i class="ti ti-stethoscope"></i>
-              </span>
-              <span class="hide-menu">View Doctors</span>
-            </a>
-            <ul aria-expanded="false" class="collapse first-level">
-              <li class="sidebar-item">
-                <a href="/get-doctors" class="sidebar-link">
-                  <div class="round-16 d-flex align-items-center justify-content-center">
-                    <i class="ti ti-circle"></i>
-                  </div>
-                  <span class="hide-menu">Doctors Near Me</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a href="/my-doctors" class="sidebar-link">
-                  <div class="round-16 d-flex align-items-center justify-content-center">
-                    <i class="ti ti-circle"></i>
-                  </div>
-                  <span class="hide-menu">My Doctors</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="sidebar-item">
-            <a href="/blogs" class="sidebar-link">
-              <div class="round-16 d-flex align-items-center justify-content-center">
-                <i class="ti ti-circle"></i>
-              </div>
-              <span class="hide-menu">Blogs</span>
-            </a>
-          </li>
-
-          <!-- ============================= -->
-          <!-- Cards -->
-          <!-- ============================= -->
-
-
-          <!-- ============================= -->
-          <!-- Component -->
-          <!-- ============================= -->
-          <!-- ============================= -->
-          <!-- Forms -->
-          <!-- ============================= -->
-          <!-- =================== -->
-          <!-- Form Elements -->
-          <!-- =================== -->
-          <li class="sidebar-item">
-            <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
-              <span class="d-flex">
-                <i class="ti ti-health-recognition"></i>
-              </span>
-              <span class="hide-menu">My Care Givers</span>
-            </a>
-            <ul aria-expanded="false" class="collapse first-level">
-              <li class="sidebar-item">
-                <a href="/user.my-family" class="sidebar-link">
-                  <div class="round-16 d-flex align-items-center justify-content-center">
-                    <i class="ti ti-circle"></i>
-                  </div>
-                  <span class="hide-menu">Family</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a href="/my-friends" class="sidebar-link">
-                  <div class="round-16 d-flex align-items-center justify-content-center">
-                    <i class="ti ti-circle"></i>
-                  </div>
-                  <span class="hide-menu">Friends</span>
-                </a>
-              </li>
-              
-            </ul>
-          </li>
-
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="/my-profile" aria-expanded="false">
-              <span>
-                <i class="ti ti-user"></i>
-              </span>
-              <span class="hide-menu">View/Edit Profile</span>
-            </a>
-          </li>
-
-          <!-- ============================= -->
-          <!-- Charts -->
-          <!-- ============================= -->
-     
-        </ul>
-        <div class="unlimited-access hide-menu bg-light-primary position-relative my-7 rounded">
-          <div class="d-flex">
-            <div class="unlimited-access-title">
-              <button class="btn btn-primary fs-2 fw-semibold lh-sm">Emergency</button>
+          </ul>
+        </li>
+        <li class="sidebar-item">
+          <a href="/blogs" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
             </div>
-          </div>
+            <span class="hide-menu">Blogs</span>
+          </a>
+        </li>
+
+        <!-- ============================= -->
+        <!-- Cards -->
+        <!-- ============================= -->
+
+
+        <!-- ============================= -->
+        <!-- Component -->
+        <!-- ============================= -->
+        <!-- ============================= -->
+        <!-- Forms -->
+        <!-- ============================= -->
+        <!-- =================== -->
+        <!-- Form Elements -->
+        <!-- =================== -->
+        <li class="sidebar-item">
+          <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
+            <span class="d-flex">
+              <i class="ti ti-health-recognition"></i>
+            </span>
+            <span class="hide-menu">My Care Givers</span>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="/my_family" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  <i class="ti ti-circle"></i>
+                </div>
+                <span class="hide-menu">Under Development</span>
+              </a>
+            </li>
+
+            <!-- <li class="sidebar-item">
+              <a href="/my-friends" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  <i class="ti ti-circle"></i>
+                </div>
+                <span class="hide-menu">Friends</span>
+              </a>
+            </li> -->
+            
+          </ul>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/fit_data" aria-expanded="false">
+            <span>
+              <i class="ti ti-user"></i>
+            </span>
+            <span class="hide-menu">Google Fit Streak Game</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/doctor_appointments1" class="sidebar-link">
+            <div class="round-16 d-flex align-items-center justify-content-center">
+              <i class="ti ti-circle"></i>
+            </div>
+            <span class="hide-menu">Prescriptions Lists</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/my_profile" aria-expanded="false">
+            <span>
+              <i class="ti ti-user"></i>
+            </span>
+            <span class="hide-menu">View/Edit Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/chatbot" aria-expanded="false">
+            <span>
+              <i class="ti ti-message-dots"></i>
+            </span>
+            <span class="hide-menu">ChatBot</span>
+          </a>
+        </li>
+        <!-- ============================= -->
+        <!-- Charts -->
+        <!-- ============================= -->
+   
+      </ul>
+    
+    </nav>
+    <div class="fixed-profile p-3 bg-light-secondary rounded sidebar-ad mt-3">
+      <div class="hstack gap-3">
+        <div class="john-img">
+          <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg')}}" class="rounded-circle" width="40" height="40" alt="">
         </div>
-      </nav>
-      <div class="fixed-profile p-3 bg-light-secondary rounded sidebar-ad mt-3">
-        <div class="hstack gap-3">
-          <div class="john-img">
-            <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg')}}" class="rounded-circle" width="40" height="40" alt="">
-          </div>
-          <div class="john-title">
-            <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
-            <span class="fs-2 text-dark">Designer</span>
-          </div>
-          <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
-            <i class="ti ti-power fs-6"></i>
-          </button>
+        <div class="john-title">
+          <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
+          <span class="fs-2 text-dark">Designer</span>
         </div>
-      </div>  
-      <!-- End Sidebar navigation -->
-    </div>
-    <!-- End Sidebar scroll-->
-  </aside>
+        <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+          <i class="ti ti-power fs-6"></i>
+        </button>
+      </div>
+    </div>  
+    <!-- End Sidebar navigation -->
+  </div>
+  <!-- End Sidebar scroll-->
+</aside>
