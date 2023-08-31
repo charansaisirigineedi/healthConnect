@@ -156,9 +156,8 @@
             <div class="d-flex w-100">
               <div class="left-part border-end w-20 flex-shrink-0 d-none d-lg-block">
                 <div class="px-9 pt-4 pb-3">
-                  <button class="btn mb-1 btn-light-primary text-primary btn-lg px-4 fs-4 font-medium"
-                        data-bs-toggle="modal"
-                        data-bs-target="#signup-modal" >New Appointment</button>
+                <a href="/get-doctors"><button class="btn mb-1 btn-light-primary text-primary btn-lg px-4 fs-4 font-medium"
+ >New Appointment</button></a>
                 </div>
                 <ul class="list-group" style="height: calc(100vh - 400px)" data-simplebar>
                   <li class="list-group-item border-0 p-0 mx-9">
@@ -245,8 +244,8 @@
                                 </div>
                                 <div class="row">
                                   <div class="col-4 mb-7">
-                                    <p class="mb-1 fs-2">Phone number</p>
-                                    <h6 class="fw-semibold mb-0">+1 (203) 3458</h6>
+                                    <p class="mb-1 fs-2">Recommendation Score                                    </p>
+                                    <h6 class="fw-semibold mb-0">{{a['doctor']['recommendation_score']}}</h6>
                                   </div>
                                   <div class="col-8 mb-7">
                                     <p class="mb-1 fs-2">Email address</p>
@@ -267,7 +266,7 @@
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                   <button class="btn btn-primary fs-2" disabled="disabled">Appointment Booked</button>
-                                  <button class="btn btn-danger fs-2">Cancel Booking</button>
+                                  <button class="btn btn-danger fs-2" onClick="showErrorAlert();" >Cancel Booking</button>
                                 </div>
                               </div>
                             
@@ -324,7 +323,17 @@
         </div>
       </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        function showErrorAlert() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Appointement Status',
+                text: "Please confrim you appointment at Hospital",
+                confirmButtonText: 'OK'
+            });
+        }
+  </script>
     {% include 'user/footer.html' %}
     <!-- ---------------------------------------------- -->
     <!-- current page js files -->
