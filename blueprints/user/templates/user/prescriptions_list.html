@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% include 'doctor/header.html' %}
+  {% include 'user/header.html' %}
   <body>
     <!-- Preloader -->
     <!-- --------------------------------------------------- -->
@@ -10,11 +10,12 @@
       <!-- --------------------------------------------------- -->
       <!-- Sidebar -->
       <!-- --------------------------------------------------- -->
-      {% include 'doctor/sidebar-doctor.html' %}
+      {% include 'user/sidebar-user.html' %}
       <!-- --------------------------------------------------- -->
       <!-- Main Wrapper -->
       <!-- --------------------------------------------------- -->
       <div class="body-wrapper">
+        {% include 'user/header-user.html' %}
         <!-- --------------------------------------------------- -->
         <!-- Header Start -->
         <!-- --------------------------------------------------- -->
@@ -22,19 +23,15 @@
         <!-- --------------------------------------------------- -->
         <!-- Header End -->
         <!-- --------------------------------------------------- -->
-     
-        <div class="container-fluid note-has-grid ">
+        <div class="container-fluid note-has-grid">
           <div class="card bg-light-info shadow-none position-relative overflow-hidden">
             <div class="card-body px-4 py-3">
               <div class="row align-items-center">
                 <div class="col-9">
-                  <h4 class="fw-semibold mb-8">{{user_data['name']}} - Reports</h4>
-                  <br/>
-                  <h6 class="fw-semibold mb-12">Blood Group : {{user_data['bloodGroup']}} </h6>
+                  <h4 class="fw-semibold mb-8">My Appointments</h4>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="index.html">Smoking Consume Habits :  </a></li>
-                      <li class="breadcrumb-item" aria-current="page">{{user_data['smokingConsumerHabits']}}</li>
+                      <li class="breadcrumb-item" aria-current="page">Appointments</li>
                     </ol>
                   </nav>
                 </div>
@@ -46,64 +43,52 @@
               </div>
             </div>
           </div>
-          <ul class="nav nav-pills p-3 mb-3 rounded align-items-center card flex-row">
-            <li class="nav-item">
-              <a href="{{url_for('doctor.patientreports',appointment_id=appointment_id,user_id=user_id)}}" class="
-                      nav-link
-                      note-link
-                      d-flex
-                      align-items-center
-                      justify-content-center
-                      active
-                      px-3 px-md-3
-                      me-0 me-md-2 text-body-color
-                    " id="all-category">
-                <i class="ti ti-list fill-white me-0 me-md-1"></i>
-                <span class="d-none d-md-block font-weight-medium">Medical Reports</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{{url_for('doctor.doctor_reviews',appointment_id=appointment_id,user_id=user_id)}}" class="
-                      nav-link
-                      note-link
-                      d-flex
-                      align-items-center
-                      justify-content-center
-                      px-3 px-md-3
-                      me-0 me-md-2 text-body-color
-                    " id="all-category">
-                <i class="ti ti-list fill-white me-0 me-md-1"></i>
-                <span class="d-none d-md-block font-weight-medium">Prescribed Medicines and Report Reviews</span>
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="add-notes">
-              <label class="form-check-label" for="medicallyApprovedToggle" style="font-weight:700 ;">Lab Tests Required</label>
-            </div>
-            <div class="text-end">
-              <a href="{{ url_for('doctor.prescription_completed') }}">
-                  <button type="submit"  class="btn btn-primary">Finish</button>		
-              </a>								
-          </div>
-            <div id="note-full-container" class="note-has-grid row">
-              {% for report in pdf_reports %}
-              <div class="col-md-4 single-note-item all-category">
-                <div class="card card-body">
-                  <span class="side-stick"></span>
-                  <h6 class="note-title text-truncate w-75 mb-0" data-noteheading="Book a Ticket for Movie">{{ report['reportType'] }}</h6>
-                  <div class="note-content">
-                    <p class="note-inner-content" data-notecontent="Blandit tempus porttitor aasfs. Integer posuere erat a ante venenatis.">FileName : {{ report['filename'] }}</p>
-                  </div>
-                  <div class="d-flex align-items-center">
-                    <a href="{{ url_for('doctor.doctor_display_pdf', filename=report['filename'])}}" class="link text-danger ms-2">
-                      <i class="ti ti-files" style="font-size: large;"></i>
-                    </a>
-                    
-                  </div>
-                </div>
-              </div> {% endfor %}
+         
+          <div class="card card-body">
+            <div class="table-responsive">
+              <table class="table search-table align-middle text-nowrap">
+                <thead class="header-item">
+                  <th>Doctor-Name</th>
+                  <th>Issue</th>
+                  <th>Date</th>
+                  <th>Appointment Time</th>
+                  <th>View Prescriptions List</th>
+                </thead>
+                <tbody>
+                  <!-- start row -->
+                  <tr class="search-items">
+                      {% for appointment_with_user in appointments_with_users %}
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='dist/images/profile/user-1.jpg')}}" alt="avatar" class="rounded-circle" width="35">
+                        <div class="ms-3">
+                          <div class="user-meta-info">
+                            <h6 class="user-name mb-0" data-name="Charan Sai">{{ appointment_with_user['doctor_id'] }}</h6>
+                          
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="usr-email-addr" data-email="adams@mail.com"></span>{{ appointment_with_user['appointment_date'] }}
+                    </td>
+                    <td>
+                      <span class="usr-location" data-location="Boston, USA">{{ appointment_with_user['apppointment_time'] }}</span>
+                    </td>
+                    <td>
+                      <span class="usr-ph-no" data-time="12:00:00">{{ appointment_with_user['appointment_time'] }}</span>
+                    </td>
+
+                    <td>
+                      <a href="{{url_for('user.doctor_reviews1',appointment_id=appointment_with_user['_id'], doctor_id =appointment_with_user['doctor_id'])}}" class="link text-danger ms-2">
+                        <buttton class="btn btn-primary">View Prescriptions</buttton>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  <!-- end row -->
+                </tbody>
+              </table>
             </div>
           </div>
           <!-- Modal Add notes -->
@@ -111,46 +96,35 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content border-0">
                 <div class="modal-header bg-primary">
-                  <h6 class="modal-title text-white">Add Lab Tests Required</h6>
-                  <button type="button" class="btn-close btn-close-white" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <h6 class="modal-title text-white">Patient Tests</h6>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                   <div class="notes-box">
                     <div class="notes-content">
-                      <form  method="post" action="/lab_tests_required" enctype="multipart/form-data" id="addnotesmodalTitle">
+                      <form action="doctor_lab_updates" method="POST">
                         <div class="row">
                           <div class="col-md-12 mb-3">
                             <div class="note-title">
-                            <label>Select Lab Tests</label>
-                            <input list="tests" name="test" id="test" class="form-control" required>
-                            <datalist id="tests">
-                              <option value="X-ray">
-                                <option value="Sugar Test">
-                                <option value="ECG">
-                                <option value="Blood Test">
-                                <option value="MRI Scan">
-                                <option value="CT Scan">
-                                <option value="Urinalysis">
-                                <option value="Thyroid Function Test">
-                                <option value="Liver Panel">
-                                <option value="Complete Blood Count">
-                                <option value="Lipid Panel">
-                                <option value="Hemoglobin A1c">
-                                <option value="Stool Occult Blood Test">
-                                <option value="Thyroid Stimulating Hormone">
-                        </datalist>
-
+                              <label>Note Title</label>
+                              <input type="text" id="note-has-title" class="form-control" minlength="25" placeholder="Title">
                             </div>
                           </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-primary">Add</button>
+                          <div class="col-md-12">
+                            <div class="note-description">
+                              <label>Note Description</label>
+                              <textarea id="note-has-description" class="form-control" minlength="60" placeholder="Description" rows="3"></textarea>
+                            </div>
+                          </div>
                         </div>
                       </form>
                     </div>
                   </div>
                 </div>
-
+                <div class="modal-footer">
+                  <button class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
+                  <button id="btn-n-add" class="btn btn-primary" disabled="">Add</button>
+                </div>
               </div>
             </div>
           </div>
@@ -485,62 +459,7 @@
         </div>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        // Get a reference to the button
-        var addButton = $('#add-notes');
-      
-        // Listen for click event on the button
-        addButton.click(function() {
-          if (addButton.hasClass('active')) {
-            // If the button is already active (checked), uncheck it and hide the modal
-            addButton.removeClass('active');
-            $('#addnotesmodal').modal('hide');
-          } else {
-            // If the button is not active (unchecked), check it and show the modal
-            addButton.addClass('active');
-            $('#addnotesmodal').modal('show');
-          }
-        });
-      });
-      </script>
-
-<script>
-  var datalist = jQuery('datalist');
-  var options = jQuery('datalist option');
-  var optionsarray = jQuery.map(options ,function(option) {
-      return option.value;
-  });
-  var input = jQuery('input[list]');
-  var inputcommas = (input.val().match(/,/g)||[]).length;
-  var separator = ',';
-      
-  function filldatalist(prefix) {
-    if (input.val().indexOf(separator) > -1 && options.length > 0) {
-      datalist.empty();
-      for (i=0; i < optionsarray.length; i++ ) {
-        if (prefix.indexOf(optionsarray[i]) < 0 ) {
-          datalist.append('<option value="'+prefix+optionsarray[i]+'">');
-        }
-      }
-    }
-  }
-  input.bind("change paste keyup",function() {
-    var inputtrim = input.val().replace(/^\s+|\s+$/g, "");
-    var currentcommas = (input.val().match(/,/g)||[]).length;
-    if (inputtrim != input.val()) {
-      if (inputcommas != currentcommas) {
-        var lsIndex = inputtrim.lastIndexOf(separator);
-        var str = (lsIndex != -1) ? inputtrim.substr(0, lsIndex)+", " : "";
-        filldatalist(str);
-        inputcommas = currentcommas;
-      }
-      input.val(inputtrim);
-    }
-  });
-  </script>
-      
-    {% include 'doctor/footer.html' %}
+    
+    {% include 'user/footer.html' %}
   </body>
 </html>

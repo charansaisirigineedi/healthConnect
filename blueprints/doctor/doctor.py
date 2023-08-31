@@ -220,7 +220,7 @@ def doctor_display_pdf(filename):
         expiration = 600
         try:
             signedUrl = cosReader.generate_presigned_url(http_method, Params={'Bucket': bucket_name, 'Key': key_name}, ExpiresIn=expiration)
-            message = "Doctor ID: " + str(doctor_id) + " (Appointment ID: " + appointment_id + " - User ID: " + user_id + ") Viwed file " + filename
+            message = "Doctor ID: " + str(doctor_id) + " (Appointment ID: " + str(appointment_id) + " - User ID: " + str(user_id) + ") Viwed file " + filename
             blockChain(message)
             return render_template('doctor/patient-pdfreports.html', pdfUrl=signedUrl,filename=filename,pdfreports=pdf_reports)
         except Exception as e:
@@ -234,8 +234,10 @@ def tabletsprescription():
         reports_review = request.form.get('report_reviews')
         medicine_list = list(medicines.find())
         prescriptions_list=[]
-        prescriptions_list = list(appointments.find({'_id':ObjectId(session['APPOINTMENT_ID'])},{'prescription':1,'_id':0}))
-        return render_template('doctor/tablets-prescription.html',medicines=medicine_list,prescriptions_list=prescriptions_list)
+        report = appointments.update_one({'_id':ObjectId(session['APPOINTMENT_ID'])},{'$set':{'reviews':reports_review}})
+        if report:
+            prescriptions_list = list(appointments.find({'_id':ObjectId(session['APPOINTMENT_ID'])},{'prescription':1,'_id':0}))
+            return render_template('doctor/tablets-prescription.html',medicines=medicine_list,prescriptions_list=prescriptions_list)
     else:
         medicine_list = list(medicines.find())
         prescriptions_list=[]
@@ -271,12 +273,29 @@ def prescription_submitted():
     user_id = session.get('USER_ID')
     appointment_id=session['APPOINTMENT_ID']
     return redirect(url_for('doctor.patientreports',user_id=user_id,appointment_id=appointment_id))
+@doctor.route('/prescription_completed')
+def prescription_completed():
+    user_id = session.get('USER_ID')
+    appointment_id=session['APPOINTMENT_ID']
+    upd = appointments.update_one({'_id':ObjectId(appointment_id)},{'$set':{'status':'completed'}})
+    if upd:
+        return redirect(url_for('doctor.doctordashboard'))
 
 @doctor.route('/doctor_reviews/<appointment_id>/<user_id>')
 def doctor_reviews(appointment_id,user_id):
     doctor_id = session.get('doctor_id')
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
-    return render_template('doctor/app-invoice.html',appointment_id=appointment_id,user_id=user_id,plist=plist)
+    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'reviews':1})
+    report_review=report_review1[0]['reviews']
+    return render_template('doctor/app-invoice.html',appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
+
+@doctor.route('/doctor_reviews2/<appointment_id>/<user_id>')
+def doctor_reviews2(appointment_id,user_id):
+    doctor_id = session.get('doctor_id')
+    plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
+    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'reviews':1})
+    report_review=report_review1[0]['reviews']
+    return render_template('doctor/app-invoice1.html',appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
 
 @doctor.route('/prescription')
 def prescription():

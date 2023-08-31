@@ -26,7 +26,7 @@
         <!-- --------------------------------------------------- -->
         <!-- Header Start -->
         <!-- --------------------------------------------------- -->
-        {% include 'user/header-user.html' %}
+        <!-- {% include 'user/header-user.html' %} -->
         <!-- --------------------------------------------------- -->
         <!-- Header End -->
         <!-- --------------------------------------------------- -->
@@ -38,7 +38,7 @@
                       <div class="col-lg-6">
                         <div id="sync1" class="owl-carousel owl-theme">
                           <div class="item rounded overflow-hidden">
-                            <img src="dist/images/products/s12.jpg" alt="" class="img-fluid">
+                            <img src="{{ url_for('static', filename='dist/images/doctor.png')}}" alt="" class="img-fluid">
                           </div>
                       </div>
                       
@@ -81,8 +81,8 @@
                             <a href="javascript:void(0)" class="btn d-block btn-primary px-5 py-8 mb-2 mb-sm-0">Contact Hospital</a>
                             <a href="javascript:void(0)" class="btn d-block btn-danger px-7 py-8">View Hosiptal</a>
                           </div>
-                          <p class="mb-0">Dispatched in 2-3 weeks</p>
-                          <a href="javascript:void(0)">Why the longer time for delivery?</a>
+                          <!-- <p class="mb-0">Dispatched in 2-3 weeks</p>
+                          <a href="javascript:void(0)">Why the longer time for delivery?</a> -->
                         </div>
                       </div>
                     </div>
