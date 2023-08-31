@@ -200,7 +200,10 @@ def user_dashboard():
             print(i)
             if r.get(str(i['_id'])):
                 code = r.get(str(i['_id']))
-                code = code.decode('utf-8')
+                # code = code.decode('utf-8')
+                if len(code)!=4:
+                    code = None
+                print(code)
                 break
         query ={'user_id':user_id['_id']}
         res=[]
@@ -229,7 +232,7 @@ def user_dashboard():
 
 
 
-@user.route('/my-appointments',methods=['GET'])
+@user.route('/my_appointments',methods=['GET'])
 def my_appointements():
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))
@@ -282,7 +285,7 @@ def my_reports():
         user = users.find_one({'_id': ObjectId(session['_id'])})
         return render_template('user/my-reports.html', reports=user['pdfReports'])
 
-@user.route('/my-profile',methods=['GET'])
+@user.route('/my_profile',methods=['GET'])
 def my_profile():
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))
@@ -313,7 +316,23 @@ def search_docotors():
         # Extract doctor IDs from the cursor
         return render_template('user/doctors.html',doctors_data=doctors_cursor , hospitals_names=hospitals_names ,locations=hospitals_loc_data)
 
-@user.route('/get-doctors',methods=['GET'])
+
+@user.route('/doctor_appointments1')
+def doctor_appointments1():
+    appointment1 = appointments.find({"user_id": ObjectId(session['_id']),'status':'completed'}).sort('timestamp',-1)
+    appointments_with_users = appointment1
+    print(appointments_with_users)
+    return render_template('user/prescriptions_list.html', appointments_with_users=appointments_with_users)
+ 
+@user.route('/doctor_reviews1/<appointment_id>/<doctor_id>')
+def doctor_reviews1(appointment_id,doctor_id):
+    user_id = session.get('_id')
+    plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
+    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'reviews':1})
+    report_review=report_review1[0]['reviews']
+    return render_template('user/app-invoice.html',appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
+
+@user.route('/get_doctors',methods=['GET'])
 def get_doctors():
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))

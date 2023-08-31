@@ -36,7 +36,7 @@
                 <div>
                   <h3 class="fw-semibold">Hi, <span class="text-dark">{{userdata['name']}}</span>
                   </h3>
-                  <span>Last Visited to Hospital - {{date}}</span>
+                  
                 </div>
               </div>
            </div>
@@ -149,15 +149,12 @@
                                 <div class="d-flex align-items-center gap-3">
                                   <div>
                                     <h6 class="mb-0 fw-semibold">{{appointment['doctor']['name']}}</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
+                                    <span class="fs-2">{{appointment['doctor']['email']}}</span>
                                   </div>
                                 </div>
                               </td>
                               <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
+                                <span>{{appointment['appointment']['issue']}}</span>
                               </td>
                               <td class="text-end ps-0">
                                 <span class="badge bg-light-warning text-warning rounded-pill">
@@ -183,16 +180,13 @@
                                     <img src="{{ url_for('static', filename='dist/images/products/product-2.jpg') }}" class="rounded" alt="p2" width="80">
                                   </div>
                                   <div>
-                                    <h6 class="mb-0 fw-semibold">Oyhan Ruhiyan</h6>
-                                    <span class="fs-2">oyhan@gmail.com</span>
+                                    <h6 class="mb-0 fw-semibold">{{appointment['doctor']['name']}}</h6>
+                                    <span class="fs-2">{{appointment['doctor']['email']}}</span>
                                   </div>
                                 </div>
                               </td>
                               <td class="ps-0">
-                                <span>Frontend Dev - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$49.00</h6>
+                                <span>{{appointment['appointment']['issue']}}</span>
                               </td>
                               <td class="text-end ps-0">
                                 <span class="badge bg-light-success text-success rounded-pill">
@@ -206,104 +200,7 @@
                       </div>
                     </div>
                     <div class="tab-pane" id="messages" role="tabpanel">
-                      <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0 text-nowrap">
-                          <tbody>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="{{ url_for('static', filename='dist/images/products/product-4.jpg') }}" class="rounded" alt="p4" width="80">
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <a href="javascript:void(0)" class="badge bg-light-success text-success rounded-pill">
-                                  <span class="round-8 bg-success rounded-circle d-inline-block me-1"></span>delivered </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="{{ url_for('static', filename='dist/images/products/product-1.jpg') }}" class="rounded" alt="p1" width="80">
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Irpun Wicaksono</h6>
-                                    <span class="fs-2">irpun@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>React Js - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$50.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-light-warning text-warning rounded-pill">
-                                  <span class="round-8 bg-warning rounded-circle d-inline-block me-1"></span>progress </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="{{ url_for('static', filename='dist/images/products/product-2.jpg') }}" class="rounded" alt="p2" width="80">
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Oyhan Ruhiyan</h6>
-                                    <span class="fs-2">oyhan@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>Frontend Dev - Online Classes</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$49.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-light-success text-success rounded-pill">
-                                  <span class="round-8 bg-success rounded-circle d-inline-block me-1"></span>delivered </span>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="ps-0">
-                                <div class="d-flex align-items-center gap-3">
-                                  <div class="flex-shrink-0">
-                                    <img src="{{ url_for('static', filename='dist/images/products/product-3.jpg') }}" class="rounded" alt="p3" width="80">
-                                  </div>
-                                  <div>
-                                    <h6 class="mb-0 fw-semibold">Dayat Santoso</h6>
-                                    <span class="fs-2">dayat@gmail.com</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="ps-0">
-                                <span>UX Research - Power Courses</span>
-                              </td>
-                              <td class="ps-0">
-                                <h6 class="mb-0">$79.00</h6>
-                              </td>
-                              <td class="text-end ps-0">
-                                <span class="badge bg-light-danger text-danger rounded-pill">
-                                  <span class="round-8 bg-danger rounded-circle d-inline-block me-1"></span>cancel</span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                  
                     </div>
                   </div>
                 </div>
