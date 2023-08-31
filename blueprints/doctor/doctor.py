@@ -10,8 +10,8 @@ doctor = Blueprint("doctor",__name__,template_folder="templates")
 
 @doctor.before_request
 def check_session():
-    if request.endpoint not in ['doctor.doctorsignup', 'doctor.doctorlogin'] and '_id' not in session:
-        return redirect(url_for('lab.lab_login'))
+    if request.endpoint not in ['doctor.doctorsignup', 'doctor.doctorlogin'] and 'doctor_id' not in session:
+        return redirect(url_for('doctor.doctorlogin'))
 
 
 @doctor.route('/doctorsignup',methods=['POST','GET'])
@@ -64,6 +64,7 @@ def doctorlogin():
         demail = request.form['d-email']
         dpassword = request.form['d-password']
         doctor = doctors.find_one({'username': demail,'password':dpassword})
+        print(doctor)
         if doctor:                       
             session['email'] = demail
             session['doctor_id'] = str(doctor['_id'])

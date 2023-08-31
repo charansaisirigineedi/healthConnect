@@ -11,19 +11,17 @@ from datetime import datetime
 
 blog = Blueprint("blog", __name__, template_folder="templates")
 
-@blog.before_request
-def check_session():
-    if '_id' not in session:
-        return redirect(url_for('user.login'))
-
-
 @blog.route('/blogDetails<string:blog_id>')
 def blogDetails(blog_id):
+   doctor_id = session.get('doctor_id')
+   user_is_doctor = False
+   if doctor_id:
+       user_is_doctor = True
    try:
         blog_object_id = ObjectId(blog_id)
         blog = blogVar.find_one({'_id': blog_object_id})
         if blog:
-            return render_template('blog/blogdetails.html', blog=blog)
+            return render_template('blog/blogdetails.html', blog=blog, user_is_doctor=user_is_doctor)
         else:
             # Handle the case where the blog doesn't exist
             return render_template('error.html', error_message="Blog not found")
@@ -41,6 +39,7 @@ def blogs():
         user_is_doctor = False
         if doctor_id:
             doctor_data = doctors.find_one({"_id": ObjectId(doctor_id)})
+            print(doctor_data)
             user_is_doctor = True
         return render_template('blog/blogposts.html', blogs=all_blogs, doctor_data=doctor_data, user_is_doctor=user_is_doctor)
     except Exception as e:
