@@ -35,7 +35,7 @@ def hospital_register():
         try:
             result = hospitals.insert_one(hospital)
             if result.inserted_id:
-                return redirect(url_for('hospital-dashboard') )
+                return redirect(url_for('hospital.hospital_dashboard') )
             else:
                 return render_template('hospital/hospital-login.html', message='User not created')
             
@@ -109,10 +109,10 @@ def hospital_approve_appointments(app_id):
         if update_result.modified_count > 0:
             # Document was updated
             appointments_data = appointments.find({'hospital_id': ObjectId(session['_id'])})
-            return redirect(url_for('hospital_dashboard', message='Success'))
+            return redirect(url_for('hospital.hospital_dashboard', message='Success'))
         else:
             # Document was not updated
-            return redirect(url_for('hospital_dashboard', message=query))
+            return redirect(url_for('hospital.hospital_dashboard', message="There was an error approving the appointment"))
    
 @hospital.route('/generate_token/<ap_id>',methods=['GET'])
 def generate_token(ap_id):
@@ -132,7 +132,7 @@ def validate_access_token(ap_id):
         if redisCon.get(ap_id) is None :
             return render_template('hospital/authentication.html', error_msg = 'Token Expired')
         if int(redisCon.get(ap_id)) == token:
-            return redirect(url_for('hospital_approve_appointments', app_id = ap_id))
+            return redirect(url_for('hospital.hospital_approve_appointments', app_id = ap_id))
         else:
             return render_template('hospital/authentication.html',ap_id=ap_id, error_msg = 'Invalid Token')
 
@@ -147,7 +147,7 @@ def hospital_approve_appointments_list(app_id):
         }
         appointments.update_one(query, update_data)
         appointments_data = appointments.find({'hospital_id': ObjectId(session['_id'])})
-        return redirect(url_for('view-appointments', message = 'Success') )
+        return redirect(url_for('hospital.view-appointments', message = 'Success') )
 
 @hospital.route('/hospital-get-doctors',methods=['GET'])
 def hospital_get_doctors():
