@@ -6,6 +6,10 @@ COPY . /appfolder
 
 RUN python3 -m pip install -r /appfolder/requirements.txt
 
+WORKDIR /appfolder
+
 EXPOSE 5000
 
-CMD ["python", "/appfolder/app.py"] 
+ENTRYPOINT [ "python3" ]
+
+CMD [ "app.py" ]
