@@ -220,7 +220,51 @@ def view_appointments():
         else:
             return render_template('hospital/appointments.html',hospital_details=hospital_details , appointments_data = res , appointments_count=len(appointments_data) , doctor_count =len(doc_details) , patients_count = patients_count )  
 
+
+
+@hospital.route('/emergency-patient-details', methods=['GET' ,'POST'])
+def emergency_patient_details():
+    if '_id' in session:
+        return render_template('hospital/emergency_patient_details.html',user_details=None)
+    
+@hospital.route('/search-emergency-patient-details/', methods=['GET' ,'POST'])
+def search_emergency_patient_details():
+    if '_id' in session :
+        if request.method == 'POST':
+            user_id = request.form.get('user_id')
+            user_details = users.find_one({'aadharnumber': user_id})
+            for i,j in user_details['emergency_profile'].items():
+                if j== 1:
+                    user_details['emergency_profile'][i] = user_details[i]
+            if user_details:
+                return render_template('hospital/emergency_patient_details.html',user_details=user_details)
+            else:
+                return render_template('hospital/emergency_patient_details.html',user_details=None)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @hospital.route('/hospitallogout')
 def hospitallogout():
     session.clear()
     return redirect(url_for('hospital.hospital_login')) 
+
+
