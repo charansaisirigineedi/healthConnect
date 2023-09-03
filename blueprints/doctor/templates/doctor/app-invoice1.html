@@ -21,7 +21,7 @@
         <ul class="nav nav-pills p-3 mb-3 rounded align-items-center card flex-row">
 
           <li class="nav-item">
-            <a href="{{url_for('doctor.doctor_reviews',appointment_id=session['APPOINTMENT_ID'],user_id=user_id)}}" class="
+            <a href="{{url_for('doctor.doctor_reviews2',appointment_id=session['APPOINTMENT_ID'],user_id=user_id)}}" class="
                     nav-link
                     note-link
                     d-flex
@@ -53,15 +53,13 @@
             </div>
           </div>
         </div>
-        <div class="row align-items-center">
-            <div class="col-9">
-                <h2 class="fw-semibold mb-8">Report Reviews</h2>
-               <p class="fw-semibold mb-8">{{report_review}}</p>
-              </div>
+        <h2 class="fw-semibold mb-8">Patient Report Reviews</h2>
+          <div class="card">
+            <div class="card-body">
+                <p>{{report_review}}</p>
             </div>
-        <div class="selected-medicines">
-          <div class="border-bottom title-part-padding">
-          <h4>Selected Medicines</h4>
+          </div>
+          <h4 class="fw-semibold mb-8">Selected Medicines</h4>
           <div class="card">
           <div class="invoice-add-table">
               <div class="table-responsive">
@@ -92,12 +90,10 @@
                       </tbody>
                   </table>
               </div>
-          </div></div>
+          </div>
         </div>
       </div>
-      </div>
-    </div>
-  </div>
+
 
             
            

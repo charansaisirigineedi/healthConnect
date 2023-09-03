@@ -111,6 +111,29 @@ def stepsform():
         chcom = request.form['chcom'] 
         aadharnumber = session.get('aadharnumber')
         #Insert form details
+        details = {
+        'firstName': 1,
+        'lastname': 1,
+        'email': 1,
+        'phno': 1,
+        'email': 1,
+        'city': 1,
+        'dob': 1,
+        'noofchildren' : 0,
+        'cargivers' : 1,
+        'gender': 1,
+        'marriage_status': 1,
+        'bloodgroup': 1,
+        'smokingConsumerHabits': 1,
+        'is_handicapped': 1,
+        'occupation': 1,
+        'currentMedications': 1,
+        'emergency_contact': 1,
+        'cheif_complaint': 1,
+        'aadharnumber': 1,
+        'pdfReports': 0,    
+        }
+
         data = {
         'firstName': fname,
         'lastname': lname,
@@ -129,7 +152,9 @@ def stepsform():
         'occupation': occ,
         'currentMedications': currmed,
         'emergency_contact': emercon,
-        'cheif_complaint': chcom,      
+        'cheif_complaint': chcom,  
+        'emergency_profile' : details  
+          
         }
         result = users.update_one(
         {'aadharnumber': aadharnumber},
@@ -138,6 +163,7 @@ def stepsform():
     )
         return "Form Submitted Successfully"
     return render_template('user/stepreq.html')
+
 
 @user.route('/login', methods=['GET', 'POST'])
 def login():
@@ -321,16 +347,15 @@ def search_docotors():
 def doctor_appointments1():
     appointment1 = appointments.find({"user_id": ObjectId(session['_id']),'status':'completed'}).sort('timestamp',-1)
     appointments_with_users = appointment1
-    print(appointments_with_users)
     return render_template('user/prescriptions_list.html', appointments_with_users=appointments_with_users)
  
 @user.route('/doctor_reviews1/<appointment_id>/<doctor_id>')
 def doctor_reviews1(appointment_id,doctor_id):
     user_id = session.get('_id')
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
-    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'reviews':1})
-    report_review=report_review1[0]['reviews']
-    return render_template('user/app-invoice.html',appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
+    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'notes':1})
+    report_review=report_review1[0]['notes']
+    return render_template('user/app-invoice.html',plist=plist,appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
 
 @user.route('/get_doctors',methods=['GET'])
 def get_doctors():
@@ -380,8 +405,7 @@ def recommendMydoctor():
             specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
             sorted_doctors= doctors.find({'hospital':hospital_name,'speciality': specialist}).sort('recommendation_score',-1)
             sorted_doctors=list(sorted_doctors)
-            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data)
-        
+            return render_template('user/doctors.html',doctors_data=sorted_doctors,hospitals_names=hospitals_names ,locations=hospitals_loc_data) 
         elif symptoms!=[]:
             specialist = str(get_specialist(symptoms, session['age'], session['gender'])).strip()
             sorted_doctors= doctors.find({'speciality': specialist}).sort('recommendation_score',-1)
@@ -507,8 +531,8 @@ def confirm_booking(doctor_id):
                         'timestamp': datetime.datetime.now(),
                         'issue': reason,
                         'reviews': '',
-                        'notes': [],
-                        'status': 'booked',
+                        'notes': '',
+                        'status': 'pending',
                         'lab_tests': [],
                         'lab_report': [],
                         'calendar_event_id':str(event_id)
@@ -720,14 +744,16 @@ def get_bot():
          appointments2['time']=time
          status=confirm_booking1()
          if status == 'booked':
-             return f'''Thank You for Choosing AI Online Booking Chatbot!!     Hope you get well soon!!      booked successfully!!
-                        Your Slot Details:
-                         NAME OF THE DOCTOR:{appointments2['doctor']},
-                         date of booking:{appointments2['date']},
-                         Time Slot:{appointments2['time']},
-                         Speciality:{appointments2['speciality']},
-                        location:{appointments2['location']},
-                        You can Go Back Now, by clicking back button
+             return f'''Thank You for Choosing AI Online Booking Chatbot!!     
+                                     Hope you get well soon!!         
+                                     Booked successfully!!
+                                     Your Slot Details:
+                                     NAME OF THE DOCTOR:{appointments2['doctor']},
+                                     date of booking:{appointments2['date']},
+                                     Time Slot:{appointments2['time']},
+                                     Speciality:{appointments2['speciality']},
+                                     location:{appointments2['location']},
+                                     You can Go Back Now, by clicking 'back' button.
              '''
          else:
              return 'booked not successfully'
@@ -847,7 +873,25 @@ def confirm_booking1():
                 # Insert the booking data into the database
                 appointments.insert_one(booking_data)
                 return "booked"
-            
+@user.route('/update_emgergency_visibility' , methods=['POST' , 'GET'])
+def update_emgergency_visibility():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    visibility = data.get('visibility')
+    availability = data.get('availability')
+    update_query = {'$set': {f'emergency_profile.{visibility}': availability}}
+    res = users.update_one({'_id':ObjectId(user_id)},update_query)
+    if res.modified_count == 1 :
+        return jsonify({'message':'success'})
+    else:
+        return jsonify({'message':'failed'})
+    
+@user.route('/emergency_profile',methods=['GET'])
+def emergency_profile():
+    if '_id' in session:
+        user =  users.find_one({'_id': ObjectId(session['_id'])},{'private_key':0,'public_key':0,'password':0,'password':0 , '_id':1})
+        print(user)
+        return render_template('user/emergency_profile.html',user=user , details = user)           
             
 
     

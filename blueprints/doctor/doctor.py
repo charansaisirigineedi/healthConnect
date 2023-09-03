@@ -222,7 +222,7 @@ def doctor_display_pdf(filename):
             signedUrl = cosReader.generate_presigned_url(http_method, Params={'Bucket': bucket_name, 'Key': key_name}, ExpiresIn=expiration)
             message = "Doctor ID: " + str(doctor_id) + " (Appointment ID: " + str(appointment_id) + " - User ID: " + str(user_id) + ") Viwed file " + filename
             blockChain(message)
-            return render_template('doctor/patient-pdfreports.html', pdfUrl=signedUrl,filename=filename,pdfreports=pdf_reports)
+            return render_template('doctor/patient-pdfreports.html', pdfUrl=signedUrl,filename=filename,pdfreports=pdf_reports,report_reviews=appointment['notes'])
         except Exception as e:
             print(e)
             return "Cannot load data"
@@ -234,7 +234,7 @@ def tabletsprescription():
         reports_review = request.form.get('report_reviews')
         medicine_list = list(medicines.find())
         prescriptions_list=[]
-        report = appointments.update_one({'_id':ObjectId(session['APPOINTMENT_ID'])},{'$set':{'reviews':reports_review}})
+        report = appointments.update_one({'_id':ObjectId(session['APPOINTMENT_ID'])},{'$set':{'notes':reports_review}})
         if report:
             prescriptions_list = list(appointments.find({'_id':ObjectId(session['APPOINTMENT_ID'])},{'prescription':1,'_id':0}))
             return render_template('doctor/tablets-prescription.html',medicines=medicine_list,prescriptions_list=prescriptions_list)
@@ -283,18 +283,16 @@ def prescription_completed():
 
 @doctor.route('/doctor_reviews/<appointment_id>/<user_id>')
 def doctor_reviews(appointment_id,user_id):
-    doctor_id = session.get('doctor_id')
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
-    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'reviews':1})
-    report_review=report_review1[0]['reviews']
+    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'notes':1})
+    report_review=report_review1[0]['notes']
     return render_template('doctor/app-invoice.html', plist=plist,user_id=user_id,report_review=str(report_review))
 
 @doctor.route('/doctor_reviews2/<appointment_id>/<user_id>')
 def doctor_reviews2(appointment_id,user_id):
-    doctor_id = session.get('doctor_id')
     plist=appointments.find({'_id':ObjectId(appointment_id)},{'prescription':1})
-    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'reviews':1})
-    report_review=report_review1[0]['reviews']
+    report_review1=appointments.find({'_id':ObjectId(appointment_id)},{'_id':0,'notes':1})
+    report_review=report_review1[0]['notes']
     return render_template('doctor/app-invoice1.html', plist=plist,appointment_id=appointment_id,user_id=user_id,report_review=str(report_review))
 
 @doctor.route('/prescription')

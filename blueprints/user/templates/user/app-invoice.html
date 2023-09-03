@@ -65,52 +65,46 @@
             </div>
           </div>
         </div>
-        <div class="row align-items-center">
-          <div class="col-9">
-              <h2 class="fw-semibold mb-8">Report Reviews</h2>
-              <div class="card-body">
-             <p class="fw-semibold mb-8">{{report_review}}</p></div>
-            </div>
+        <h2 class="fw-semibold mb-8">Patient Report Reviews</h2>
+        <div class="card">
+          <div class="card-body">
+              <p>{{report_review}}</p>
           </div>
-        <div class="selected-medicines">
-          <div class="border-bottom title-part-padding">
-          <h4>Selected Medicines</h4>
-          <div class="card">
-          <div class="invoice-add-table">
-              <div class="table-responsive">
-                  <table class="table table-center add-table-items">
-                      <thead>
-                          <tr>
-                              <th>Medicine Name</th>
-                              <th>Manufacture Name</th>
-                              <th>Course Days</th>
-                              <th>Morning</th>
-                              <th>Afternoon</th>
-                              <th>Evening</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                        {%  for prescription_list in plist%}
-                        {%  for medicine in prescription_list['prescription']  %}
-                        <tr> 
-                          <td> {{medicine['medicine_name']}}</td> 
-                          <td> {{ medicine['medicine_mname']}}</td> 
-                          <td> {{ medicine['course_days']}}</td> 
-                          <td> {{medicine['morning']}} </td> 
-                          <td> {{medicine['afternoon']}} </td> 
-                          <td> {{medicine['evening']}}</td> 
-                          </tr>
-                        {% endfor %}
-                        {% endfor %}
-                      </tbody>
-                  </table>
-              </div>
-          </div></div>
+        </div>
+        <h4 class="fw-semibold mb-8">Selected Medicines</h4>
+        <div class="card">
+        <div class="invoice-add-table">
+            <div class="table-responsive">
+                <table class="table table-center add-table-items">
+                    <thead>
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Manufacture Name</th>
+                            <th>Course Days</th>
+                            <th>Morning</th>
+                            <th>Afternoon</th>
+                            <th>Evening</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {%  for prescription_list in plist%}
+                      {%  for medicine in prescription_list['prescription']  %}
+                      <tr> 
+                        <td> {{medicine['medicine_name']}}</td> 
+                        <td> {{ medicine['medicine_mname']}}</td> 
+                        <td> {{ medicine['course_days']}}</td> 
+                        <td> {{medicine['morning']}} </td> 
+                        <td> {{medicine['afternoon']}} </td> 
+                        <td> {{medicine['evening']}}</td> 
+                        </tr>
+                      {% endfor %}
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
       </div>
-      </div>
     </div>
-  </div>
 
             
            
