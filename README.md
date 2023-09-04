@@ -146,7 +146,7 @@ This section provides insight into the frontend, backend, database, containeriza
 **Database Technology**: HealthConnect's core database is powered by MongoDB, a NoSQL database that accommodates diverse healthcare data scenarios.
 
 - Document-Oriented Structure: MongoDB's flexibility suits the variability of healthcare data across patients and care contexts.
-- Scalability Features: Replication and auto-sharding ensure high availability and redundancy as the platform scales.
+- Redis: Redis is utilized to manage tokens and store OTPs for a fixed duration, ensuring fast access and expiration handling.
 
 **Containerization**: Docker containers are employed to streamline deployment and enhance component isolation.
 
