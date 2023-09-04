@@ -163,3 +163,7 @@ This section provides insight into the frontend, backend, database, containeriza
 - Encryption: Sensitive data is encrypted to safeguard confidentiality.
 - Access Controls: Mechanisms are in place to regulate and manage user access.
 - Activity Auditing: Logging and auditing ensure accountability.
+
+  <a href="http://www.youtube.com/watch?feature=player_embedded&v=VIDEO_ID" target="_blank">
+    <img src="http://img.youtube.com/vi/VIDEO_ID/0.jpg" alt="App Demo Video" width="240" height="180" border="10" />
+</a>
