@@ -58,8 +58,9 @@ By comprehensively addressing coordination gaps and pioneering decentralized hea
 # Core Architecture
 ## END-TO-END PLATFORM WORKFLOW (Core Functionality):
 ![END-TO-END PLATFORM WORKFLOW Image](/metadata/app-demo.png)
+
 -The workflow illustrates the typical patient journey and interactions on the HealthConnect platform, from appointment scheduling to maintaining health records.
--Patients can search for and select a suitable doctor based on preferences like location, specialty, accepted insurance etc.
+-Patients can search for and select a suitable doctor based on preferences like location, specialty, accepted insurance, etc.
 -Appointment slots can be booked by checking availability on the doctor's calendar and selecting a convenient time.
 -Platform notifications and reminders reduce missed appointments and ensure better follow-ups.
 -After an appointment, any new lab reports, discharge summaries, or prescription orders can be digitized and uploaded to the patient's health records.
@@ -71,6 +72,7 @@ By comprehensively addressing coordination gaps and pioneering decentralized hea
 
 ## SECURE HEALTH RECORD STORAGE (Data Protection Methodology):
 ![SECURE HEALTH RECORD STORAGE Image](/metadata/app-demo.png)
+
 -The platform uses public-private key encryption to securely store health records in the cloud.
 -Each user has a unique public & private key that is stored in the database.
 -The private key is used for digitally signing the health records uploaded by the user.
@@ -87,6 +89,7 @@ By comprehensively addressing coordination gaps and pioneering decentralized hea
 
 ##BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS:
 ![BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS Image](/metadata/app-demo.png)
+
 -The platform maintains a centralized append-only audit log of all health record transactions.
 -Each transaction is recorded with metadata like timestamp, user ID, access type, etc.
 -New entries are immutably appended to the log in an ordered sequence.
