@@ -87,7 +87,7 @@ By comprehensively addressing coordination gaps and pioneering decentralized hea
 -The records are encrypted before storage for data privacy.
 -The system uses industry-standard asymmetric encryption algorithms like RSA or ECC for robust security.
 
-##BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS:
+## BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS:
 ![BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS Image](/metadata/app-demo.png)
 
 -The platform maintains a centralized append-only audit log of all health record transactions.
