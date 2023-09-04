@@ -124,12 +124,12 @@ def generate_token(ap_id):
 @hospital.route('/validate_access_token/<ap_id>',methods=['POST' , 'GET'])
 def validate_access_token(ap_id):
     if '_id' in session:
-
+        
         token = int(request.args.get('token'))
         if redisCon.get(ap_id) is None :
             return render_template('hospital/authentication.html', error_msg = 'Token Expired')
         if int(redisCon.get(ap_id)) == token:
-            return redirect(url_for('hospital.hospital_approve_appointments', app_id = ap_id))
+            return redirect(url_for('hospital.hospital-approve-appointments', app_id = ap_id))
         else:
             return render_template('hospital/authentication.html',ap_id=ap_id, error_msg = 'Invalid Token')
 

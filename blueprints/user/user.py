@@ -222,7 +222,7 @@ def user_dashboard():
     if 'aadharnumber' not in session:
         return redirect(url_for('login'))
     else:
-        user_id = users.find_one({'aadharnumber':session['aadharnumber']},"_id")
+        user_id = users.find_one({'aadharnumber':session['aadharnumber']},{"_id":1})
         userdata = users.find_one({'_id':user_id['_id']},{'password':0})
         today, _ = str(datetime.datetime.now()).split()
         appointment_id = appointments.find({'user_id':ObjectId(user_id['_id']), 'appointment_date': today},{'_id':1})
@@ -259,9 +259,8 @@ def user_dashboard():
                 }
             }
             res.append(combined_data)
-            requests = users.find_one({'_id':ObjectId(user_id['_id'])},{'caregivers':1})
-            print(requests)
-            
+
+    requests = users.find_one({'_id':ObjectId(user_id['_id'])},{'caregivers':1})     
     return render_template('user/user-dashboard.html',appointments=res,userdata=userdata, code=code , requests=requests)
 
 
@@ -540,7 +539,7 @@ def confirm_booking(doctor_id):
                         'issue': reason,
                         'reviews': '',
                         'notes': '',
-                        'status': 'pending',
+                        'status': 'booked',
                         'lab_tests': [],
                         'lab_report': [],
                         'calendar_event_id':str(event_id)
@@ -929,9 +928,9 @@ def send_care_giver_request():
             if i['care_giver_id'] == req_id['_id']:
                 return render_template('user/care-givers.html',care_giverdetails = user_data , message = 'You have already sent a request to this caregiver')
         cid = users.find_one({'aadharnumber':str(req)},{'_id':1})
-        query = {'$push': {'caregivers': {'care_giver_id': cid['_id'], 'status': 'pending'}}}     
+        query = {'$push': {'caregivers': {'care_giver_id': cid['_id'], 'status': 'booked'}}}     
         users.update_one({'_id': ObjectId(session['_id'])}, query)
-        users.update_one({'_id': ObjectId(cid['_id'])}, {'$push': {'caregivers': {'care_giver_id': ObjectId(session['_id']), 'status': 'pending'}}})
+        users.update_one({'_id': ObjectId(cid['_id'])}, {'$push': {'caregivers': {'care_giver_id': ObjectId(session['_id']), 'status': 'booked'}}})
         userdata = users.find_one({'_id': ObjectId(session['_id'])})
         res=[]
         for i in userdata['caregivers']:
