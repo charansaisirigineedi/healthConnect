@@ -169,3 +169,24 @@ This section provides insight into the frontend, backend, database, containeriza
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=VIDEO_ID" target="_blank">
     <img src="metadata/Health_Connect_Video_thumbnail.jpg" alt="App Demo Video" />
 </a>
+
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your confidential.py file
+
+`MONGOURI`: A connection address for MongoDB, which is a type of database. You get this when setting up MongoDB.
+
+`IBM_ENDPOINT`: The web address for an IBM service. You create an account with IBM and get this when using their services.
+
+`IBM_API_KEY_ID`: An ID for accessing IBM services. You make this key in your IBM Cloud account.
+
+`IBM_INSTANCE_CRN`: A special name for resources in IBM Cloud. You find it in your IBM Cloud settings.
+
+`IBM_ACCESS_KEY_ID` - `IBM_SECRET_ACCESS_KEY`: Keys for using IBM Cloud services, like storage. You generate these in IBM Cloud's security settings.
+
+`REDIS_URI` - `REDIS_HOST` - `REDIS_PADDWORD`: Details for connecting to a Redis database. You get these from your Redis provider or your own setup.
+
+`OPEN_AI_KEY`: An API key for the OpenAI service. You create it when you sign up for OpenAI and find it in your developer settings.
+
+Remember to keep these keys and addresses secure and don't share them publicly to protect your services and data.
