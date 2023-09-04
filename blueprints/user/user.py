@@ -24,7 +24,6 @@ specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology',
 
 @user.before_request
 def check_session():
-    print(request.endpoint)
     if request.endpoint not in ['user.login', 'user.register','user.hello_world','user.doc_out' ] and '_id' not in session:
         return redirect(url_for('user.login'))
 
