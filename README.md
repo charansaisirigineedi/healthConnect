@@ -166,7 +166,7 @@ This section provides insight into the frontend, backend, database, containeriza
 
 ## Application Demo
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=VIDEO_ID" target="_blank">
+<a href="https://pranavtej.github.io/destination-changer/" target="_blank">
     <img src="metadata/Health_Connect_Video_thumbnail.jpg" alt="App Demo Video" />
 </a>
 
