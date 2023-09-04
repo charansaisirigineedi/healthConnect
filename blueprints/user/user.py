@@ -977,7 +977,7 @@ def diabeticPrediction():
         if  pred==1:
             message = 'Had Diabetic'
         else:
-            mesaage = 'No Diabetic'
+            message = 'No Diabetic'
         return render_template('user/fitness_data.html', fitness_data=value, age=age , streak=str(streak),prediction=message)
 
 
