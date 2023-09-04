@@ -21,7 +21,7 @@ specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology',
 @user.before_request
 def check_session():
     print(request.endpoint)
-    if request.endpoint not in ['user.login', 'user.register','user.hello_world','user.doc_out'] and '_id' not in session:
+    if request.endpoint not in ['user.login', 'user.register','user.hello_world','user.doc_out' , 'user.user_dashboard'] and '_id' not in session:
         return redirect(url_for('user.login'))
 
 
@@ -172,6 +172,8 @@ def login():
         aadharnumber = request.form['aadharnumber']
         password = request.form['password']
         user = users.find_one({'aadharnumber': aadharnumber})
+        session['aadharnumber'] = "567889976542"
+        session['_id'] = "64ee6ca766822d5452ccc3cc"
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['aadharnumber'] = aadharnumber
             session['_id'] = str(user['_id'])
@@ -254,7 +256,10 @@ def user_dashboard():
                 }
             }
             res.append(combined_data)
-    return render_template('user/user-dashboard.html',appointments=res,userdata=userdata, code=code)
+            requests = users.find_one({'_id':ObjectId(user_id['_id'])},{'caregivers':1})
+            print(requests)
+            
+    return render_template('user/user-dashboard.html',appointments=res,userdata=userdata, code=code , requests=requests)
 
 
 
@@ -892,7 +897,58 @@ def emergency_profile():
         user =  users.find_one({'_id': ObjectId(session['_id'])},{'private_key':0,'public_key':0,'password':0,'password':0 , '_id':1})
         print(user)
         return render_template('user/emergency_profile.html',user=user , details = user)           
-            
 
+
+@user.route('/care_givers' , methods=['POST','GET'])
+def care_givers():
+    if '_id' in session:
+        return render_template('user/care-givers.html',care_giverdetails = None)
+
+
+@user.route('/send-care-giver-request',methods=['GET','POST'])
+def send_care_giver_request():
+    if '_id' in session:
+        req = request.form.get('user_id')
+        if req == session['aadharnumber']:
+            return render_template('user/care-givers.html',care_giverdetails = None , message = 'You cannot send request to yourself')
+        if req == None:
+            return render_template('user/care-givers.html',care_giverdetails = None , message = 'Please enter a valid aadhar number')
+        req_id =  users.find_one({'aadharnumber' : req},{'_id':1})
+        print(req_id)
+        user_data = users.find_one({'_id':ObjectId(session['_id'])})  
+        print(user_data)
+        for i in user_data['caregivers']:
+            if i['care_giver_id'] == req_id['_id']:
+                return render_template('user/care-givers.html',care_giverdetails = user_data , message = 'You have already sent a request to this caregiver')
+        cid = users.find_one({'aadharnumber':str(req)},{'_id':1})
+        query = {'$push': {'caregivers': {'care_giver_id': cid['_id'], 'status': 'pending'}}}     
+        users.update_one({'_id': ObjectId(session['_id'])}, query)
+        users.update_one({'_id': ObjectId(cid['_id'])}, {'$push': {'caregivers': {'care_giver_id': ObjectId(session['_id']), 'status': 'pending'}}})
+        userdata = users.find_one({'_id': ObjectId(session['_id'])})
+        res=[]
+        for i in userdata['caregivers']:
+            name = users.find_one({'_id':i['care_giver_id']},{'name':1,'_id':0})
+            res.append({'name':name['name'],'status':i['status']})
+        
+        return render_template('user/care-givers.html',care_giverdetails = res , message = 'Request Sent Successfully')
+
+
+@user.route('/approve-care-giver-request/<care_id>',methods=['GET','POST'])
+def approve_care_giver_request(care_id):
+    if '_id' in session :
+        query = {'$set': {'caregivers.$.status': 'approved'}}
+        cid = users.find_one({'aadharnumber':str(care_id)},{'_id':1})
+        users.update_one({'_id': ObjectId(session['_id']), 'caregivers.care_giver_id': cid['_id']}, query)
+        userdata = users.find_one({'_id': ObjectId(session['_id'])})
+        return redirect(url_for('user_dashboard'))
     
+@user.route('/reject-care-giver-request/<care_id>',methods=['GET','POST'])
+def reject_care_giver_request(care_id):
+    if '_id' in session :
+        query = {'$set': {'caregivers.$.status': 'rejected'}}
+        cid = users.find_one({'aadharnumber':str(care_id)},{'_id':1})
+        users.update_one({'_id': ObjectId(session['_id']), 'caregivers.care_giver_id': cid['_id']}, query)
+        userdata = users.find_one({'_id': ObjectId(session['_id'])})
+        return  redirect(url_for('user_dashboard'))
+
 

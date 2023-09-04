@@ -38,6 +38,25 @@
                     </div>
                   </a>   
                   {% endif %}
+                  {% if requests !=None %}
+                <div class="message-body" data-simplebar="">
+
+                  <a  class="py-6 px-7 d-flex align-items-center dropdown-item">
+                    <div class="w-75 d-inline-block v-middle">
+                      <h6 class="mb-1 fw-semibold">New Care Giver Request</h6>
+                      <span class="d-block">Request From {{requests['name']}}</span>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                          <button onclick="window.location.href='/approve-care-giver-request/{{requests['care_giver_id']}}'" class="btn btn-primary">Approve</button>
+                      </div>
+                      <div  class="col-sm-6">
+                        <button onclick="window.location.href='/reject-care-giver-request/{{requests['care_giver_id']}}'" class="btn btn-light-primary">Reject</button>
+                    </div>
+                    </div>
+                  </a>  
+                  </div> 
+                  {% endif %}
                 </div>
               </div>
             </li>

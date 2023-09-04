@@ -111,9 +111,9 @@
                   <div class="card card-body">
                     <span class="side-stick"></span>
                     <a href="{{ url_for('user.display_pdf', filename=i['filename']) }}" ><h6 class="note-title text-truncate w-75 mb-0" >{{ i['reportType'] }}</h6></a>
-                    <p class="note-date fs-2">11 March 2009</p>
+                    <p class="note-date fs-2"></p>
                     <div class="note-content">
-                      <p class="note-inner-content" data-noteContent="Blandit tempus porttitor aasfs. Integer posuere erat a ante venenatis."> Blandit tempus porttitor aasfs. Integer posuere erat a ante venenatis. </p>
+                      <p class="note-inner-content" data-noteContent="Blandit tempus porttitor aasfs. Integer posuere erat a ante venenatis."> </p>
                     </div>
                     <div class="d-flex align-items-center">
                       <a href="javascript:void(0)" class="link me-1">
@@ -315,7 +315,6 @@
                 confirmButtonText: 'OK'
             });
         }
-  
         {% if message %}
             showErrorAlert("{{ message }}");
         {% endif %}
