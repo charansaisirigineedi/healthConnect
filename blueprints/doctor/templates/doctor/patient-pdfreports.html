@@ -148,18 +148,14 @@
             
             <div class="card card-body">
               <div class="row">
-                  <div class="d-flex flex-column flex-md-row align-items-center">
-                      <form action="/tabletsprescription" method='POST' class="position-relative flex-grow-1 mb-3 mb-md-0 me-md-2">
-                        <div class="col-md-10">
-                          <textarea  name="report_reviews" class="form-control product-search ps-3">{{ report_reviews}}</textarea></div>
-                      <div class="col-md-2">
-                          <button type="submit" class="btn btn-primary" id="send-button">
-                            <i class="fas fa-arrow-right fs-4 text-white me-2"></i> Send
-                        </button>
-                      </div>
-                    </form>
-
-                  </div>
+                <form action="/tabletsprescription" method="POST" class="d-flex flex-row align-items-center flex-grow-1 mb-3 mb-md-0 me-md-2">
+                    <textarea name="report_reviews" class="form-control product-search ps-3 flex-grow-1 me-2" placeholder="write your review">{{ report_reviews }}</textarea>
+                    <button type="submit" class="btn btn-primary" id="send-button">
+                         Send
+                    </button>
+                </form>
+            </div>
+            
                  
                   <script>
                     const inputElement = document.getElementById('input-search');
