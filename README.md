@@ -4,22 +4,22 @@
 HealthConnect is a cloud-based healthcare management platform that aims to improve the coordination of care by connecting patients, providers, and health records onto an integrated system for streamlined appointment scheduling, health record access, e-prescriptions, analytics, and enhanced patient engagement.
 # Key Value Proposition
 
-**Improved Care Coordination**: By consolidating medical records, appointments, prescriptions, and care workflows onto a unified platform, HealthConnect significantly improves care coordination and continuity. This reduces medical errors and duplication of services.
+1) **Improved Care Coordination**: By consolidating medical records, appointments, prescriptions, and care workflows onto a unified platform, HealthConnect significantly improves care coordination and continuity. This reduces medical errors and duplication of services.
 
-**Enhanced Patient Experience**: The solution provides convenience to patients for activities like appointment booking, accessing test results, refilling prescriptions, etc. The user-friendly interface aims to make healthcare interactions more engaging and efficient.
+2) **Enhanced Patient Experience**: The solution provides convenience to patients for activities like appointment booking, accessing test results, refilling prescriptions, etc. The user-friendly interface aims to make healthcare interactions more engaging and efficient.
 
-**Operational Efficiencies**: Features like appointment scheduling, notifications, and digitized prescriptions help optimize administrative tasks and staff time for healthcare organizations. Analytics provide data-driven insights on service levels and resource allocation.
+3) **Operational Efficiencies**: Features like appointment scheduling, notifications, and digitized prescriptions help optimize administrative tasks and staff time for healthcare organizations. Analytics provide data-driven insights on service levels and resource allocation.
 
-**Accessibility**: The platform expands access to healthcare services by simplifying appointment scheduling and enabling telemedicine capabilities. This makes healthcare more equitable.
+4) **Accessibility**: The platform expands access to healthcare services by simplifying appointment scheduling and enabling telemedicine capabilities. This makes healthcare more equitable.
 Medication Adherence: ePrescriptions and reminder alerts help patients better comply with medication plans leading to improved health outcomes.
 
-**Population Health Analytics**: Aggregated health data facilitates analysis of public health KPIs, disease surveillance, treatment effectiveness, costs and social determinants that can inform policy decisions.
+5) **Population Health Analytics**: Aggregated health data facilitates analysis of public health KPIs, disease surveillance, treatment effectiveness, costs, and social determinants that can inform policy decisions.
 
-**Blogs and Articles**: The platform incorporates health blogs and articles to promote patient education on wellness topics, diseases, medications, lifestyle changes, diet, and more.
+6) **Blogs and Articles**: The platform incorporates health blogs and articles to promote patient education on wellness topics, diseases, medications, lifestyle changes, diet, and more.
 
-**Streak Counters and Milestones**: The app tracks consecutive days/weeks users have logged an activity like exercise or meditation. Prominent counters display current streaks. Badges are awarded when users achieve streak milestones like 7, 15, 30, or 90-day streaks. Longer streaks earn more prestigious badges. Seeing their progress reflected through growing streak counters and achieving streak milestones helps motivate users to maintain consistency.
+7) **Streak Counters and Milestones**: The app tracks consecutive days/weeks users have logged an activity like exercise or meditation. Prominent counters display current streaks. Badges are awarded when users achieve streak milestones like 7, 15, 30, or 90-day streaks. Longer streaks earn more prestigious badges. Seeing their progress reflected through growing streak counters and achieving streak milestones helps motivate users to maintain consistency.
 
-**Security**: State-of-the-art data security mechanisms help maintain patient privacy and demonstrate compliance with healthcare regulations. This builds trust.
+8) **Security**: State-of-the-art data security mechanisms help maintain patient privacy and demonstrate compliance with healthcare regulations. This builds trust.
 # Problem Statement
 
 The healthcare industry today is plagued by fragmentation across systems and lack of coordination leading to broken patient journeys. Patients struggle to schedule appointments, access records scattered across providers, and manage medications. This results in poor continuity of care. Studies show lack of coordination contributes to over 130 million medical errors and nearly half of hospital readmissions annually, costing billions.
@@ -31,17 +31,17 @@ HealthConnect is a cloud-based healthcare management platform that aims to impro
 
 The core capabilities offered by HealthConnect include:
 
-**Appointment Scheduling**: Enables patients to easily search, book, reschedule, and manage appointments across healthcare providers.
+1) **Appointment Scheduling**: Enables patients to easily search, book, reschedule, and manage appointments across healthcare providers.
 
-**Health Records Management**: Creates longitudinal health records for patients by consolidating documents from across providers into a unified portal.
+2) **Health Records Management**: Creates longitudinal health records for patients by consolidating documents from across providers into a unified portal.
 
-**ePrescribing**: Digitizes and streamlines the prescription workflow from ordering to fulfillment.
+3) **ePrescribing**: Digitizes and streamlines the prescription workflow from ordering to fulfillment.
 
-**Care Team Coordination**: Provides care providers a consolidated overview of patient cases to improve collaboration.
+4) **Care Team Coordination**: Provides care providers a consolidated overview of patient cases to improve collaboration.
 
-**Patient Engagement Portals**: Offers patients self-service access to health records, appointments, prescription refills, and doctor communication.
+5) **Patient Engagement Portals**: Offers patients self-service access to health records, appointments, prescription refills, and doctor communication.
 
-**Population Health Analytics**: Gains insights from aggregated health data to understand disease trends, outcomes, and costs.
+6) **Population Health Analytics**: Gains insights from aggregated health data to understand disease trends, outcomes, and costs.
 
 Additionally, HealthConnect is envisioned to evolve into an open protocol akin to **ONDC** for decentralized health data exchange through an Open Health Data Network (OHDN). The OHDN will allow different healthcare providers to share interoperable health records on the network with patient consent.
 
