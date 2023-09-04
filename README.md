@@ -190,3 +190,45 @@ To run this project, you will need to add the following environment variables to
 `OPEN_AI_KEY`: An API key for the OpenAI service. You create it when you sign up for OpenAI and find it in your developer settings.
 
 Remember to keep these keys and addresses secure and don't share them publicly to protect your services and data.
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://link-to-project
+```
+
+1. Using docker
+
+```bash
+  docker build -t healthConnect .
+  docker run -p 5000:5000 healthConnect
+```
+
+2. Using Virtual Environment
+
+- Create a virtual environment
+
+```bash
+  virtualenv healthConnect
+```
+
+- Activate the virtual environment
+
+```bash
+  healthConnect\Scripts\activate.ps1
+```
+
+- Install dependencies
+
+```bash
+  pip install -r requirements.txt
+```
+
+- Run the application
+
+```bash
+  flask run
+```
