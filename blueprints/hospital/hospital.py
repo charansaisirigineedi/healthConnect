@@ -75,10 +75,8 @@ def hospital_dashboard():
             doctor_id = i['_id']
             
             # Find appointments for the current doctor
-            appointments_data = list(appointments.find({'doctor_id': doctor_id , 'appointment_date' : datetime.now().strftime("%Y-%m-%d") , 'status' : 'pending'}))
+            appointments_data = list(appointments.find({'doctor_id': doctor_id , 'appointment_date' : datetime.now().strftime("%Y-%m-%d") , 'status' : 'booked'}))
             patients_count = len(list(appointments.find({'doctor_id': doctor_id })))
-
-            print(appointments_data)
             if appointments_data:
                 user_id = appointments_data[0]['user_id']
                 
@@ -92,7 +90,6 @@ def hospital_dashboard():
                     
                     # Append combined data to the result list
                     res.append(appointments_data)
-        print(res)
         if request.args.get('message') != None:
             return render_template('hospital/hospital-dashboard.html',hospital_details=hospital_details , appointments_data = res , appointments_count=len(appointments_data) , doctor_count =len(doc_details) , patients_count = patients_count , message = message)   
         else:
@@ -103,7 +100,7 @@ def hospital_approve_appointments(app_id):
     if '_id' in session:
         query = {'_id': ObjectId(app_id)}
         print(query)
-        update_data = {'$set': {'status': 'booked'}}
+        update_data = {'$set': {'status': 'pending'}}
         update_result = appointments.update_one(query, update_data)
 
         if update_result.modified_count > 0:
@@ -143,7 +140,7 @@ def hospital_approve_appointments_list(app_id):
         '_id': ObjectId(app_id),     
         }
         update_data = {
-            '$set': {'status': 'booked'} 
+            '$set': {'status': 'pending'} 
         }
         appointments.update_one(query, update_data)
         appointments_data = appointments.find({'hospital_id': ObjectId(session['_id'])})
@@ -197,7 +194,7 @@ def view_appointments():
             doctor_id = i['_id']
             
             # Find appointments for the current doctor
-            appointments_data = list(appointments.find({'doctor_id': doctor_id , 'appointment_date' : datetime.now().strftime("%Y-%m-%d") , 'status' : 'pending'}))
+            appointments_data = list(appointments.find({'doctor_id': doctor_id , 'appointment_date' : datetime.now().strftime("%Y-%m-%d") , 'status' : 'booked'}))
             patients_count = len(list(appointments.find({'doctor_id': doctor_id })))
 
             print(appointments_data)

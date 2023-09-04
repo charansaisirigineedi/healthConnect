@@ -125,7 +125,7 @@
                             <p class="fs-3 text-dark mb-0">{{app[0]['appointment_time']}}</p>
                           </td>
                           <td>
-                          {% if app[0]['status'] == 'pending'%}
+                          {% if app[0]['status'] == 'booked'%}
                            <a href="/hospital-approve-appointments/{{app[0]['_id']}}"> <span class="badge fw-semibold py-1 w-85 bg-light-primary text-primary">Confirm</span>
                             </a>
                             {%else%}
