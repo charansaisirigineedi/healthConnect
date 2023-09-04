@@ -112,7 +112,7 @@
                     <div class="col-4">
                       <div class="d-flex justify-content-end">
                         <div class="p-2 bg-light-primary rounded-2 d-inline-block">
-                          <img src="{{ url_for('static', filename='dist/images/logos/map.png')}}" alt="" class="img-fluid" width="30" height="30">
+                          <img src="{{ url_for('static', filename='dist/images/logos/maps.jpeg')}}" alt="" class="img-fluid" width="30" height="30">
                         </div>
                       </div>
                     </div>
@@ -157,7 +157,7 @@
                   </div>
                   <ul class="timeline-widget mb-0 position-relative mb-n5">
                     {% for appointment_with_user in appointments_with_users | sort(attribute='appointment.appointment_time') %}
-                        {% if appointment_with_user['appointment']['status'] == 'booked' %}
+                        {% if appointment_with_user['appointment']['status'] == 'pending'%}
                     <li class="timeline-item d-flex position-relative overflow-hidden">
                       <div class="timeline-time text-dark flex-shrink-0 text-end">{{ appointment_with_user['appointment']['appointment_time'] }}</div>
                       <div class="timeline-badge-wrap d-flex flex-column align-items-center">

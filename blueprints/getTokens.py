@@ -135,4 +135,27 @@ def addEvent(id, what, event=None,date=None):
             bpm = bucket['dataset'][0]['point'][0]['value'][0]['fpVal']
             calories_dict[date] = bpm
 
-        return [stepsDict,calories_dict]
+        url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate"
+        today = datetime.datetime.now()
+        start_of_day = today.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_of_day = today.replace(hour=23, minute=59, second=59, microsecond=999)
+
+        # Convert timestamps to milliseconds since the epoch
+        start_time_millis = int(start_of_day.timestamp()) * 1000
+        end_time_millis = int(end_of_day.timestamp()) * 1000
+
+        # Define the request payload
+        request = {
+            "aggregateBy": [{
+                "dataTypeName": "com.google.step_count.delta",
+                "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
+            }],
+            "bucketByTime": { "durationMillis": 86400000 },
+            "startTimeMillis": start_time_millis,
+            "endTimeMillis": end_time_millis
+        }
+        response3 = requests.post(url, json=request, headers=headers)
+        response3 = response3.json()
+        todaySteps = response3["bucket"][0]["dataset"][0]["point"][0]["value"][0]["intVal"]
+
+        return [stepsDict,calories_dict, todaySteps]
