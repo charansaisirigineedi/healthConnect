@@ -167,5 +167,5 @@ This section provides insight into the frontend, backend, database, containeriza
 ## Application Demo
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=VIDEO_ID" target="_blank">
-    <img src="/metadata/diagram1.png" alt="App Demo Video" width="240" height="180" border="10" />
+    <img src="/metadata/diagram1.png" alt="App Demo Video" />
 </a>
