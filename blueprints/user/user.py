@@ -14,6 +14,10 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from blueprints.redis_connection import r 
 from blueprints.blockChainLogging import blockChain
 from blueprints.confidential import OPEN_AI_KEY
+import xgboost as xgb
+import pandas as pd
+import numpy as np
+
 
 user = Blueprint("user", __name__, template_folder="templates")
 specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology', 'General Practice', 'Infectious Diseases', 'Neurology', 'Oncology', 'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology']
@@ -21,7 +25,7 @@ specialties = ['Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology',
 @user.before_request
 def check_session():
     print(request.endpoint)
-    if request.endpoint not in ['user.login', 'user.register','user.hello_world','user.doc_out' , 'user.user_dashboard'] and '_id' not in session:
+    if request.endpoint not in ['user.login', 'user.register','user.hello_world','user.doc_out' ] and '_id' not in session:
         return redirect(url_for('user.login'))
 
 
@@ -172,8 +176,6 @@ def login():
         aadharnumber = request.form['aadharnumber']
         password = request.form['password']
         user = users.find_one({'aadharnumber': aadharnumber})
-        session['aadharnumber'] = "567889976542"
-        session['_id'] = "64ee6ca766822d5452ccc3cc"
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['aadharnumber'] = aadharnumber
             session['_id'] = str(user['_id'])
@@ -767,7 +769,7 @@ def get_bot():
     
 
 def get_specialist2(symptoms, age, gender):
-  openai.api_key = "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"
+  openai.api_key = OPEN_AI_KEY
   prompt = f"Based on these symptoms: {symptoms}, for a {gender} aged {age}, the most accurate initially needed medical specialty from this list: {specialties} is:"
 
   response = openai.Completion.create(
@@ -794,7 +796,7 @@ def check_appointments1(doctor_id, selected_date, dayOfWeek):
     get_appointments = list(appointments.find({"doctor_id":doctor_id,"appointment_date":selected_date},{"appointment_time":1, "_id":0}))
     get_appointments = [appointment['appointment_time'] for appointment in get_appointments]
     print(available_slots)
-    return list(available_slots)
+    return list(set(list(available_slots))-set(list(get_appointments)))
 
 def get_doc_details1(doctor_id):
     doctor_details = doctors.find_one({'_id':doctor_id})
@@ -950,5 +952,31 @@ def reject_care_giver_request(care_id):
         users.update_one({'_id': ObjectId(session['_id']), 'caregivers.care_giver_id': cid['_id']}, query)
         userdata = users.find_one({'_id': ObjectId(session['_id'])})
         return  redirect(url_for('user_dashboard'))
+@user.route('/diabeticPrediction', methods=['POST'])
+def diabeticPrediction():
+    if request.method == 'POST':
+        preg = int(request.form['pregnancies'])
+        glucose = int(request.form['glucose'])
+        bp = int(request.form['bloodpressure'])
+        st = int(request.form['skinthickness'])
+        insulin = int(request.form['insulin'])
+        bmi = float(request.form['bmi'])
+        dpf = float(request.form['dpf'])
+        age = int(request.form['age'])
+        pred =predict_diabetes([preg,glucose,bp,st,insulin,bmi,dpf,age])
+        print(pred)
+        return redirect(url_for('user.fit_data'))
+
+
+# Create prediction function 
+def predict_diabetes(input_data):
+    model = xgb.XGBClassifier()
+    model.load_model('blueprintsModels//diabetes_model.json')
+    input_data = np.array(input_data).reshape(1, -1) 
+    input_df = pd.DataFrame(input_data, columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 
+                                               'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age'])
+    prediction = model.predict(input_df)
+    return prediction[0]
+
 
 
