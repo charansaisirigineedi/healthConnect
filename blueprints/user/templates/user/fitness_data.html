@@ -35,7 +35,7 @@
       <!-- Employee Salary -->
       <h4>Elevate Your Wellness: Attain Health Stability with a Continuous Calorie-Burning Streak🔥</h4>
       <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div class="col-md-12">
           <div class="card">
             <div class="card-body pb-0 mb-xxl-4 pb-1">
@@ -44,30 +44,33 @@
               <div class="d-flex align-items-center mb-3"> </div>
            </div>
         </div>
-        <div class="col-md-2">
-          <div class="card">
+    
           <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="add-notes">
             <label class="form-check-label" for="medicallyApprovedToggle" style="font-weight:700 ;">Diabetes Prediction</label>
-        </div>
+          </div>
+       
+      </div>
        </div>
-        </div></div>
-       </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
+          <div class="col-md-12">
           <div class="card">
             <div class="card-body pb-0 mb-xxl-4 pb-1">
-              <p class="mb-1 fs-3"> Yesterday's Step Count 🏃‍♀️🏃‍♀️</p>
+              <p class="mb-1 fs-3"> Today's Step Count 🏃‍♀️🏃‍♀️</p>
               <div id="todaysteps" class="d-flex align-items-center mb-3"> </div>
             </div>
           </div>
-        </div>
-
-     
-    
+            <div class="card">
+              <div class="card-body">
+            <p class="mb-1 fs-3"> Badges Earned 🔖</p>
+            <div id="daily-badges" class="form-check form-switch">
+            </div>
+            </div></div>
+         
+        </div></div>
         <div class="col-md-6">
           <div class="card">
-            <div class="card-body pb-0 mb-xxl-4 pb-1">
-              
+            <div class="card-body pb-0 mb-xxl-4 pb-1"> 
               <div id="milestoneGif" class="d-flex align-items-center mb-3"> </div>
             </div>
           </div>
@@ -162,52 +165,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body">
-                <div class="mb-4">
-                  <h5 class="card-title fw-semibold">Yesterday's MileStone 🎯</h5>
-                  <p class="card-subtitle">Walk and Build your Health</p>
-                </div>
-                <ul class="timeline-widget mb-0 position-relative mb-n5">
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">Mile Stone 0🎯</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-0 border border-success flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">Start<a href="javascript:void(0)" class="text-primary d-block fw-normal ">#ML-0 Steps</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">Mile Stone 1🎯</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-1 border border-warning flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">Achieved<a href="javascript:void(0)" class="text-primary d-block fw-normal ">#ML-6000 Steps</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">Mile Stone 2🎯</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">UnStoppable <a href="javascript:void(0)" class="text-primary d-block fw-normal ">#ML-8000 Steps</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">Mile Stone 3🎯</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-3 border border-warning fw-bold flex-shrink-0 my-8"></span>                          
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Finished<a class="text-primary d-block fw-normal ">#ML-10000 Steps</a></div>
-                  </li>
-                </ul>                  
-              </div>
-            </div>
-          </div>
+          
       </div>
     
       <div class="modal fade" id="addnotesmodal" tabindex="-1" role="dialog" aria-labelledby="addnotesmodalTitle" aria-hidden="true">
@@ -281,6 +239,7 @@
 </div>
 </div>
     <script src="{{ url_for('static', filename='dist/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
 <!-- Your JavaScript code can now access the fitnessData variable -->
 <script>
     // Function to update the chart with new data
@@ -388,9 +347,77 @@
 
         }
       }
-      document.getElementById('streak').textContent = streak.toString()+'🔥';
+      document.getElementById('streak').textContent = streak+'🔥';
+        fetch('/update_streak/'+streak)
+        .then(response => response.json())
+        .then( data => {
+          console.log('streak');
+        })
 
-   }
+        const dailyBadges = document.getElementById('daily-badges');
+
+    // Clear existing badge content
+    dailyBadges.innerHTML = '';
+
+    // Check streak count and display badges accordingly
+    if (streak >= 7) {
+        dailyBadges.innerHTML += '<img src="badge-7-days.png" alt="7-Day Streak Badge">';
+    }
+    if (streak >= 15) {
+        dailyBadges.innerHTML += '<img src="badge-15-days.png" alt="15-Day Streak Badge">';
+    }
+    if (streak >= 30) {
+        dailyBadges.innerHTML += '<img src="badge-30-days.png" alt="30-Day Streak Badge">';
+    }
+    if(streak<7){
+      dailyBadges.innerHTML += '<img src="badge-0-days.png" alt="Day Streak Badge">';
+    }
+      }
+function todaymlsteps(steps){
+
+  const milestones = [0, 6000, 8000, 10000];
+
+// Get current milestone 
+let milestoneIndex = 0;
+for(let i=0; i<milestones.length; i++) {
+  if(steps >= milestones[i]) {
+    milestoneIndex = i;
+  } else {
+    break;
+  }
+}
+// Update badge borders
+for(let i=1; i<=milestoneIndex; i++) {
+  document.querySelectorAll(".timeline-badge")[i].classList.replace("border-warning", "border-success"); 
+}
+
+// Show motivational gif  
+let gifSrc;
+if(milestoneIndex === 0) {
+  // Reached 0 steps
+  gifSrc = "https://media.giphy.com/media/GUOlg71URS8koymPbc/giphy.gif";
+
+} else if(milestoneIndex === 1) {
+  // Reached milestone 1
+  gifSrc = "https://media.giphy.com/media/5zf2M4HgjjWszLd4a5/giphy.gif";
+
+} else if(milestoneIndex === 2) {
+  // Reached milestone 2
+  gifSrc = "https://media.giphy.com/media/3og0IHyZMxZNkNOWT6/giphy.gif"; 
+
+} else if(milestoneIndex === 3) {
+  // Reached max milestone 3
+  gifSrc = "https://media.giphy.com/media/26DOoDwdNGKAg6UKI/giphy.gif";
+
+  let audio = new Audio('../../../static/dist/images/music/audio1.mp3');
+  audio.play();
+}
+
+// Display motivational gif
+document.getElementById("milestoneGif").innerHTML = `
+  <img src="${gifSrc}" alt="Motivational gif">  
+`;
+}
   // Function to update the chart with new data
   function updateChart1(dates1, data1) {
       var salary = {
@@ -449,8 +476,7 @@
   };
   var chart = new ApexCharts(document.querySelector("#salary1"), salary);
         chart.render();
-      }
-     
+      } 
      var fitnessData = JSON.parse('{{ fitness_data | tojson | safe }}');
       // Access the fitnessData variable and use it in your JavaScript code
       var dates = Object.keys(fitnessData[0]);
@@ -462,58 +488,11 @@
     updateChart1(dates1, calories1);
     // Updating the chart with the received data
     updateChart(dates, calories);
+    todaymlsteps(7500)
     streakCalculate(calories);
-
-    
-const steps= calories[6]
+const steps= 7500
 document.getElementById('todaysteps').textContent = steps.toString();
-    // Milestones
 const milestones = [0, 6000, 8000, 10000];
-
-// Get current milestone 
-let milestoneIndex = 0;
-for(let i=0; i<milestones.length; i++) {
-  if(steps >= milestones[i]) {
-    milestoneIndex = i;
-  } else {
-    break;
-  }
-}
-
-
-// Update badge borders
-for(let i=1; i<=milestoneIndex; i++) {
-  document.querySelectorAll(".timeline-badge")[i].classList.replace("border-warning", "border-success"); 
-}
-
-// Show motivational gif  
-let gifSrc;
-if(milestoneIndex === 0) {
-  // Reached 0 steps
-  gifSrc = "https://media.giphy.com/media/GUOlg71URS8koymPbc/giphy.gif";
-
-} else if(milestoneIndex === 1) {
-  // Reached milestone 1
-  gifSrc = "https://media.giphy.com/media/5zf2M4HgjjWszLd4a5/giphy.gif";
-
-} else if(milestoneIndex === 2) {
-  // Reached milestone 2
-  gifSrc = "https://media.giphy.com/media/3og0IHyZMxZNkNOWT6/giphy.gif"; 
-
-} else if(milestoneIndex === 3) {
-  // Reached max milestone 3
-  gifSrc = "https://media.giphy.com/media/26DOoDwdNGKAg6UKI/giphy.gif";
-
-  let audio = new Audio('../../../static/dist/images/music/audio1.mp3');
-  audio.play();
-}
-
-// Display motivational gif
-document.getElementById("milestoneGif").innerHTML = `
-  <img src="${gifSrc}" alt="Motivational gif">  
-`;
-
-
   </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

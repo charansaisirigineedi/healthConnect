@@ -135,7 +135,7 @@ def finish_reports(ap_id):
         query = {'_id': ObjectId(ap_id)}
         update_data = {'$set': {'status': 'pending'}}
         appointments.update_one(query, update_data)
-        return redirect(url_for('lab_dashboard'))
+        return redirect(url_for('lab.lab_dashboard'))
 
 @lab.route('/lablogout')
 def lablogout():

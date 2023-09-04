@@ -100,7 +100,7 @@ def hospital_approve_appointments(app_id):
     if '_id' in session:
         query = {'_id': ObjectId(app_id)}
         print(query)
-        update_data = {'$set': {'status': 'pending'}}
+        update_data = {'$set': {'status': 'confirmed'}}
         update_result = appointments.update_one(query, update_data)
 
         if update_result.modified_count > 0:
@@ -140,7 +140,7 @@ def hospital_approve_appointments_list(app_id):
         '_id': ObjectId(app_id),     
         }
         update_data = {
-            '$set': {'status': 'pending'} 
+            '$set': {'status': 'confirmed'} 
         }
         appointments.update_one(query, update_data)
         appointments_data = appointments.find({'hospital_id': ObjectId(session['_id'])})
@@ -192,12 +192,9 @@ def view_appointments():
         res=[]
         for i in doc_details:
             doctor_id = i['_id']
-            
             # Find appointments for the current doctor
             appointments_data = list(appointments.find({'doctor_id': doctor_id , 'appointment_date' : datetime.now().strftime("%Y-%m-%d") , 'status' : 'booked'}))
             patients_count = len(list(appointments.find({'doctor_id': doctor_id })))
-
-            print(appointments_data)
             if appointments_data:
                 user_id = appointments_data[0]['user_id']
                 

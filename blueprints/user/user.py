@@ -74,6 +74,7 @@ def register():
         'phone': phone,
         'private_key': private_key_pem.decode('utf-8'),
         'public_key': public_key_pem.decode('utf-8'),
+        'streak':'-1'
         }
         
         try:
@@ -659,12 +660,17 @@ def doc_out():
 def fit_data():
     today = datetime.datetime.now()
     value = addEvent(session['_id'],2,date=today)
-    user_age = users.find({'_id':ObjectId(session['_id'])},{'age':1,'_id':0})
+    user_age = users.find({'_id':ObjectId(session['_id'])},{'age':1,'streak':1,'_id':0})
     age= user_age[0]['age']
-    streakc = tokens.find({'userID':ObjectId(session['_id'])},{'streak':1,'_id':0})
-    streak = streakc[0]['streak']
+    streak = user_age[0]['streak']
     return render_template('user/fitness_data.html', fitness_data=value, age=age , streak=str(streak))
 
+@user.route('/update_streak/<string:streak>', methods=['GET'])
+def update_streak(streak):
+    streak3 = users.update_one({'userID':ObjectId(session['_id'])},{'$set':{'streak':streak}})
+    if streak3:
+        response = {'message': 'Streak updated successfully'}
+        return jsonify(response)
 
 @user.route('/chatbot')
 def chatbot():
