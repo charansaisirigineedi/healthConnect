@@ -118,10 +118,12 @@ def doctor_appointments():
     if doctor_id:
         current_date= datetime.datetime.now().date()
         date1 = str(current_date.strftime('%Y-%m-%d'))
-        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1},{'status':'confirmed'})
+        doctor_appointments = appointments.find({"doctor_id": ObjectId(doctor_id),"appointment_date":date1, 'status':'confirmed'},{})
         appointments_with_users = []
         for appointment in doctor_appointments:
+            print(appointment)
             user_id = appointment.get("user_id")
+            print("Choodu ikkada", user_id)
             user_data = users.find_one({"_id": ObjectId(user_id)})
             # Include the user data along with appointment data
             appointment_with_user = {
