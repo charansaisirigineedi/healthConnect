@@ -56,7 +56,7 @@ The solution utilizes a microservices architecture on cloud infrastructure for m
 By comprehensively addressing coordination gaps and pioneering decentralized health data exchange through OHDN, HealthConnect aims to deliver the next generation of integrated healthcare experiences.
 
 # Core Architecture
-## END-TO-END PLATFORM WORKFLOW (Core Functionality):
+1. END-TO-END PLATFORM WORKFLOW (Core Functionality):
 ![END-TO-END PLATFORM WORKFLOW Image](/metadata/daigram1.png)
 
 - The workflow illustrates the typical patient journey and interactions on the HealthConnect platform, from appointment scheduling to maintaining health records.
@@ -79,7 +79,7 @@ By comprehensively addressing coordination gaps and pioneering decentralized hea
 
 - It provides a high-level overview of how patients and providers would leverage the capabilities of HealthConnect in a typical usage scenario.
 
-## SECURE HEALTH RECORD STORAGE (Data Protection Methodology):
+2. SECURE HEALTH RECORD STORAGE (Data Protection Methodology):
 ![SECURE HEALTH RECORD STORAGE Image](/metadata/daigram2.png)
 
 - The platform uses public-private key encryption to securely store health records in the cloud.
@@ -107,7 +107,7 @@ By comprehensively addressing coordination gaps and pioneering decentralized hea
 
 - The system uses industry-standard asymmetric encryption algorithms like RSA or ECC for robust security.
 
-## BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS:
+3. BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS:
 ![BLOCKCHAIN-INSPIRED SECURITY FOR AUDIT TRAILS Image](/metadata/daigram3.png)
 
 - The platform maintains a centralized append-only audit log of all health record transactions.
