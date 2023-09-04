@@ -957,6 +957,7 @@ def reject_care_giver_request(care_id):
         users.update_one({'_id': ObjectId(session['_id']), 'caregivers.care_giver_id': cid['_id']}, query)
         userdata = users.find_one({'_id': ObjectId(session['_id'])})
         return  redirect(url_for('user_dashboard'))
+    
 @user.route('/diabeticPrediction', methods=['POST'])
 def diabeticPrediction():
     if request.method == 'POST':
@@ -969,14 +970,22 @@ def diabeticPrediction():
         dpf = float(request.form['dpf'])
         age = int(request.form['age'])
         pred =predict_diabetes([preg,glucose,bp,st,insulin,bmi,dpf,age])
-        print(pred)
-        return redirect(url_for('user.fit_data'))
+        today = datetime.datetime.now()
+        value = addEvent(session['_id'],2,date=today)
+        user_age = users.find({'_id':ObjectId(session['_id'])},{'age':1,'streak':1,'_id':0})
+        age= user_age[0]['age']
+        streak = user_age[0]['streak']
+        if  pred==1:
+            message = 'Had Diabetic'
+        else:
+            mesaage = 'No Diabetic'
+        return render_template('user/fitness_data.html', fitness_data=value, age=age , streak=str(streak),prediction=message)
 
 
 # Create prediction function 
 def predict_diabetes(input_data):
     model = xgb.XGBClassifier()
-    model.load_model('blueprintsModels//diabetes_model.json')
+    model.load_model('blueprints//user//Models//diabetes_model.json')
     input_data = np.array(input_data).reshape(1, -1) 
     input_df = pd.DataFrame(input_data, columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 
                                                'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age'])
