@@ -43,7 +43,7 @@ The core capabilities offered by HealthConnect include:
 
 6) **Population Health Analytics**: Gains insights from aggregated health data to understand disease trends, outcomes, and costs.
 
-Additionally, HealthConnect is envisioned to evolve into an open protocol akin to **ONDC** for decentralized health data exchange through an Open Health Data Network (OHDN). The OHDN will allow different healthcare providers to share interoperable health records on the network with patient consent.
+Additionally, HealthConnect is envisioned to evolve into an open protocol akin to [**ONDC**](https://ondc.org/ "Open Network for Digital Commerce") for decentralized health data exchange through an Open Health Data Network (OHDN). The OHDN will allow different healthcare providers to share interoperable health records on the network with patient consent.
 
 Patients will get unique Health IDs for identifier portability. Granular consent protocols will enable patients to authorize access to their data. Blockchain approaches can secure health data provenance.
 
