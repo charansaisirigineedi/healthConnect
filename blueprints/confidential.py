@@ -1,19 +1,21 @@
-MONGOURI = "mongodb+srv://charanmcr:Charansai20020902@healthconnect.bfcrznb.mongodb.net"
+# Add your own credentials
 
-IBM_ENDPOINT = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud/"
+MONGOURI = ""
 
-IBM_API_KEY_ID = "9ZRvAqSK7WnDFMG81vydoH3MCdZyc-tCc8yXsFwwhny7"
+IBM_ENDPOINT = ""
 
-IBM_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/e50d98f937be4be6bd2c99d0e442608b:e640c7ab-a342-4c8f-a56f-501aecdfa6e6:bucket:healthconnectibm"
+IBM_API_KEY_ID = ""
 
-IBM_ACCESS_KEY_ID = "1d22c4181b204b60b769944a62a3f5a8"
+IBM_INSTANCE_CRN = ""
 
-IBM_SECRET_ACCESS_KEY = "70ffc6d2c663c59107eea73c59c026b110caf4c5a49f54b9"
+IBM_ACCESS_KEY_ID = ""
 
-REDIS_URI = "mongodb+srv://charanmcr:Charansai20020902@healthconnect.bfcrznb.mongodb.net/?retryWrites=true&w=majority"
+IBM_SECRET_ACCESS_KEY = ""
 
-REDIS_HOST = "redis-12013.c264.ap-south-1-1.ec2.cloud.redislabs.com"
+REDIS_URI = ""
 
-REDIS_PADDWORD = "4fOBUp5AUER9gdGqfHmN7ZIKzLzJyziM"
+REDIS_HOST = ""
 
-OPEN_AI_KEY = "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"
+REDIS_PADDWORD = ""
+
+OPEN_AI_KEY = ""
